@@ -34,10 +34,10 @@ void cEngine::EvaluatePawnStruct(POS *p, eData *e) {
 
         // pawn hashtable contains delta of white and black score
 
-        e->mgPawns[WC] = mPawnTT[addr].mg_pawns;
-        e->egPawns[WC] = mPawnTT[addr].eg_pawns;
-        e->mgPawns[BC] = 0;
-        e->egPawns[BC] = 0;
+        e->mgPawns[WC] = mPawnTT[addr].mg_white_pawns;
+        e->egPawns[WC] = mPawnTT[addr].eg_white_pawns;
+        e->mgPawns[BC] = mPawnTT[addr].mg_black_pawns;
+        e->egPawns[BC] = mPawnTT[addr].eg_black_pawns;
         return;
     }
 
@@ -62,6 +62,7 @@ void cEngine::EvaluatePawnStruct(POS *p, eData *e) {
     // Center binds (good) and wing binds (bad)
     // - important squares controlled by two pawns
 
+    
     int tmp = 0;
     if (e->twoPawnsTake[WC] & SqBb(D5)) tmp += V(P_BIND);
     if (e->twoPawnsTake[WC] & SqBb(E5)) tmp += V(P_BIND);
@@ -107,7 +108,7 @@ void cEngine::EvaluatePawnStruct(POS *p, eData *e) {
     }
 
     // Evaluate number of pawn islands (based on Texel)
-
+    
     const U64 w_pawns = p->Pawns(WC);
     const U64 w_pawn_files = BB.FillSouth(w_pawns) & 0xff;
     const int w_islands = PopCnt(((~w_pawn_files) >> 1) & w_pawn_files);
@@ -115,17 +116,22 @@ void cEngine::EvaluatePawnStruct(POS *p, eData *e) {
     const U64 b_pawns = p->Pawns(BC);
     const U64 b_pawn_files = BB.FillSouth(b_pawns) & 0xff;
     const int b_islands = PopCnt(((~b_pawn_files) >> 1) & b_pawn_files);
-    e->mgPawns[WC] -= (w_islands - b_islands) * V(P_ISL);
-    e->egPawns[WC] -= (w_islands - b_islands) * V(P_ISL);
-    // pawn islands code would also break detailed score display
+    e->mgPawns[WC] -= w_islands  * V(P_ISL);
+    e->mgPawns[BC] -= b_islands * V(P_ISL);
+    e->egPawns[WC] -= w_islands * V(P_ISL);
+    e->egPawns[BC] -= b_islands * V(P_ISL);
+    
 
     // Save stuff in pawn hashtable.
     // Note that we save delta between white and black scores.
     // It might become a problem if we decide to print detailed eval score.
 
     mPawnTT[addr].key = p->mPawnKey;
-    mPawnTT[addr].mg_pawns = (V(W_STRUCT) * (e->mgPawns[WC] - e->mgPawns[BC])) / 100;
-    mPawnTT[addr].eg_pawns = (V(W_STRUCT) * (e->egPawns[WC] - e->egPawns[BC])) / 100;
+    mPawnTT[addr].mg_white_pawns = e->mgPawns[WC];
+    mPawnTT[addr].mg_black_pawns = e->mgPawns[BC];
+    mPawnTT[addr].eg_white_pawns = e->egPawns[WC];
+    mPawnTT[addr].eg_black_pawns = e->egPawns[BC];
+
 }
 
 void cEngine::EvaluateKing(POS *p, eData *e, eColor sd) {

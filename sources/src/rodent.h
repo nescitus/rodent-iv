@@ -18,8 +18,12 @@ If not, see <http://www.gnu.org/licenses/>.
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
 // 8158 lines
 
-// bench 14, release: 13358101 nodes searched in 11609, speed 1150568 nps (Score: 2.670)
-// bench 16, release: 31383012 nodes searched in 24906, speed 1260007 nps (Score: 2.924)
+// bench 14, 64-bit release: 13592685 nodes searched in 12985, speed 1046718 nps (Score: 2.429)
+// bench 14, 64-bit debug  : 13592685 nodes searched in 168594, speed 80623 nps (Score: 0.187)
+// bench 14, 64-bit release, no magic, no fast popcnt - return the same score
+
+// bench 14, 32-bit release: 12490441 nodes searched in 16968, speed 736074 nps (Score: 1.708)
+// bench 14, 32-bit debug  : 11446842 nodes searched in 151968, speed 75323 nps (Score: 0.175)
 
 // TODO: pawns participation in king attack
 // TODO: auxiliary pawn piece/square tables, depending on king's wing
@@ -523,8 +527,10 @@ struct sEvalHashEntry {
 
 struct sPawnHashEntry {
     U64 key;
-    int mg_pawns;
-    int eg_pawns;
+    int mg_white_pawns;
+    int mg_black_pawns;
+    int eg_white_pawns;
+    int eg_black_pawns;
 };
 
 struct Line {

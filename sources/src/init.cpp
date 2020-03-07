@@ -26,7 +26,7 @@ std::mt19937_64 e2(2018);
 std::uniform_int_distribution<U64> dist(std::llround(std::pow(2, 56)), std::llround(std::pow(2, 62)));
 
 U64 POS::Random64() {
-	return dist(e2);
+    return dist(e2);
 }
 
 void POS::Init() { // static init function

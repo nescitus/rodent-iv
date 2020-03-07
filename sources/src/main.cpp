@@ -35,7 +35,7 @@ sBook GuideBook;
 sBook MainBook;
 void PrintVersion() {
 
-    printf("id name Rodent IV 022"
+    printf("id name Rodent IV 023"
 
 #if !(defined(_WIN64) || defined(__x86_64__))
             " 32-bit"
