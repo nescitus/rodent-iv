@@ -21,15 +21,22 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <cmath> // round
 
+//#define DEBUG_EVAL_HASH
+
 int cEngine::Evaluate(POS *p, eData *e) {
 
     // Try retrieving score from per-thread eval hashtable
 
     int addr = p->mHashKey % EVAL_HASH_SIZE;
+    bool isHashEntry = false;
+    int hashScore = 0;
 
     if (mEvalTT[addr].key == p->mHashKey) {
-        int sc = mEvalTT[addr].score;
-        return p->mSide == WC ? sc : -sc;
+        isHashEntry = true;
+        hashScore = mEvalTT[addr].score;
+#ifndef DEBUG_EVAL_HASH
+        return p->mSide == WC ? hashScore : -hashScore;
+#endif
     }
 
     // Clear eval data
@@ -41,13 +48,14 @@ int cEngine::Evaluate(POS *p, eData *e) {
     EvaluateMaterial(p, e, WC);
     EvaluateMaterial(p, e, BC);
     EvaluatePieces(p, e, WC);
-    EvaluatePieces(p, e, BC);
+    EvaluatePieces(p, e, BC);  
     EvaluatePawnStruct(p, e);
     EvaluatePassers(p, e, WC);
     EvaluatePassers(p, e, BC);
     EvaluateUnstoppable(e, p);
     EvaluateThreats(p, e, WC);
     EvaluateThreats(p, e, BC);
+    
     Add(e, p->mSide, 14, 7); // tempo bonus
 
     // Evaluate patterns
@@ -88,6 +96,7 @@ int cEngine::Evaluate(POS *p, eData *e) {
 
     // Piece/square table magic interpolation
 
+    /**/
     int mgPh = Min(p->mPhase, 24);
     int egPh = 24 - mgPh;
 
@@ -198,6 +207,11 @@ int cEngine::Evaluate(POS *p, eData *e) {
     score = Clip(score, MAX_EVAL);
 
     // Save eval score in the evaluation hash table
+
+#ifdef DEBUG_EVAL_HASH
+    if (isHashEntry && hashScore != score)
+        printf("x");
+#endif
 
     mEvalTT[addr].key = p->mHashKey;
     mEvalTT[addr].score = score;
