@@ -377,7 +377,8 @@ void ParseGo(POS *p, const char *ptr) {
     if (Glob.goodbye)
         exit(0);
 
-    int *best_pv, best_depth = -1;
+    int *best_pv = NULL;
+	int best_depth = -1;
 
     for (auto& engine: Engines)
         if (best_depth < engine.mDpCompleted) {
