@@ -2,6 +2,7 @@
 Rodent, a UCI chess playing engine derived from Sungorus 1.4
 Copyright (C) 2009-2011 Pablo Vazquez (Sungorus author)
 Copyright (C) 2011-2019 Pawel Koziol
+Copyright (C) 2020-2020 Bernhard C. Maerz
 
 Rodent is free software: you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 3 of the
@@ -18,6 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include "rodent.h"
 #include "book.h"
 #include <cstdlib>
+#include <string>
 
 cGlobals Glob;
 
@@ -33,38 +35,65 @@ cMask Mask;
 cDistance Dist;
 sBook GuideBook;
 sBook MainBook;
+
 void PrintVersion() {
+    std::string OutStr;
 
-    printf("id name Rodent IV 023"
+    OutStr = "id name Rodent IV V0.23";
 
-#if !(defined(_WIN64) || defined(__x86_64__))
-            " 32-bit"
-#else
-            " 64-bit"
+	int bits = sizeof(void*) * 8; // CHAR_BIT
+	if (bits == 32)
+        OutStr += " 32-bit";
+	else if (bits == 64)
+        OutStr += " 64-bit";
+
+#if defined(__arm__)
+    OutStr += "/arm";
+#elif defined(__aarch64__)
+    OutStr += "/aarch64";
+#elif defined(__i386__)
+    OutStr += "/x86";
+#elif defined(__x86_64__)
+    OutStr += "/x86_64";
 #endif
 
-#if   defined(__clang__)
-            "/CLANG " __clang_version__
+#if defined(__clang__)
+    // "__clang_version__" too long
+    OutStr += "/CLANG " + std::to_string(__clang_major__);
+    OutStr += "." + std::to_string(__clang_minor__);
+    OutStr += "." + std::to_string(__clang_patchlevel__);
 #elif defined(__MINGW32__)
-            "/MINGW " __VERSION__
+    OutStr += "/MINGW " __VERSION__;
 #elif defined(__GNUC__)
-            "/GCC " __VERSION__
+    OutStr += "/GCC " __VERSION__;
 #elif defined(_MSC_VER)
-            "/MSVS"
+    OutStr += "/MSVS";
     #if   _MSC_VER == 1900
-                "2015"
+        OutStr += "2015";
     #elif _MSC_VER >= 1910
-                "2017"
+        OutStr += "2017";
     #endif
 #endif
 
 #if (defined(_MSC_VER) && defined(USE_MM_POPCNT)) || (defined(__GNUC__) && defined(__POPCNT__))
-            "/POPCNT"
+        OutStr += "/POPCNT";
 #elif defined(__GNUC__) && defined(__SSSE3__) // we are using custom SSSE3 popcount implementation
-            "/SSSE3"
+        OutStr += "/SSSE3";
 #endif
 
-                        "\n");
+#if defined(NO_THREADS)
+    OutStr += "/NOSMP";
+#else
+    OutStr += "/SMP";
+#endif
+
+#if defined(DEBUG)
+    OutStr += "/DEBUG";
+#endif
+
+    // Maybe too much info - can be shortened later
+    // But currently it's not bad to have infos
+    printf("%s\n",OutStr.c_str());
 }
 
 int main() {
