@@ -2,6 +2,7 @@
 Rodent, a UCI chess playing engine derived from Sungorus 1.4
 Copyright (C) 2009-2011 Pablo Vazquez (Sungorus author)
 Copyright (C) 2011-2019 Pawel Koziol
+Copyright (C) 2020-2020 Bernhard C. Maerz
 
 Rodent is free software: you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 3 of the
@@ -23,7 +24,9 @@ If not, see <http://www.gnu.org/licenses/>.
 #else
     #include <unistd.h>
     #include <sys/time.h>
-    #include <wordexp.h>
+    #ifndef ANDROID
+        #include <wordexp.h>
+    #endif
 #endif
 
 #include "rodent.h"
@@ -244,6 +247,7 @@ void PrintOverrides() {
     if (char *ptr = getenv("RIIIPERSONALITIES"))
         printf("info string override for personalities path: '%s'\n", ptr);
 }
+#ifndef ANDROID
 bool ChDirEnv(const char *env_name) {
     char *env_path;
     env_path = getenv(env_name);
@@ -269,6 +273,7 @@ bool ChDirEnv(const char *env_name) {
 
     return result;
 }
+#endif
 // constexpr for detecting relative paths
 constexpr bool relative = _BOOKSPATH[0] != '/' || _PERSONALITIESPATH[0] != '/';
 bool ChDir(const char *new_path) {
