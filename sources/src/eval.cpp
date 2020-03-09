@@ -29,11 +29,15 @@ int cEngine::Evaluate(POS *p, eData *e) {
     // Try retrieving score from per-thread eval hashtable
 
     int addr = p->mHashKey % EVAL_HASH_SIZE;
+#ifdef DEBUG_EVAL_HASH
     bool isHashEntry = false;
+#endif
     int hashScore = 0;
 
     if (mEvalTT[addr].key == p->mHashKey) {
+#ifdef DEBUG_EVAL_HASH
         isHashEntry = true;
+#endif
         hashScore = mEvalTT[addr].score;
 #ifndef DEBUG_EVAL_HASH
         return p->mSide == WC ? hashScore : -hashScore;
