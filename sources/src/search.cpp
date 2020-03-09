@@ -2,6 +2,7 @@
 Rodent, a UCI chess playing engine derived from Sungorus 1.4
 Copyright (C) 2009-2011 Pablo Vazquez (Sungorus author)
 Copyright (C) 2011-2019 Pawel Koziol
+Copyright (C) 2020-2020 Bernhard C. Maerz
 
 Rodent is free software: you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 3 of the
@@ -229,12 +230,13 @@ void cEngine::Iterate(POS *p, int *pv) {
 
     for (mRootDepth = 1 + offset; mRootDepth <= msSearchDepth; mRootDepth++) {
 
-        tDepth[mcThreadId] = mRootDepth;
         depthCounter = 0;
+#ifndef NO_THREADS
+        tDepth[mcThreadId] = mRootDepth;
         for (int j = 0; j < Glob.numberOfThreads; j++) {
             if (tDepth[j] >= mRootDepth) depthCounter++;
         }
-
+#endif
         // skip depth if it already has good coverage in multi-threaded mode
 
         if (mRootDepth > 5
