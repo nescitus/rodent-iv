@@ -1223,7 +1223,14 @@ void cEngine::Slowdown() {
     // assumes additional role and handles the search timeout.
 
 #ifndef USE_THREADS
-    if (TimeTestIntervalReached() ) CheckTimeout();
+	if (!Par.useWeakening) {
+		if (TimeTestIntervalReached() )
+			CheckTimeout();
+	} else {
+		// each npsLimit will waste 10ms.
+		// So I think it's ok to check EVERYTIME when here:
+		CheckTimeout();
+	}
 #endif
 
     // for MultiPv
