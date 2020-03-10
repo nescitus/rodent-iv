@@ -527,19 +527,6 @@ void cEngine::EvaluatePieces(POS *p, eData *e, eColor sd) {
             }
         }
 
-	    // premature queen developement penalty
-
-		if (b & ~(bb_rel_rank[sd][RANK_1] | bb_rel_rank[sd][RANK_2]) ) {
-			int tmp = 0;
-			if (p->IsOnSq(sd, N, REL_SQ(sd, B1))) tmp -= 2;
-			if (p->IsOnSq(sd, N, REL_SQ(sd, G1))) tmp -= 2;
-			if (p->IsOnSq(sd, B, REL_SQ(sd, C1))) tmp -= 2;
-			if (p->IsOnSq(sd, B, REL_SQ(sd, F1))) tmp -= 2;
-			if (p->IsOnSq(sd, P, REL_SQ(sd, E2))) tmp -= 3;
-			if (p->IsOnSq(sd, P, REL_SQ(sd, D2))) tmp -= 3;
-			Add(e, sd, tmp, 0);
-		}
-
     } // end of queen eval
 
     // Composite factors

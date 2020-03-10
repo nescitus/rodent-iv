@@ -19,12 +19,11 @@ If not, see <http://www.gnu.org/licenses/>.
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
 // 8158 lines
 
-// bench 14, 64-bit release: 13592685 nodes searched in 12985, speed 1046718 nps (Score: 2.429)
-// bench 14, 64-bit debug  : 13592685 nodes searched in 168594, speed 80623 nps (Score: 0.187)
-// bench 14, 64-bit release, no magic, no fast popcnt - return the same score
+// bench 14, 64-bit release: 11835547 nodes searched in 12250, speed 966088 nps (Score: 2.242)
+// bench 14, 64-bit debug  : 11835547 nodes searched in 157344, speed 75220 nps (Score: 0.175)
 
-// bench 14, 32-bit release: 12490441 nodes searched in 16968, speed 736074 nps (Score: 1.708)
-// bench 14, 32-bit debug  : 11446842 nodes searched in 151968, speed 75323 nps (Score: 0.175)
+// bench 14, 32-bit release: 11835547 nodes searched in 15672, speed 755155 nps (Score: 1.752)
+// bench 14, 32-bit debug  : 11835547 nodes searched in 157657, speed 75071 nps (Score: 0.174)
 
 // TODO: pawns participation in king attack
 // TODO: auxiliary pawn piece/square tables, depending on king's wing
