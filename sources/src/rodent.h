@@ -567,7 +567,7 @@ enum Values {
 const char* const paramNames[N_OF_VAL] = {
     "PawnValueMg", "PawnValueEg", "KnightValueMg", "KnightValueEg", "BishopValueMg", 
     "BishopValueEg", "RookValueMg", "RookValueEg", "QueenValueMg", "QueenValueEg",             // piece values
-    "BishopPairMg", "BishopPairEg", "N_PAIR", "R_PAIR", "ELEPH", "A_EXC",                                        // material adjustments
+    "BishopPairMg", "BishopPairEg", "KnightPair", "RookPair", "ELEPH", "A_EXC",                // material adjustments
     "N_ATT1", "N_ATT2", "B_ATT1", "B_ATT2", "R_ATT1", "R_ATT2", "Q_ATT1", "Q_ATT2",            // attacks against enemy king zone
     "N_CHK", "B_CHK", "R_CHK", "Q_CHK", "Q_CONTACT",                                           // check threats
 	"N_OWH_MG", "N_OWH_EG", "B_OWH_MG", "B_OWH_EG",
@@ -585,7 +585,7 @@ const char* const paramNames[N_OF_VAL] = {
     "P_BIGCHAIN", "P_SMALLCHAIN", "P_CS1", "P_CS2", "P_CS_EDGE", "P_CSFAIL",
     "ROF_MG", "ROF_EG", "RGH_MG", "RGH_EG", "RBH_MG", "RBH_EG", "RSR_MG", "RSR_EG", "ROQ_MG", "ROQ_EG",     // rook bonuses
     "RS2_MG", "RS2_EG", "QSR_MG", "QSR_EG", "R_BLOCK_MG",  "R_BLOCK_EG",                                    // queen and rook bonuses
-    "Material", "W_PST", "W_CLA", "OwnAttack", "OppAttack", "OwnMobility", "OppMobility", "FlatMobility", 
+    "Material", "PrimaryPstWeight", "SecondaryPstWeight", "OwnAttack", "OppAttack", "OwnMobility", "OppMobility", "FlatMobility",
     "PiecePressure", // weights part 1
     "KingTropism", "PassedPawns", "PawnShield", "PawnStorm", "W_MASS", "W_CHAINS", "PawnStructure", // weights part 2
     "Lines", "Outposts", "Space",

@@ -80,18 +80,22 @@ void PrintUciOptions() {
 
         PrintSingleOption(B_PAIR_MG);
         PrintSingleOption(B_PAIR_EG);
+        PrintSingleOption(N_PAIR);
+        PrintSingleOption(R_PAIR);
         printf("option name ExchangeImbalance type spin default %d min -200 max 200\n", V(A_EXC));
         printf("option name KnightLikesClosed type spin default %d min 0 max 10\n", V(N_CL));
 
         PrintSingleOption(W_MATERIAL);
         printf("option name PrimaryPstStyle type spin default %d min 0 max 4\n", Par.primaryPstStyle);
         printf("option name SecondaryPstStyle type spin default %d min 0 max 4\n", Par.secondaryPstStyle);
-        printf("option name PiecePlacement type spin default %d min 0 max 500\n", V(W_PRIM));
+        // printf("option name PiecePlacement type spin default %d min 0 max 500\n", V(W_PRIM));
         PrintSingleOption(W_OWN_ATT);
         PrintSingleOption(W_OPP_ATT);
         PrintSingleOption(W_OWN_MOB);
         PrintSingleOption(W_OPP_MOB);
         PrintSingleOption(W_TROPISM);
+        PrintSingleOption(W_PRIM);
+        PrintSingleOption(W_SECO);
         PrintSingleOption(W_THREATS);
 
         PrintSingleOption(W_PASSERS);
@@ -121,6 +125,7 @@ void PrintUciOptions() {
     printf("option name MobilityRebalancing type check default %s\n", Par.useMobilityRebalancing ? "true" : "false");
 
     if (!Glob.useBooksFromPers || !Glob.usePersonalityFiles) {
+        printf("option name BookFilter type spin default %d min 0 max 100\n", Par.bookFilter);
         printf("option name GuideBookFile type string default %s\n", GuideBook.bookName);
         printf("option name MainBookFile type string default %s\n", MainBook.bookName);
     }
@@ -234,6 +239,10 @@ void ParseSetoption(const char *ptr) {
         setvalue(B_PAIR_MG, atoi(value), false);
     } else if (strcmp(name, "bishoppaireg") == 0)                            {
         setvalue(B_PAIR_EG, atoi(value), false);
+    } else if (strcmp(name, "knightpair") == 0)                              {
+        setvalue(N_PAIR, atoi(value), false);
+    } else if (strcmp(name, "rookpair") == 0)                                {
+        setvalue(R_PAIR, atoi(value), false);
     } else if (strcmp(name, "exchangeimbalance") == 0)                       {
         Par.values[A_EXC] = atoi(value);
         Par.InitMaterialTweaks();
@@ -250,8 +259,8 @@ void ParseSetoption(const char *ptr) {
         Glob.shouldClear = true;
     } else if (strcmp(name, "material") == 0)                                {
         setvalue(W_MATERIAL, atoi(value), true);
-    } else if (strcmp(name, "pieceplacement") == 0)                          {
-        setvalue(W_MATERIAL, atoi(value), true);
+    //} else if (strcmp(name, "pieceplacement") == 0)                          {
+    //    setvalue(W_MATERIAL, atoi(value), true);
     } else if (strcmp(name, "ownattack") == 0)                               {
         setvalue(W_OWN_ATT, atoi(value), false);
     } else if (strcmp(name, "oppattack") == 0)                               {
@@ -264,6 +273,10 @@ void ParseSetoption(const char *ptr) {
         setvalue(W_FLAT, atoi(value), false);
     } else if (strcmp(name, "kingtropism") == 0)                             {
         setvalue(W_TROPISM, atoi(value), false);
+    } else if (strcmp(name, "primarypstweight") == 0)                        {
+        setvalue(W_PRIM, atoi(value), false);
+    } else if (strcmp(name, "secondarypstweight") == 0)                      {
+        setvalue(W_SECO, atoi(value), false);
     } else if (strcmp(name, "piecepressure") == 0)                           {
         setvalue(W_THREATS, atoi(value), false);
     } else if (strcmp(name, "passedpawns") == 0)                             {
@@ -298,7 +311,7 @@ void ParseSetoption(const char *ptr) {
         setvalue(ISO_MG, atoi(value), false);
     } else if (strcmp(name, "isolatedpawneg") == 0)                          {
         setvalue(ISO_EG, atoi(value), false);
-    } else if (strcmp(name, "isolatedopenmg") == 0)                          {
+    } else if (strcmp(name, "isolatedonopenmg") == 0)                        {
         setvalue(ISO_OF, atoi(value), false);
     } else if (strcmp(name, "backwardpawnmg") == 0)                          {
         Par.values[BK_MID] = atoi(value);
@@ -319,6 +332,8 @@ void ParseSetoption(const char *ptr) {
 
     // Here starts a block of non-eval options
 
+    } else if (strcmp(name, "bookfilter") == 0)                              {
+	    Par.bookFilter = atoi(value);
     } else if (strcmp(name, "guidebookfile") == 0)                           {
         if (Glob.CanReadBook() ) GuideBook.SetBookName(value);
     } else if (strcmp(name, "mainbookfile") == 0)                            {
