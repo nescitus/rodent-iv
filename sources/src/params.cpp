@@ -456,6 +456,7 @@ void cParam::InitKingAttackTable() {
 void cParam::SetSpeed(int elo_in) {
     npsLimit = 0;
     evalBlur = 0;
+    bookDepth = 256;
 
     if (useWeakening) {
         npsLimit = EloToSpeed(elo_in);

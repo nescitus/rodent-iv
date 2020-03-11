@@ -357,6 +357,7 @@ void ParseSetoption(const char *ptr) {
         valuebool(Glob.isNoisy, value);
     } else if (strcmp(name, "uci_limitstrength") == 0)                       {
         valuebool(Par.useWeakening, value);
+        Par.SetSpeed(Par.elo);
     } else if (strcmp(name, "ponder") == 0)                                  {
         valuebool(Par.use_ponder, value);
     } else if (strcmp(name, "usebook") == 0)                                 {
