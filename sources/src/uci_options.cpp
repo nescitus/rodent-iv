@@ -389,6 +389,7 @@ void ParseSetoption(const char *ptr) {
 void ReadThreadNumber(const char * fileName) {
 	FILE *threadFile = NULL;
 	threadFile = fopen(fileName, "r");
+    // printf_debug("reading threadFile '%s' (%s)\n", fileName, threadFile == NULL ? "failure" : "success");
 
 	if (threadFile == NULL)
 		return;
@@ -423,6 +424,7 @@ void ReadPersonality(const char *fileName) {
         || ChDirEnv("RIIIPERSONALITIES")        // try `RIIIPERSONALITIES` env var first (26/08/17: linux only)
             || ChDir(_PERSONALITIESPATH))       // next built-in path
                 personalityFile = fopen(fileName, "r");
+    printf_debug("reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");
 
     if (Glob.isNoisy)
         printf("info string reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");

@@ -12,6 +12,8 @@ void cEngine::LoadEpd() {
 
     FILE *epdFile = NULL;
     epdFile = fopen("epd.epd", "r");
+    printf_debug("reading epdFile 'epd.epd' (%s)\n", epdFile == NULL ? "failure" : "success");
+
     char line[256];
     char *pos;
     std::string posString;

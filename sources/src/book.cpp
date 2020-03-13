@@ -346,6 +346,7 @@ void sBook::OpenPolyglot() {
             if (!ChDir(_BOOKSPATH)) return;     // next built-in path
 
     bookFile = fopen(bookName, "rb");
+    printf_debug("reading book file '%s' (%s)\n", bookName, bookFile == NULL ? "failure" : "success");
 
     if (bookFile == NULL) return;
 
