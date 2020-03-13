@@ -1,6 +1,7 @@
 ; Grumpy personality for Rodent IV chess engine
 ; by Pawel Koziol
 ; attack, restraint, contempt, likes blocked positions
+;
 setoption name PawnValueMg value 90
 setoption name KnightValueMg value 385
 setoption name BishopValueMg value 390

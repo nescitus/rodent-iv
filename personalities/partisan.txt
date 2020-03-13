@@ -1,5 +1,5 @@
 ; Partisan personality for Rodent IV chess engine
-; emphasises attack, bt plays stealthy openings
+; emphasises attack, but plays stealthy openings
 ;
 setoption name PawnValueMg value 90
 setoption name KnightValueMg value 380

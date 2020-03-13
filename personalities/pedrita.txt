@@ -1,5 +1,6 @@
 ; Pedrita personality for Rodent IV chess engine
 ; pawns, defence, restraint
+;
 setoption name PawnValueMg value 90
 setoption name KnightValueMg value 380
 setoption name BishopValueMg value 390

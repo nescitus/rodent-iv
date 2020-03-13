@@ -1,5 +1,6 @@
 ; Morphy personality for Rodent IV chess engine
 ; author: Pawel Koziol
+;
 setoption name PawnValueMg value 80
 setoption name KnightValueMg value 380
 setoption name BishopValueMg value 390
@@ -61,7 +62,6 @@ setoption name Contempt value 20
 setoption name SlowMover value 100
 setoption name Selectivity value 175
 setoption name SearchSkill value 10
-setoption name RiskyDepth value 0
 setoption name BookFilter value 20
 setoption name GuideBookFile value morphy.bin
 setoption name MainBookFile value hist/_pre30.bin
