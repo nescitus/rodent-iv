@@ -18,6 +18,7 @@ If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdio>
 #include <cstring>
+#include <string>
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -292,5 +293,34 @@ bool ChDir(const char *new_path) {
     }
     printf_debug("go to '%s'\n", new_path);
     return chdir(new_path) == 0;
+}
+#endif
+
+#if (defined(_WIN32) || defined(_WIN64)) && __CYGWIN__
+// In win-builds with cygwin, "fopen" is not opening files in current directory
+// so you can use this function to get the FullPath of the file.
+// (Not needed for other os, but still working)
+std::string GetFullPath(const char *exe_file) {
+    std::string FullPathFileStr;
+
+    // As default the file itself, if already fullpath or current directory can't be determined
+    FullPathFileStr = exe_file;
+
+    if (!isabsolute(exe_file)) {
+#if defined(_WIN32) || defined(_WIN64)
+        char cwd[MAX_PATH + 1];
+
+        if (GetCurrentDirectory(MAX_PATH + 1, cwd)) {
+            FullPathFileStr = (std::string)cwd + "\\" + exe_file;
+        }
+#else
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd)) != NULL) {
+            FullPathFileStr = (std::string)cwd + "/" + exe_file;
+        }
+#endif
+    }
+
+    return FullPathFileStr;
 }
 #endif

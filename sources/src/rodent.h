@@ -52,6 +52,7 @@ If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdint>
 #include <cinttypes>
+#include <string>
 
 //#define USE_TUNING
 
@@ -984,6 +985,12 @@ extern const int ph_value[7];
     bool ChDir(const wchar_t *new_path);
     // classify path
     constexpr bool isabsolute(const char *path) { return path[0] != '\0' && path[1] == ':'; }
+    #if __CYGWIN__
+        // Workaround for win-builds with cygwin
+        std::string GetFullPath(const char *exe_file);
+        #define fopen(file, mode) ( fopen(GetFullPath(file).c_str(), mode) )
+    #endif
+
 #else
     #if defined(BOOKSPATH)
         constexpr char _BOOKSPATH[] = MAKESTR(BOOKSPATH) "";
