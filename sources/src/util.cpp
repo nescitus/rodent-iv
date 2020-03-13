@@ -21,6 +21,7 @@ If not, see <http://www.gnu.org/licenses/>.
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
+    #include <wchar.h>
 #else
     #include <unistd.h>
     #include <sys/time.h>
