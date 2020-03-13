@@ -25,10 +25,6 @@ prefers d4 to e4 as White
 low.bin - minimal book which tries to start with a couple of moves that
 do not reach the 4th or the 5th rank.
 
-ph-andersson2.bin - interesting book for a solid player
-
-ph-short2.bin - 1.e4 as white, Nimzo-Indian and mostly French as black.
-
 solid.bin - Karpov + Uhlmann
 
 tricky.bin - Morozevich's games + a lot of handcrafting. Wide and tricky.

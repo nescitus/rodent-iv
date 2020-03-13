@@ -12,3 +12,7 @@ nimzowitsch.bin - Nimzowitsch's games form PgnMentor collection as the first lay
 petrosian.bin - Petrosian's games form PgnMentor collection as the first layer 
 + 1931 to 1980 games from Norm Pollock's collection as the second layer
 
+ph-andersson2.bin - interesting book for a solid player
+
+ph-short2.bin - 1.e4 as white, Nimzo-Indian and mostly French as black.
+
