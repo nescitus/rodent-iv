@@ -97,6 +97,8 @@ void PrintVersion() {
 }
 
 int main() {
+
+	SetRodentHomeDir();
 	Glob.threadOverride = 0;
 	ReadThreadNumber("threads.ini");
 

@@ -224,22 +224,23 @@ void cEngine::WasteTime(int milliseconds) {
 }
 
 #if defined(_WIN32) || defined(_WIN64)
-// constexpr for detecting relative paths
-constexpr bool relative = _BOOKSPATH[1] != L':' || _PERSONALITIESPATH[1] != L':';
 bool ChDir(const wchar_t *new_path) {
-    if (relative) {
-        wchar_t exe_path[1024];
+    bool result;
+    std::wstring NewPathWStr;
 
-        // getting the current executable location ...
-        GetModuleFileNameW(NULL, exe_path, sizeof(exe_path)/sizeof(exe_path[0])); *(wcsrchr(exe_path, '\\') + 1) = L'\0';
+    if (isabsolute(WCStr2Str(new_path).c_str()))
+        NewPathWStr = WCStr2WStr(new_path);
+    else
+        NewPathWStr = RodentHomeDirWStr + WCStr2WStr(new_path);
 
-        // go there ...
-        printf_debug("go to '%ls'\n", exe_path);
-        SetCurrentDirectoryW(exe_path);
-    }
-    // and now go further, it's for relative paths
-    printf_debug("go to '%ls'\n", new_path);
-    return SetCurrentDirectoryW(new_path);
+    result = (SetCurrentDirectoryW(NewPathWStr.c_str()));
+
+    if (result) {
+        printf_debug("go to '%ls'\n", NewPathWStr.c_str());
+    } else
+        printf_debug("can't go to '%ls'\n", NewPathWStr.c_str());
+
+    return result;
 }
 #else
 void PrintOverrides() {
@@ -276,23 +277,23 @@ bool ChDirEnv(const char *env_name) {
     return result;
 }
 #endif
-// constexpr for detecting relative paths
-constexpr bool relative = _BOOKSPATH[0] != '/' || _PERSONALITIESPATH[0] != '/';
 bool ChDir(const char *new_path) {
-    if (relative) {
-        char exe_path[1024];
+    bool result;
+    std::string NewPathStr;
 
-        #if defined (__APPLE__)
-            #error something should be done here, look for _NSGetExecutablePath(path, &size)
-        #endif
-        // getting the current executable location ...
-        readlink("/proc/self/exe", exe_path, sizeof(exe_path)); *(strrchr(exe_path, '/') + 1) = '\0';
+    if (isabsolute(new_path))
+        NewPathStr = new_path;
+    else
+        NewPathStr = WStr2Str(RodentHomeDirWStr) + new_path;
 
-        printf_debug("go to '%s'\n", exe_path);
-        chdir(exe_path); // go to the exe location, it's for relative paths
-    }
-    printf_debug("go to '%s'\n", new_path);
-    return chdir(new_path) == 0;
+    result = (chdir(NewPathStr.c_str()) == 0);
+
+    if (result) {
+        printf_debug("go to '%s'\n", NewPathStr.c_str());
+    } else
+        printf_debug("can't go to '%s'\n", NewPathStr.c_str());
+
+    return result;
 }
 #endif
 

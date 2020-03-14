@@ -33,3 +33,6 @@ int cEngine::msMoveTime;
 int cEngine::msMoveNodes;
 int cEngine::msSearchDepth;
 int cEngine::msStartTime;
+
+std::wstring RodentHomeDirWStr;
+std::wstring LogFileWStr;

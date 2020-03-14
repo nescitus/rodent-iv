@@ -268,8 +268,10 @@
     <ClCompile Include="src\params.cpp" />
     <ClCompile Include="src\quiesce.cpp" />
     <ClCompile Include="src\recognize.cpp" />
+    <ClCompile Include="src\rodenthome.cpp" />
     <ClCompile Include="src\search.cpp" />
     <ClCompile Include="src\setboard.cpp" />
+    <ClCompile Include="src\stringfunctions.cpp" />
     <ClCompile Include="src\swap.cpp" />
     <ClCompile Include="src\trans.cpp" />
     <ClCompile Include="src\uci.cpp" />
@@ -282,6 +284,7 @@
     <ClInclude Include="src\eval.h" />
     <ClInclude Include="src\magicmoves.h" />
     <ClInclude Include="src\rodent.h" />
+    <ClInclude Include="src\stringfunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

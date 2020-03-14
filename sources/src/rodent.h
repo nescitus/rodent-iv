@@ -53,6 +53,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstdint>
 #include <cinttypes>
 #include <string>
+#include "stringfunctions.h"
 
 //#define USE_TUNING
 
@@ -1027,3 +1028,12 @@ extern ChessHeapClass Trans;
 #ifndef NO_THREADS
     extern int tDepth[MAX_THREADS];
 #endif
+
+// I don't belive anybody will use UNICODE in pathnames (only filenames), but
+// still being ready for it using (more complex) wstring:
+extern std::wstring RodentHomeDirWStr;
+extern std::wstring LogFileWStr;
+
+void FullPathEndSlash(std::wstring &pathWStr);
+void SetRodentHomeDir();
+void CreateRodentHome(const char *RodentDir);
