@@ -873,7 +873,6 @@ avoidNull:
 
         // GATHER INFO ABOUT THE MOVE
 
-        // flagExtended = false;
         movesPlayed[movesTried] = move;
         movesTried++;
         
@@ -962,21 +961,6 @@ avoidNull:
         && moveType == MV_NORMAL) {
             p->UndoMove(move, u);
             continue;
-        }
-
-        // SEE pruning of bad captures
-
-        if (flagPrunableNode
-            && (moveType == MV_NORMAL)
-            && !p->InCheck()
-            && depth <= 3
-            && !isPv
-            && alpha > -MAX_EVAL
-            && beta < MAX_EVAL) {
-            if (moveSEEscore > 300 * depth) { // yes, sign is correct
-                p->UndoMove(move, u);
-                continue;
-            }
         }
 
         // SEE pruning of bad captures
