@@ -41,6 +41,14 @@ void PrintUciOptions() {
 
 	printfUciOut("option name Clear Hash type button\n");
     printfUciOut("option name Hash type spin default 16 min 1 max %d\n", max_tt_size_mb);
+
+    if (LogFileWStr != L"")
+        printfUciOut("option name LogFile type string default %s\n", WStr2Str(LogFileWStr).c_str());
+#ifdef DEBUG
+    else
+        printfUciOut("option name LogFile type string default ---\n");
+#endif
+
 #ifdef USE_THREADS
 	if (Glob.threadOverride == 0)
     printfUciOut("option name Threads type spin default %d min 1 max %d\n", Glob.numberOfThreads, MAX_THREADS);
@@ -332,6 +340,12 @@ void ParseSetoption(const char *ptr) {
 
     // Here starts a block of non-eval options
 
+    } else if (strcmp(name, "logfile") == 0)                           {
+        LogFileWStr = CStr2WStr(value);
+        if (!isabsolute(WStr2Str(LogFileWStr).c_str()))
+            LogFileWStr = RodentHomeDirWStr + LogFileWStr;
+        printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
+        ReadPersonality("basic.ini"); // only for checking "CLEAR_LOG" - needed!
     } else if (strcmp(name, "bookfilter") == 0)                              {
 	    Par.bookFilter = atoi(value);
     } else if (strcmp(name, "guidebookfile") == 0)                           {
