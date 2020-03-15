@@ -625,9 +625,7 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
     int hashScore = -INF;
 
     bool flagInCheck;
-    // bool flagExtended;
     bool flagFutility = false;
-    // bool didNull = false;
     bool isPv = (alpha != beta - 1);
     bool canSing = false;
 
@@ -750,8 +748,6 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
     && flagPrunableNode
     && p->MayNull()
     && eval >= beta) {
-
-        // didNull = true;
 
         // null move depth reduction - modified Stockfish formula
 
@@ -898,19 +894,22 @@ avoidNull:
         newDepth = depth - 1;
 
         // EXTENSIONS
+        // please note they behave in an unusual way: if there are
+        // more than one reason to extend, we can extend by more
+        // than one ply. It would be preferable to avoid that,
+        // but tests show that with current extension restrictions
+        // it works best.
 
         // 1. check extension, applied in pv nodes or at low depth
 
         if (isPv || depth < 8) {
             newDepth += p->InCheck();
-            // flagExtended = true;
         };
 
         // 2. recapture extension in pv-nodes
 
         if (isPv && Tsq(move) == lastCaptSquare) {
             newDepth += 1;
-            // flagExtended = true;
         };
 
         // 3. pawn to 7th rank extension at the tips of pv-line
@@ -920,7 +919,6 @@ avoidNull:
         && p->TpOnSq(Tsq(move)) == P
         && (SqBb(Tsq(move)) & (RANK_2_BB | RANK_7_BB))) {
             newDepth += 1;
-            // flagExtended = true;
         };
 
         // 4. singular extension, Senpai-style
@@ -928,14 +926,12 @@ avoidNull:
         if (isPv
         && depth > 5
         && move == singMove
-        && canSing
-        /*&& flExtended == false*/) {
+        && canSing) {
             int newAlpha = -singScore - 50;
             int mockPv;
             int sc = Search(p, ply+1, newAlpha, newAlpha + 1, depth - 4, false, -1, -1, &mockPv);
             if (sc <= newAlpha) {
                 newDepth += 1;
-                // flagExtended = true;
             }
         }
 
