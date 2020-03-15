@@ -460,6 +460,12 @@ void ReadPersonality(const char *fileName) {
         if (strstr(line, "SHOW_OPTIONS")) Glob.usePersonalityFiles = false; // DEFAULT
         if (strstr(line, "HIDE_PERSFILE")) Glob.showPersonalityFile = false; // DEFAULT == true
 
+        if (strstr(line, "CLEAR_LOG")) {
+            FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
+            if (logFile) fclose(logFile);
+            printf_debug("Log cleared\n");
+        }
+
         // Aliases for personalities
 
         pos = strchr(line, '=');

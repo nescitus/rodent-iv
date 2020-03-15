@@ -19,6 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <stdarg.h>
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -325,3 +326,27 @@ std::string GetFullPath(const char *exe_file) {
     return FullPathFileStr;
 }
 #endif
+
+void printfLog(const char *preStr, const char *fmt, ...)
+{
+    va_list ap;
+
+    va_start(ap, fmt);
+
+    if (strcmp(preStr, ">> ")) // uci-in needn't echo
+        vfprintf(stdout, fmt, ap);
+
+    if (LogFileWStr != L"") {
+
+        FILE *logFile = NULL;
+
+        logFile = fopen(WStr2Str(LogFileWStr).c_str(), "a+");
+        if (logFile) {
+            fprintf(logFile, "%s", preStr);
+            vfprintf(logFile, fmt, ap);
+            fclose(logFile);
+        }
+    }
+
+    va_end(ap);
+}
