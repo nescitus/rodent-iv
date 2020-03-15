@@ -93,7 +93,7 @@ void PrintVersion() {
 
     // Maybe too much info - can be shortened later
     // But currently it's not bad to have infos
-    printf("%s\n",OutStr.c_str());
+    printfUciOut("%s\n",OutStr.c_str());
 }
 
 int main() {
@@ -112,6 +112,7 @@ int main() {
     cEngine::InitSearch();
     POS::Init();
     Glob.Init();
+	Par.SetSpeed(2800); // no longer part of DefaultWeights
     Par.DefaultWeights();
     Par.InitKingAttackTable();
 	Par.use_ponder = false;
@@ -125,11 +126,11 @@ int main() {
 
 if (Glob.isNoisy) {
 #if defined(_WIN32) || defined(_WIN64)
-    printf("info string opening books path is '%ls' (%s)\n", _BOOKSPATH, ChDir(_BOOKSPATH) ? "exists" : "doesn't exist");
-    printf("info string personalities path is '%ls' (%s)\n", _PERSONALITIESPATH, ChDir(_PERSONALITIESPATH) ? "exists" : "doesn't exist");
+    printfUciOut("info string opening books path is '%ls' (%s)\n", _BOOKSPATH, ChDir(_BOOKSPATH) ? "exists" : "doesn't exist");
+    printfUciOut("info string personalities path is '%ls' (%s)\n", _PERSONALITIESPATH, ChDir(_PERSONALITIESPATH) ? "exists" : "doesn't exist");
 #else
-    printf("info string opening books path is '%s' (%s)\n", _BOOKSPATH, ChDir(_BOOKSPATH) ? "exists" : "doesn't exist");
-    printf("info string personalities path is '%s' (%s)\n", _PERSONALITIESPATH, ChDir(_PERSONALITIESPATH) ? "exists" : "doesn't exist");
+    printfUciOut("info string opening books path is '%s' (%s)\n", _BOOKSPATH, ChDir(_BOOKSPATH) ? "exists" : "doesn't exist");
+    printfUciOut("info string personalities path is '%s' (%s)\n", _PERSONALITIESPATH, ChDir(_PERSONALITIESPATH) ? "exists" : "doesn't exist");
 #endif
 }
 

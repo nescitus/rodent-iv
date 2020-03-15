@@ -33,62 +33,70 @@ struct {
 } pers_aliases;
 
 void PrintSingleOption(int ind) {
-    printf("option name %s type spin default %d min %d max %d\n",
+    printfUciOut("option name %s type spin default %d min %d max %d\n",
             paramNames[ind], Par.values[ind], Par.min_val[ind], Par.max_val[ind]);
 }
 
 void PrintUciOptions() {
 
-	printf("option name Clear Hash type button\n");
-    printf("option name Hash type spin default 16 min 1 max %d\n", max_tt_size_mb);
+	printfUciOut("option name Clear Hash type button\n");
+    printfUciOut("option name Hash type spin default 16 min 1 max %d\n", max_tt_size_mb);
+
+    if (LogFileWStr != L"")
+        printfUciOut("option name LogFile type string default %s\n", WStr2Str(LogFileWStr).c_str());
+#ifdef DEBUG
+    else
+        printfUciOut("option name LogFile type string default ---\n");
+#endif
+
 #ifdef USE_THREADS
 	if (Glob.threadOverride == 0)
-    printf("option name Threads type spin default %d min 1 max %d\n", Glob.numberOfThreads, MAX_THREADS);
+    printfUciOut("option name Threads type spin default %d min 1 max %d\n", Glob.numberOfThreads, MAX_THREADS);
 #endif
-    printf("option name MultiPV type spin default %d min 1 max %d\n", Glob.multiPv, MAX_PV);
-	printf("option name TimeBuffer type spin default %d min 0 max 1000\n", Glob.timeBuffer);
+    printfUciOut("option name MultiPV type spin default %d min 1 max %d\n", Glob.multiPv, MAX_PV);
+	printfUciOut("option name TimeBuffer type spin default %d min 0 max 1000\n", Glob.timeBuffer);
 
     if (Glob.eloSlider) {
-        printf("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
-        printf("option name PrintPv type check default %s\n", Glob.printPv ? "true" : "false");
-        printf("option name Taunting type check default %s\n", Glob.useTaunting ? "true" : "false");
-        printf("option name UCI_Elo type spin default %d min 800 max 2800\n", Par.elo);
+        printfUciOut("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
+        printfUciOut("option name PrintPv type check default %s\n", Glob.printPv ? "true" : "false");
+        printfUciOut("option name Taunting type check default %s\n", Glob.useTaunting ? "true" : "false");
+        printfUciOut("option name UCI_Elo type spin default %d min 800 max 2800\n", Par.elo);
     }
 
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)
-            printf("option name PersonalityFile type string default default.txt\n");
+            printfUciOut("option name PersonalityFile type string default default.txt\n");
         if (pers_aliases.count != 0) {
-            printf("option name Personality type combo default ---"); // `---` in case we want PersonalityFile
+            printfUciOut("option name Personality type combo default ---"); // `---` in case we want PersonalityFile
             for (int i = 0; i < pers_aliases.count; i++)
-                printf(" var %s", pers_aliases.alias[i]);
-            printf("\n");
+                printfUciAdd(" var %s", pers_aliases.alias[i]);
+            printfUciAdd("\n");
         }
     } else {
 
-        printf("option name PawnValue type spin default %d min 0 max 1200\n", V(P_MID));
-        printf("option name KnightValue type spin default %d min 0 max 1200\n", V(N_MID));
-        printf("option name BishopValue type spin default %d min 0 max 1200\n", V(B_MID));
-        printf("option name RookValue type spin default %d min 0 max 1200\n", V(R_MID));
-        printf("option name QueenValue type spin default %d min 0 max 1200\n", V(Q_MID));
+        printfUciOut("option name PawnValue type spin default %d min 0 max 1200\n", V(P_MID));
+        printfUciOut("option name KnightValue type spin default %d min 0 max 1200\n", V(N_MID));
+        printfUciOut("option name BishopValue type spin default %d min 0 max 1200\n", V(B_MID));
+        printfUciOut("option name RookValue type spin default %d min 0 max 1200\n", V(R_MID));
+        printfUciOut("option name QueenValue type spin default %d min 0 max 1200\n", V(Q_MID));
 
-        printf("option name KeepPawn type spin default %d min 0 max 500\n", Par.keep[P]);
-        printf("option name KeepKnight type spin default %d min 0 max 500\n", Par.keep[N]);
-        printf("option name KeepBishop type spin default %d min 0 max 500\n", Par.keep[B]);
-        printf("option name KeepRook type spin default %d min 0 max 500\n", Par.keep[R]);
-        printf("option name KeepQueen type spin default %d min 0 max 500\n", Par.keep[Q]);
+        printfUciOut("option name KeepPawn type spin default %d min 0 max 500\n", Par.keep[P]);
+        printfUciOut("option name KeepKnight type spin default %d min 0 max 500\n", Par.keep[N]);
+        printfUciOut("option name KeepBishop type spin default %d min 0 max 500\n", Par.keep[B]);
+        printfUciOut("option name KeepRook type spin default %d min 0 max 500\n", Par.keep[R]);
+        printfUciOut("option name KeepQueen type spin default %d min 0 max 500\n", Par.keep[Q]);
 
         PrintSingleOption(B_PAIR_MG);
         PrintSingleOption(B_PAIR_EG);
         PrintSingleOption(N_PAIR);
         PrintSingleOption(R_PAIR);
-        printf("option name ExchangeImbalance type spin default %d min -200 max 200\n", V(A_EXC));
-        printf("option name KnightLikesClosed type spin default %d min 0 max 10\n", V(N_CL));
+        printfUciOut("option name ExchangeImbalance type spin default %d min -200 max 200\n", V(A_EXC));
+        printfUciOut("option name KnightLikesClosed type spin default %d min 0 max 10\n", V(N_CL));
 
         PrintSingleOption(W_MATERIAL);
-        printf("option name PrimaryPstStyle type spin default %d min 0 max 4\n", Par.primaryPstStyle);
-        printf("option name SecondaryPstStyle type spin default %d min 0 max 4\n", Par.secondaryPstStyle);
-        // printf("option name PiecePlacement type spin default %d min 0 max 500\n", V(W_PRIM));
+        printfUciOut("option name PrimaryPstStyle type spin default %d min 0 max 4\n", Par.primaryPstStyle);
+        printfUciOut("option name SecondaryPstStyle type spin default %d min 0 max 4\n", Par.secondaryPstStyle);
+        // printfUciOut("option name PiecePlacement type spin default %d min 0 max 500\n", V(W_PRIM));
         PrintSingleOption(W_OWN_ATT);
         PrintSingleOption(W_OPP_ATT);
         PrintSingleOption(W_OWN_MOB);
@@ -105,29 +113,29 @@ void PrintUciOptions() {
         PrintSingleOption(W_OUTPOSTS);
         PrintSingleOption(W_LINES);
 
-        printf("option name FianchKing type spin default %d min 0 max 100\n", V(B_KING));
+        printfUciOut("option name FianchKing type spin default %d min 0 max 100\n", V(B_KING));
 
-        printf("option name Contempt type spin default %d min -500 max 500\n", Par.drawScore);
+        printfUciOut("option name Contempt type spin default %d min -500 max 500\n", Par.drawScore);
 
         if (!Glob.eloSlider) {
-            printf("option name EvalBlur type spin default %d min 0 max 5000000\n", Par.evalBlur);
-            printf("option name NpsLimit type spin default %d min 0 max 5000000\n", Par.npsLimit);
+            printfUciOut("option name EvalBlur type spin default %d min 0 max 5000000\n", Par.evalBlur);
+            printfUciOut("option name NpsLimit type spin default %d min 0 max 5000000\n", Par.npsLimit);
         }
 
-        printf("option name SlowMover type spin default %d min 10 max 500\n", Par.timePercentage);
-        printf("option name Selectivity type spin default %d min 10 max 500\n", Par.hist_perc);
-        printf("option name SearchSkill type spin default %d min 0 max 10\n", Par.searchSkill);
+        printfUciOut("option name SlowMover type spin default %d min 10 max 500\n", Par.timePercentage);
+        printfUciOut("option name Selectivity type spin default %d min 10 max 500\n", Par.hist_perc);
+        printfUciOut("option name SearchSkill type spin default %d min 0 max 10\n", Par.searchSkill);
     }
-	printf("option name Verbose type check default %s\n", Glob.isNoisy ? "true" : "false");
-    printf("option name Ponder type check default %s\n", Par.use_ponder ? "true" : "false");
-    printf("option name UseBook type check default %s\n", Par.useBook ? "true" : "false");
-    printf("option name VerboseBook type check default %s\n", Par.verboseBook ? "true" : "false");
-    printf("option name MobilityRebalancing type check default %s\n", Par.useMobilityRebalancing ? "true" : "false");
+	printfUciOut("option name Verbose type check default %s\n", Glob.isNoisy ? "true" : "false");
+    printfUciOut("option name Ponder type check default %s\n", Par.use_ponder ? "true" : "false");
+    printfUciOut("option name UseBook type check default %s\n", Par.useBook ? "true" : "false");
+    printfUciOut("option name VerboseBook type check default %s\n", Par.verboseBook ? "true" : "false");
+    printfUciOut("option name MobilityRebalancing type check default %s\n", Par.useMobilityRebalancing ? "true" : "false");
 
     if (!Glob.useBooksFromPers || !Glob.usePersonalityFiles) {
-        printf("option name BookFilter type spin default %d min 0 max 100\n", Par.bookFilter);
-        printf("option name GuideBookFile type string default %s\n", GuideBook.bookName);
-        printf("option name MainBookFile type string default %s\n", MainBook.bookName);
+        printfUciOut("option name BookFilter type spin default %d min 0 max 100\n", Par.bookFilter);
+        printfUciOut("option name GuideBookFile type string default %s\n", GuideBook.bookName);
+        printfUciOut("option name MainBookFile type string default %s\n", MainBook.bookName);
     }
 }
 
@@ -332,6 +340,12 @@ void ParseSetoption(const char *ptr) {
 
     // Here starts a block of non-eval options
 
+    } else if (strcmp(name, "logfile") == 0)                           {
+        LogFileWStr = CStr2WStr(value);
+        if (!isabsolute(WStr2Str(LogFileWStr).c_str()))
+            LogFileWStr = RodentHomeDirWStr + LogFileWStr;
+        printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
+        ReadPersonality("basic.ini"); // only for checking "CLEAR_LOG" - needed!
     } else if (strcmp(name, "bookfilter") == 0)                              {
 	    Par.bookFilter = atoi(value);
     } else if (strcmp(name, "guidebookfile") == 0)                           {
@@ -427,7 +441,7 @@ void ReadPersonality(const char *fileName) {
     printf_debug("reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");
 
     if (Glob.isNoisy)
-        printf("info string reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");
+        printfUciOut("info string reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");
 
     // Exit if this personality file doesn't exist
 
@@ -459,6 +473,12 @@ void ReadPersonality(const char *fileName) {
         if (strstr(line, "HIDE_OPTIONS")) Glob.usePersonalityFiles = true;
         if (strstr(line, "SHOW_OPTIONS")) Glob.usePersonalityFiles = false; // DEFAULT
         if (strstr(line, "HIDE_PERSFILE")) Glob.showPersonalityFile = false; // DEFAULT == true
+
+        if (strstr(line, "CLEAR_LOG")) {
+            FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
+            if (logFile) fclose(logFile);
+            printf_debug("Log cleared\n");
+        }
 
         // Aliases for personalities
 

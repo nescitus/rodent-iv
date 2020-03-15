@@ -19,6 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <stdarg.h>
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -120,7 +121,7 @@ void PrintMove(int move) {
 
     char moveString[6];
     MoveToStr(move, moveString);
-    printf("%s", moveString);
+    printfUciAdd("%s", moveString);
 }
 
 // returns internal static string. not thread safe!!!
@@ -246,9 +247,9 @@ bool ChDir(const wchar_t *new_path) {
 void PrintOverrides() {
 
     if (char *ptr = getenv("RIIIBOOKS"))
-        printf("info string override for books path: '%s'\n", ptr);
+        printfUciOut("info string override for books path: '%s'\n", ptr);
     if (char *ptr = getenv("RIIIPERSONALITIES"))
-        printf("info string override for personalities path: '%s'\n", ptr);
+        printfUciOut("info string override for personalities path: '%s'\n", ptr);
 }
 #ifndef ANDROID
 bool ChDirEnv(const char *env_name) {
@@ -325,3 +326,30 @@ std::string GetFullPath(const char *exe_file) {
     return FullPathFileStr;
 }
 #endif
+
+void printfLog(const char *preStr, const char *fmt, ...)
+{
+    va_list ap;
+
+    va_start(ap, fmt);
+
+    if (strcmp(preStr, ">> ")) // uci-in needn't echo
+        vfprintf(stdout, fmt, ap);
+
+    if (LogFileWStr != L"") {
+
+		if (Glob.isNoisy ||
+		   (strstr(fmt, "info depth ")!=fmt && strstr(fmt, "info currmove ")!=fmt)) {
+
+            FILE *logFile = NULL;
+            logFile = fopen(WStr2Str(LogFileWStr).c_str(), "a+");
+            if (logFile) {
+                fprintf(logFile, "%s", preStr);
+                vfprintf(logFile, fmt, ap);
+                fclose(logFile);
+            }
+        }
+    }
+
+    va_end(ap);
+}

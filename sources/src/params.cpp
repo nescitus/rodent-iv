@@ -35,15 +35,15 @@ void cParam::DefaultWeights() {  // tuned automatically
     // Switch off weakening parameters
 
     searchSkill = 10;
-    npsLimit = 0;
+    // npsLimit = 0; // became part of SetSpeed
     useWeakening = true;
     elo = 2800;
-    evalBlur = 0;
+    // evalBlur = 0; // became part of SetSpeed
     useMobilityRebalancing = false;
 
     // Opening book
 
-    bookDepth = 256;
+    // bookDepth = 256; // became part of SetSpeed
     bookFilter = 20;
 
     // Timing
@@ -458,7 +458,7 @@ void cParam::SetSpeed(int elo_in) {
     evalBlur = 0;
     bookDepth = 256;
 
-    if (useWeakening) {
+    if (useWeakening && elo_in<2800) {
         npsLimit = EloToSpeed(elo_in);
         evalBlur = EloToBlur(elo_in);
         bookDepth = SpeedToBookDepth(npsLimit);

@@ -1016,8 +1016,13 @@ extern const int ph_value[7];
     constexpr bool isabsolute(const char *path) { return path[0] == '/'; }
 #endif
 
+#define printfUciIn(...)  printfLog(">> ", __VA_ARGS__)
+#define printfUciOut(...) printfLog("<< ", __VA_ARGS__)
+#define printfUciAdd(...) printfLog("", __VA_ARGS__)
+void printfLog(const char *preStr, const char *fmt, ...);
+
 #ifndef NDEBUG
-    #define printf_debug(...) printf("(debug) " __VA_ARGS__)
+    #define printf_debug(...) printfLog("(debug) ", __VA_ARGS__)
 #else
     #define printf_debug(...) {}
 #endif

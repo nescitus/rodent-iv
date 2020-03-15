@@ -54,7 +54,7 @@ void POS::SetPosition(const char *epd) {
                     ;
 
                 if ( !pc_char[pc_loop] ) {
-                    printf("info string FEN parsing error\n");
+                    printfUciOut("info string FEN parsing error\n");
                     SetPosition(START_POS);
                     return;
                 }
