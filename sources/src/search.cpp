@@ -254,7 +254,7 @@ void cEngine::Iterate(POS *p, int *pv) {
 
         // Perform actual search
 
-        printf("info depth %d\n", mRootDepth);
+        printfUciOut("info depth %d\n", mRootDepth);
 
         if (Par.searchSkill > 6) {
             cur_val = Widen(p, mRootDepth, pv, cur_val);
@@ -424,7 +424,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
     while ((move = NextMove(m, &mv_type, ply))) {
 
         if (Glob.finishedDepth >= depth && Glob.numberOfThreads > 1) {
-            printf("info string restarting lagging thread\n");
+            printfUciOut("info string restarting lagging thread\n");
             return 0;
         }
 
@@ -1134,9 +1134,12 @@ U64 GetNps(int elapsed) {
 void DisplayCurrmove(int move, int tried) {
 
     if (!Glob.isConsole && Glob.printPv) {
-        printf("info currmove ");
-        PrintMove(move);
-        printf(" currmovenumber %d \n", tried);
+        // Have to make single line to be able filtering it out for logging
+        char moveString[6];
+        MoveToStr(move, moveString);
+        printfUciOut((
+            "info currmove " + (std::string)moveString +
+            " currmovenumber " + std::to_string(tried) + "\n").c_str());
     }
 }
 
@@ -1163,10 +1166,10 @@ void cEngine::DisplayPv(int multipv, int score, int *pv) {
     PvToStr(pv, pvString);
 
     if (multipv == 0)
-        printf("info depth %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
+        printfUciOut("info depth %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
                 mRootDepth, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
     else
-        printf("info depth %d multipv %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
+        printfUciOut("info depth %d multipv %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
                 mRootDepth, multipv, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
 }
 

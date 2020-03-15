@@ -121,7 +121,7 @@ void PrintMove(int move) {
 
     char moveString[6];
     MoveToStr(move, moveString);
-    printf("%s", moveString);
+    printfUciAdd("%s", moveString);
 }
 
 // returns internal static string. not thread safe!!!
@@ -247,9 +247,9 @@ bool ChDir(const wchar_t *new_path) {
 void PrintOverrides() {
 
     if (char *ptr = getenv("RIIIBOOKS"))
-        printf("info string override for books path: '%s'\n", ptr);
+        printfUciOut("info string override for books path: '%s'\n", ptr);
     if (char *ptr = getenv("RIIIPERSONALITIES"))
-        printf("info string override for personalities path: '%s'\n", ptr);
+        printfUciOut("info string override for personalities path: '%s'\n", ptr);
 }
 #ifndef ANDROID
 bool ChDirEnv(const char *env_name) {
@@ -338,13 +338,16 @@ void printfLog(const char *preStr, const char *fmt, ...)
 
     if (LogFileWStr != L"") {
 
-        FILE *logFile = NULL;
+		if (Glob.isNoisy ||
+		   (strstr(fmt, "info depth ")!=fmt && strstr(fmt, "info currmove ")!=fmt)) {
 
-        logFile = fopen(WStr2Str(LogFileWStr).c_str(), "a+");
-        if (logFile) {
-            fprintf(logFile, "%s", preStr);
-            vfprintf(logFile, fmt, ap);
-            fclose(logFile);
+            FILE *logFile = NULL;
+            logFile = fopen(WStr2Str(LogFileWStr).c_str(), "a+");
+            if (logFile) {
+                fprintf(logFile, "%s", preStr);
+                vfprintf(logFile, fmt, ap);
+                fclose(logFile);
+            }
         }
     }
 

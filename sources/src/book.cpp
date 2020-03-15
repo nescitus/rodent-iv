@@ -386,7 +386,7 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
 	if (bookFile != NULL) srand(GetMS());
 
     if (Glob.isNoisy)
-        printf("info string probing '%s'...\n", bookName);
+        printfUciOut("info string probing '%s'...\n", bookName);
 
     for (int pos = FindPos(key); pos < bookSizeInEntries && (ReadEntry(entry, pos), entry->key == key); pos++) {
 
@@ -426,10 +426,10 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
 
         if (values[i] > -1 || max_weight == 1) {
             if (print_output && Glob.isNoisy) {
-                printf("info string ");
+                printfUciOut("info string ");
                 PrintMove(moves[i]);
-                if (IsInfrequent(values[i], max_weight)) printf("?!\n");
-                else                                     printf(" %d %%\n", (values[i] * 100) / weight_sum);
+                if (IsInfrequent(values[i], max_weight)) printfUciAdd("?!\n");
+                else                                     printfUciAdd(" %d %%\n", (values[i] * 100) / weight_sum);
             }
         }
 

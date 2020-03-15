@@ -41,6 +41,8 @@ void ReadLine(char *str, int n) {
         exit(0);
     if ((ptr = strchr(str, '\n')) != NULL)
         *ptr = '\0';
+
+    printfUciIn("%s\n", str);
 }
 
 const char *ParseToken(const char *string, char *token) {
@@ -71,10 +73,10 @@ void UciLoop() {
             PrintVersion();
 
             Glob.isConsole = false;
-            printf("id author Pawel Koziol, Bernhard C. Maerz (based on Sungorus 1.4 by Pablo Vazquez)\n");
+            printfUciOut("id author Pawel Koziol, Bernhard C. Maerz (based on Sungorus 1.4 by Pablo Vazquez)\n");
             PrintOverrides();
             PrintUciOptions();
-            printf("uciok\n");
+            printfUciOut("uciok\n");
         } else if (strcmp(token, "ucinewgame") == 0) {
             Trans.Clear();
             Glob.ClearData();
@@ -82,7 +84,7 @@ void UciLoop() {
             srand(GetMS());
             Glob.game_key = p->Random64() ^ (U64) GetMS(); // so that the weakest personalities do not repeat the same game
         } else if (strcmp(token, "isready") == 0)    {
-            printf("readyok\n");
+            printfUciOut("readyok\n");
         } else if (strcmp(token, "setoption") == 0)  {
             ParseSetoption(ptr);
         } else if (strcmp(token, "so") == 0)         {
@@ -143,7 +145,7 @@ void POS::ParseMoves(const char *ptr) {
             DoMove(move);
             Glob.moves_from_start++;
         }
-        else printf("info string illegal move\n");
+        else printfUciOut("info string illegal move\n");
 
         // We won't be taking back moves beyond this point:
 
@@ -189,9 +191,9 @@ void ExtractMove(int *pv) {
     MoveToStr(pv[0], bestmove_str);
     if (pv[1]) {
         MoveToStr(pv[1], ponder_str);
-        printf("bestmove %s ponder %s\n", bestmove_str, ponder_str);
+        printfUciOut("bestmove %s ponder %s\n", bestmove_str, ponder_str);
     } else
-        printf("bestmove %s\n", bestmove_str);
+        printfUciOut("bestmove %s\n", bestmove_str);
 }
 
 void cEngine::SetMoveTime(int base, int inc, int movestogo) {
@@ -224,7 +226,7 @@ void cEngine::SetMoveTime(int base, int inc, int movestogo) {
 
         msMoveTime = BulletCorrection(msMoveTime);
         if (Glob.isNoisy)
-            printf("info string base %d, Inc %d, ToGo %d, assigned %d milliseconds\n", base, inc, movestogo, msMoveTime);
+            printfUciOut("info string base %d, Inc %d, ToGo %d, assigned %d milliseconds\n", base, inc, movestogo, msMoveTime);
     }
 }
 
@@ -312,7 +314,7 @@ void ParseGo(POS *p, const char *ptr) {
     if (Par.useBook) {
 
         if (Glob.isNoisy)
-            printf("info string bd %d mfs %d\n", Par.bookDepth, Glob.moves_from_start);
+            printfUciOut("info string bd %d mfs %d\n", Par.bookDepth, Glob.moves_from_start);
 
         int pvb = GuideBook.GetPolyglotMove(p, Par.verboseBook);
 
@@ -321,7 +323,7 @@ void ParseGo(POS *p, const char *ptr) {
         }
 
         if (pvb) {
-            printf("bestmove %s\n", MoveToStr(pvb));
+            printfUciOut("bestmove %s\n", MoveToStr(pvb));
             return;
         }
     }
@@ -455,12 +457,12 @@ void POS::PrintBoard() const {
 
     static const char piece_name[] = {'P', 'p', 'N', 'n', 'B', 'b', 'R', 'r', 'Q', 'q', 'K', 'k', '.' };
 
-    printf("     --------------------------\n     |   ");
+    printfUciAdd("     --------------------------\n     |   ");
     for (int sq = 0; sq < 64; sq++) {
-        printf("%c ", piece_name[mPc[sq ^ (BC * 56)]]);
-        if ((sq + 1) % 8 == 0) printf(" %d   |\n     |   ", 9 - ((sq + 1) / 8));
+        printfUciAdd("%c ", piece_name[mPc[sq ^ (BC * 56)]]);
+        if ((sq + 1) % 8 == 0) printfUciAdd(" %d   |\n     |   ", 9 - ((sq + 1) / 8));
     }
 
-    printf("                     |\n     |   a b c d e f g h   (%c)|\n     --------------------------\n",
+    printfUciAdd("                     |\n     |   a b c d e f g h   (%c)|\n     --------------------------\n",
                                                                                             mSide == WC ? 'w' : 'b');
 }

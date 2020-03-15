@@ -352,71 +352,71 @@ void PrintTaunt(int eventType) {
 void PrintGenericTaunt() {
     srand(time(NULL));
     std::string word = generalTaunts[rand() % GENERAL_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintCaptureTaunt() {
     srand(time(NULL));
     std::string word = captureTaunts[rand() % CAPTURE_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintWinningTaunt() {
     srand(time(NULL));
     std::string word = winningTaunts[rand() % WINNING_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintAdvantageTaunt() {
     srand(time(NULL));
     std::string word = advantageTaunts[rand() % ADVANTAGE_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintBalanceTaunt() {
     srand(time(NULL));
     std::string word = balanceTaunts[rand() % BALANCE_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintDisdvantageTaunt() {
     srand(time(NULL));
     std::string word = disadvantageTaunts[rand() % DISADVANTAGE_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintLosingTaunt() {
     srand(time(NULL));
     std::string word = losingTaunts[rand() % LOSING_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintCrushingTaunt() {
     srand(time(NULL));
     std::string word = crushingTaunts[rand() % CRUSHING_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintUserBlunderTaunt() {
     srand(time(NULL));
     std::string word = userBlunderTaunts[rand() % USER_BLUNDER_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintEngineBlunderTaunt() {
     srand(time(NULL));
     std::string word = engineBlunderTaunts[rand() % ENGINE_BLUNDER_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintEngineEscapeTaunt() {
     srand(time(NULL));
     std::string word = escapeTaunts[rand() % ESCAPE_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }
 
 void PrintGainingTaunt() {
     srand(time(NULL));
     std::string word = gainingTaunts[rand() % GAINING_TAUNTS_NO];
-    std::cout << "info string " << word << std::endl;
+    printfUciOut("info string %s\n", word.c_str());
 }

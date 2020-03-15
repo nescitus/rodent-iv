@@ -49,7 +49,7 @@ struct sBook {
         strcpy(bookName, name);
         OpenPolyglot();
         if (Glob.isNoisy)
-            printf("info string reading book file '%s' (%s)\n", bookName,
+            printfUciOut("info string reading book file '%s' (%s)\n", bookName,
                                         Success() ? (bookMemory ? "success/m" : "success/d") : "failure");
     }
     bool Success() const { return bookFile || bookMemory; }
