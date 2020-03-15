@@ -112,6 +112,7 @@ int main() {
     cEngine::InitSearch();
     POS::Init();
     Glob.Init();
+	Par.SetSpeed(2800); // no longer part of DefaultWeights
     Par.DefaultWeights();
     Par.InitKingAttackTable();
 	Par.use_ponder = false;
