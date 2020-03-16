@@ -56,8 +56,6 @@ setoption name PawnMass value 125
 setoption name PawnChains value 100
 setoption name PrimaryPstStyle value 2
 setoption name SecondaryPstStyle value 1
-setoption name NpsLimit value 0
-setoption name EvalBlur value 0
 setoption name Contempt value 0
 setoption name SlowMover value 100
 setoption name Selectivity value 175
