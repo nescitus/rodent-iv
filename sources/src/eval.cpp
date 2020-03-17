@@ -101,7 +101,6 @@ int cEngine::Evaluate(POS *p, eData *e) {
 
     // Piece/square table magic interpolation
 
-    /**/
     int mgPh = Min(p->mPhase, 24);
     int egPh = 24 - mgPh;
 
@@ -415,7 +414,7 @@ void cEngine::EvaluatePieces(POS *p, eData *e, eColor sd) {
         b = SqBb(sq);                                      // set square bitboard
         AddPst(e, sd, R, (eSquare)sq);
 
-        // rook tropism to enemy king (based on Hakapeliitta)
+        // rook tropism to enemy king (based on Hakkapeliitta)
 
         tropism += Dist.rookTropism[sq][kingSq];
 
@@ -846,26 +845,26 @@ void cEngine::EvaluateThreats(POS *p, eData *e, eColor sd) {
     undefended &= ~e->allAttacks[sd];
     undefended &= ~e->allAttacks[op];
 
-    hanging |= threatened;       // piece attacked by our pawn isn't well defended
-    hanging &= e->allAttacks[sd];   // hanging piece has to be attacked
+    hanging |= threatened;            // piece attacked by our pawn isn't well defended
+    hanging &= e->allAttacks[sd];     // hanging piece has to be attacked
 
-    defended &= e->GetNbrAttacks(sd);  // N, B, R attacks (pieces attacked by pawns are scored as hanging)
-    defended &= ~e->pawnTakes[sd];  // no defense against pawn attack
+    defended &= e->GetNbrAttacks(sd); // N, B, R attacks (pieces attacked by pawns are scored as hanging)
+    defended &= ~e->pawnTakes[sd];    // no defense against pawn attack
 
-	const int att_on_hang_mg[7] = {  0, 15, 15, 17, 25,  0,   0 };
-	const int att_on_hang_eg[7] = {  0, 23, 23, 25, 33,  0,   0 };
-	const int att_on_def_mg[7]  = {  0,  8,  8, 10, 15,  0,   0 };
-	const int att_on_def_eg[7]  = {  0, 12, 12, 14, 19,  0,   0 };
-	const int floating_mg[7] =    {  0,  5,  5,  5,  5,  0,   0 };
-	const int floating_eg[7] =    {  0,  9,  9,  9,  9,  0,   0 };
+	const int attOnHangingMg[7]  = {  0, 15, 15, 17, 25,  0,  0 };
+	const int attOnHangingEg[7]  = {  0, 23, 23, 25, 33,  0,  0 };
+	const int attOnDefendedMg[7] = {  0,  8,  8, 10, 15,  0,  0 };
+	const int attOnDefendedEg[7] = {  0, 12, 12, 14, 19,  0,  0 };
+	const int floatingPieceMg[7] = {  0,  5,  5,  5,  5,  0,  0 };
+	const int floatingPieceEg[7] = {  0,  9,  9,  9,  9,  0,  0 };
 
     // hanging pieces (attacked and undefended, based on DiscoCheck)
 
     while (hanging) {
         sq = PopFirstBit(&hanging);
         pc = p->TpOnSq(sq);
-        mg += att_on_hang_mg[pc];
-        eg += att_on_hang_eg[pc];
+        mg += attOnHangingMg[pc];
+        eg += attOnHangingEg[pc];
     }
 
     // defended pieces under attack
@@ -873,8 +872,8 @@ void cEngine::EvaluateThreats(POS *p, eData *e, eColor sd) {
     while (defended) {
         sq = PopFirstBit(&defended);
         pc = p->TpOnSq(sq);
-        mg += att_on_def_mg[pc];
-        eg += att_on_def_eg[pc];
+        mg += attOnDefendedMg[pc];
+        eg += attOnDefendedEg[pc];
     }
 
     // unattacked and undefended
@@ -882,11 +881,18 @@ void cEngine::EvaluateThreats(POS *p, eData *e, eColor sd) {
     while (undefended) {
 		sq = PopFirstBit(&undefended);
 		pc = p->TpOnSq(sq);
-		mg += floating_mg[pc];
-		eg += floating_eg[pc];
+		mg += floatingPieceMg[pc];
+		eg += floatingPieceEg[pc];
     }
 
     Add(e, sd, Percent(V(W_THREATS), mg), Percent(V(W_THREATS), eg));
+
+    // space evaluation - takes into account two factors:
+    // control of central squares by one player only
+    // and control of squares behind own pawn chain.
+    // It is scaled by the number of minor pieces, so
+    // much more important in the opening. The idea comes
+    // from Stockfish.
 
     U64 behind;
 
