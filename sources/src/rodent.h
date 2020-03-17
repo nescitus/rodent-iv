@@ -958,8 +958,6 @@ void UciLoop();
 int PolyglotRandom(int n);
 int Percent(int val, int perc);
 
-int GetReduction(bool i, int d, int mn);
-
 extern const int tp_value[7];
 extern const int ph_value[7];
 
