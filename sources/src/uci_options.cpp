@@ -445,7 +445,7 @@ void ReadPersonality(const char *fileName) {
 
     FILE *personalityFile = NULL;
     if (isabsolute(fileName)                    // if known locations don't exist we want to load only from absolute paths
-        || ChDirEnv("RIIIPERSONALITIES")        // try `RIIIPERSONALITIES` env var first (26/08/17: linux only)
+        || ChDirEnv("RODENT4PERSONALITIES")     // try `RODENT4PERSONALITIES` env var first (26/08/17: linux only)
             || ChDir(_PERSONALITIESPATH))       // next built-in path
                 personalityFile = fopen(fileName, "r");
     printf_debug("reading personality '%s' (%s)\n", fileName, personalityFile == NULL ? "failure" : "success");
