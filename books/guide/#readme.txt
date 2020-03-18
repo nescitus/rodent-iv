@@ -22,21 +22,8 @@ based on games by Tomasz Markowski with some lines added by hand.
 grandpa.bin - small book, Caro + Tarrasch as main Black options, Ruy + Nimzo as a backup,
 prefers d4 to e4 as White
 
-kasparov.bin - Kasparov's games from PgnMentor as the first layer
-+ 1980 to 2006 games as the second layer 
- 
 low.bin - minimal book which tries to start with a couple of moves that
 do not reach the 4th or the 5th rank.
-
-nimzowitsch.bin - Nimzowitsch's games form PgnMentor collection as the first layer 
-+ pre-1930 games from Norm Pollock's collection as the second layer
-
-petrosian.bin - Petrosian's games form PgnMentor collection as the first layer 
-+ 1931 to 1980 games from Norm Pollock's collection as the second layer
-
-ph-andersson2.bin - interesting book for a solid player
-
-ph-short2.bin - 1.e4 as white, Nimzo-Indian and mostly French as black.
 
 solid.bin - Karpov + Uhlmann
 
