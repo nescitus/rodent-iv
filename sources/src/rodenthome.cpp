@@ -39,11 +39,11 @@ std::string GetEnv(const char *envName) {
     // Simple variant is enough - without autoincrease the limit
     const DWORD buff_size = 255;
     
-    LPTSTR buff = new TCHAR[buff_size];
-    const DWORD var_size = GetEnvironmentVariable(envName,buff,buff_size);
-    
+    wchar_t buff[buff_size];
+    const DWORD var_size = GetEnvironmentVariableW(Str2WStr(envName).c_str(), buff, buff_size);
+
     if (var_size && var_size <= buff_size)
-        retStr = buff;
+        retStr = WCStr2Str(buff);
 #else
     char *envValue;
     envValue = getenv(envName);
@@ -62,7 +62,7 @@ bool MkDir(const char *DirName) {
     bool result;
     
 #if defined(_WIN32) || defined(_WIN64)
-    result = CreateDirectory (DirName, NULL);
+    result = CreateDirectoryW(Str2WStr(DirName).c_str(), NULL);
 #else
     result = (-1 != mkdir(DirName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH));
 #endif    
