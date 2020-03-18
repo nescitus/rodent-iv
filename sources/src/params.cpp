@@ -37,7 +37,7 @@ void cParam::DefaultWeights() {  // tuned automatically
     searchSkill = 10;
     // npsLimit = 0; // became part of SetSpeed
     useWeakening = true;
-    elo = 2800;
+    // elo = 2800; // was set at programstart - keep that value
     // evalBlur = 0; // became part of SetSpeed
     useMobilityRebalancing = false;
 
@@ -462,10 +462,12 @@ void cParam::SetSpeed(int elo_in) {
     bookDepth = 256;
 
     if (useWeakening && elo_in<2800) {
+        printf_debug("set ELO to %d\n", elo_in);
         npsLimit = EloToSpeed(elo_in);
         evalBlur = EloToBlur(elo_in);
         bookDepth = SpeedToBookDepth(npsLimit);
-    }
+    } else
+        printf_debug("set ELO to maximum\n");
 }
 
 int cParam::EloToSpeed(int elo_in) {
