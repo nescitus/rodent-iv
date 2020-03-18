@@ -324,6 +324,9 @@ void cParam::DefaultWeights() {  // tuned automatically
 
     hist_perc = 175;
     histLimit = 24576;
+
+    // user definded default values
+    ReadPersonality("default.txt");
 }
 
 void cParam::InitPassers() {

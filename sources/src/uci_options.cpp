@@ -437,7 +437,11 @@ void ReadPersonality(const char *fileName) {
     // and there will be no way of telling whether previous personality used their default
     // value or not. For that reason we reset params now.
 
-    Par.DefaultWeights();
+    // DefaultWeights will make user settings by calling this sub with "default.txt"
+    if (strcmp(fileName,"default.txt")  // no init in init in init ...
+        && strcmp(fileName,"basic.ini") // need init AFTER reading basic.ini (to use "setoption name Personality ..." there)
+        && !Glob.isReadingPersonality)  // no more init, when using "setoption name Personality ..."
+        Par.DefaultWeights(); // maybe better do this only if fileName exists???
 
     FILE *personalityFile = NULL;
     if (isabsolute(fileName)                    // if known locations don't exist we want to load only from absolute paths

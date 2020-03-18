@@ -1020,7 +1020,7 @@ extern const int ph_value[7];
 void printfLog(const char *preStr, const char *fmt, ...);
 
 #ifndef NDEBUG
-    #define printf_debug(...) printfLog("(debug) ", __VA_ARGS__)
+    #define printf_debug(...) printfLog("", "(debug) " __VA_ARGS__)
 #else
     #define printf_debug(...) {}
 #endif

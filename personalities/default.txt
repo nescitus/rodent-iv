@@ -1,0 +1,25 @@
+; Use this, if your GUI doesn't support uci-options.
+;
+
+; setoption name UCI_LimitStrength value true
+; setoption name UCI_Elo value 1500
+; setoption name LogFile value rodent.log
+; setoption name Verbose value true
+
+; setoption name Personality value Amanda
+; setoption name Personality value Ampere
+; setoption name Personality value Cloe
+; setoption name Personality value Deborah
+; setoption name Personality value Defender
+; setoption name Personality value Grumpy
+; setoption name Personality value Moriss
+; setoption name Personality value Nimzowitsch
+; setoption name Personality value Partisan
+; setoption name Personality value Pawnsacker
+; setoption name Personality value Pedrita
+; setoption name Personality value Preston
+; setoption name Personality value Simple
+; setoption name Personality value Spitfire
+; setoption name Personality value Strangler
+; setoption name Personality value Swapper
+; setoption name Personality value Tal

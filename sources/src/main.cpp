@@ -113,7 +113,7 @@ int main() {
     POS::Init();
     Glob.Init();
 	Par.SetSpeed(2800); // no longer part of DefaultWeights
-    Par.DefaultWeights();
+    // Par.DefaultWeights(); will be done later
     Par.InitKingAttackTable();
 	Par.use_ponder = false;
     Mask.Init();
@@ -140,9 +140,9 @@ if (Glob.isNoisy) {
     MainBook.SetBookName("rodent.bin");
     ReadPersonality("basic.ini");
 
-    // reading default personality
-    if (Glob.usePersonalityFiles)
-        ReadPersonality("default.txt");
+    // To make also "setoption name Personality ..." useable in "default.txt"
+    // We need set to default values AFTER reading basic.ini
+    Par.DefaultWeights();
 
     UciLoop();
 }
