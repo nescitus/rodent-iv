@@ -323,7 +323,7 @@ void ParseGo(POS *p, const char *ptr) {
         }
 
         if (pvb) {
-            printfUciOut("bestmove %s\n", MoveToStr(pvb));
+            printfUciOut("bestmove %s\n", MoveToStr(pvb).c_str());
             return;
         }
     }

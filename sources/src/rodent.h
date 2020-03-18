@@ -462,7 +462,7 @@ class POS {
 
     int Swap(int from, int to);
 
-    int StrToMove(char *move_str) const;
+    int StrToMove(const char *move_str) const;
 };
 
 struct MOVES {
@@ -943,7 +943,7 @@ void ExtractMove(int *pv);
 int GetMS();
 U64 GetNps(int elapsed);
 bool InputAvailable();
-char *MoveToStr(int move); // returns internal static string. not thread safe!!!
+std::string MoveToStr(int move);
 void MoveToStr(int move, char *move_str);
 void ParseGo(POS *p, const char *ptr);
 void ParseSetoption(const char *);

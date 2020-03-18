@@ -125,11 +125,11 @@ void PrintMove(int move) {
 }
 
 // returns internal static string. not thread safe!!!
-char *MoveToStr(int move) {
+std::string MoveToStr(int move) {
 
-    static char internalstring[6];
+    char internalstring[6];
     MoveToStr(move, internalstring);
-    return internalstring;
+    return (std::string)internalstring;
 }
 
 void MoveToStr(int move, char *move_str) {
@@ -155,7 +155,7 @@ void MoveToStr(int move, char *move_str) {
     }
 }
 
-int POS::StrToMove(char *move_str) const {
+int POS::StrToMove(const char *move_str) const {
 
     int from = Sq(move_str[0] - 'a', move_str[1] - '1');
     int to   = Sq(move_str[2] - 'a', move_str[3] - '1');

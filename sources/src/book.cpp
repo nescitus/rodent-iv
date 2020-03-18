@@ -408,7 +408,7 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
         // now we want to get a move with full data, not only from and to squares
 
         int internal_move = (tsq << 6) | fsq;
-        internal_move = p->StrToMove(MoveToStr(internal_move));
+        internal_move = p->StrToMove(MoveToStr(internal_move).c_str());
 
         if (max_weight < score) max_weight = score;
         weight_sum += score;
