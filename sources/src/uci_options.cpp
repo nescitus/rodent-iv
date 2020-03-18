@@ -356,10 +356,16 @@ void ParseSetoption(const char *ptr) {
         Par.drawScore = atoi(value);
         Glob.shouldClear = true;
     } else if (strcmp(name, "evalblur") == 0)                                {
-        Par.evalBlur = atoi(value);
-        Glob.shouldClear = true;
+        if (!Glob.isReadingPersonality) {
+            Par.evalBlur = atoi(value);
+            Glob.shouldClear = true;
+        } else
+            printf_debug("skipping when reading personalities setoption name: '%s'\n", name);
     } else if (strcmp(name, "npslimit") == 0)                                {
-        Par.npsLimit = atoi(value);
+        if (!Glob.isReadingPersonality)
+            Par.npsLimit = atoi(value);
+        else
+            printf_debug("skipping when reading personalities setoption name: '%s'\n", name);
     } else if (strcmp(name, "uci_elo") == 0)                                 {
         Par.elo = atoi(value);
         Par.SetSpeed(Par.elo);
