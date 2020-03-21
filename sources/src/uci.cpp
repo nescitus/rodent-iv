@@ -174,6 +174,15 @@ void POS::ParsePosition(const char *ptr) {
     }
     if (strcmp(token, "moves") == 0)
         ParseMoves(ptr);
+
+#ifdef DEBUG
+    // Currently mainly for checking 960
+    if (Glob.isNoisy && mCFlags &&
+        (Castle_W_RQ != A1 || Castle_W_K != E1 || Castle_W_RK != H1 ||
+        Castle_B_RQ != A8 || Castle_B_K != E8 || Castle_B_RK != H8)) {
+        PrintBoard();
+    }
+#endif
 }
 
 int cEngine::BulletCorrection(int time) {
@@ -457,6 +466,12 @@ void POS::PrintBoard() const {
 
     static const char piece_name[] = {'P', 'p', 'N', 'n', 'B', 'b', 'R', 'r', 'Q', 'q', 'K', 'k', '.' };
 
+    if (mCFlags)
+        printf("        %s%c%s    %s%c%s    %s%c%s\n",
+            (mCFlags & B_QS)?" ":"(", File(Fsq(Castle_B_RQ)) + 'a', (mCFlags & B_QS)?" ":")",
+            (mCFlags & (B_KS | B_QS))?" ":"(", File(Fsq(Castle_B_K)) + 'a', (mCFlags & (B_KS | B_QS))?" ":")",
+            (mCFlags & B_KS)?" ":"(", File(Fsq(Castle_B_RK)) + 'a', (mCFlags & B_KS)?" ":")");
+
     printfUciAdd("     --------------------------\n     |   ");
     for (int sq = 0; sq < 64; sq++) {
         printfUciAdd("%c ", piece_name[mPc[sq ^ (BC * 56)]]);
@@ -465,4 +480,10 @@ void POS::PrintBoard() const {
 
     printfUciAdd("                     |\n     |   a b c d e f g h   (%c)|\n     --------------------------\n",
                                                                                             mSide == WC ? 'w' : 'b');
+
+    if (mCFlags)
+        printf("        %s%c%s    %s%c%s    %s%c%s\n",
+            (mCFlags & W_QS)?" ":"(", File(Fsq(Castle_W_RQ)) + 'a', (mCFlags & W_QS)?" ":")",
+            (mCFlags & (W_KS | W_QS))?" ":"(", File(Fsq(Castle_W_K)) + 'a', (mCFlags & (W_KS | W_QS))?" ":")",
+            (mCFlags & W_KS)?" ":"(", File(Fsq(Castle_W_RK)) + 'a', (mCFlags & W_KS)?" ":")");
 }
