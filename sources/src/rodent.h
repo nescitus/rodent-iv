@@ -412,6 +412,7 @@ class POS {
     NOINLINE static U64 Random64();
 
     static void Init();
+    static void Init960();
 
     U64 Pawns(eColor sd)   const { return mClBb[sd] & mTpBb[P]; }
     U64 Knights(eColor sd) const { return mClBb[sd] & mTpBb[N]; }

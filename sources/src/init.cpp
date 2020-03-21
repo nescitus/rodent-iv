@@ -29,17 +29,37 @@ U64 POS::Random64() {
     return dist(e2);
 }
 
-void POS::Init() { // static init function
+void POS::Init960() { // static init function for chess960
 
     for (int sq = 0; sq < 64; sq++)
         msCastleMask[sq] = W_KS | W_QS | B_KS | B_QS;
 
-    msCastleMask[A1] = W_KS |        B_KS | B_QS;
-    msCastleMask[E1] =               B_KS | B_QS;
-    msCastleMask[H1] =        W_QS | B_KS | B_QS;
-    msCastleMask[A8] = W_KS | W_QS | B_KS       ;
-    msCastleMask[E8] = W_KS | W_QS              ;
-    msCastleMask[H8] = W_KS | W_QS        | B_QS;
+    msCastleMask[Castle_W_RQ] &= W_KS |        B_KS | B_QS;
+    msCastleMask[Castle_W_K]  &=               B_KS | B_QS;
+    msCastleMask[Castle_W_RK] &=        W_QS | B_KS | B_QS;
+    msCastleMask[Castle_B_RQ] &= W_KS | W_QS | B_KS       ;
+    msCastleMask[Castle_B_K]  &= W_KS | W_QS              ;
+    msCastleMask[Castle_B_RK] &= W_KS | W_QS        | B_QS;
+
+    CastleMask_W_QS =      CastleMask [File(Castle_W_K)][File(Castle_W_RQ)];
+    CastleMask_W_KS =      CastleMask [File(Castle_W_K)][File(Castle_W_RK)];
+    CastleMask_B_QS = (U64)CastleMask [File(Castle_B_K)][File(Castle_B_RQ)] << 56;
+    CastleMask_B_KS = (U64)CastleMask [File(Castle_B_K)][File(Castle_B_RK)] << 56;
+
+    CastleFile_RQ = File(Castle_W_RQ);
+    CastleFile_RK = File(Castle_W_RK);
+}
+
+void POS::Init() { // static init function
+
+    // Init standard-chess
+    Castle_W_RQ = A1;
+    Castle_W_K  = E1;
+    Castle_W_RK = H1;
+    Castle_B_RQ = A8;
+    Castle_B_K  = E8;
+    Castle_B_RK = H8;
+    Init960();
 
     for (int i = 0; i < 12; i++)
         for (int j = 0; j < 64; j++)
