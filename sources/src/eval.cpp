@@ -902,10 +902,7 @@ void cEngine::EvaluateThreats(POS *p, eData *e, eColor sd) {
         behind = BB.FillNorth(p->Pawns(BC));
 
     int minors = p->mCnt[sd][N] + p->mCnt[sd][B];
-    U64 space = bb_central_file;
-    if (sd == WC) space &= RANK_2_BB | RANK_3_BB | RANK_4_BB | RANK_5_BB;
-    else          space &= RANK_7_BB | RANK_6_BB | RANK_5_BB | RANK_4_BB;
-    space &= e->allAttacks[sd];
+    U64 space = Mask.space[sd] & e->allAttacks[sd];
     space |= ~e->allAttacks[op];
 
     int spaceBonus = minors * PopCnt(space) / 2;

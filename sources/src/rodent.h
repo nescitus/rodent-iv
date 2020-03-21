@@ -17,9 +17,9 @@ If not, see <http://www.gnu.org/licenses/>.
 */ 
 
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
-// 8158 lines
+// 8856 lines
 
-// bench 14, 64-bit release: 11835547 nodes searched in 12250, speed 966088 nps (Score: 2.242)
+// bench 14, 64-bit release: 11835547 nodes searched in 11281, speed 1049064 nps (Score: 2.435)
 // bench 14, 64-bit debug  : 11835547 nodes searched in 157344, speed 75220 nps (Score: 0.175)
 
 // bench 14, 32-bit release: 11835547 nodes searched in 15672, speed 755155 nps (Score: 1.752)
@@ -713,6 +713,8 @@ class cMask {
                                 | SqBb(C4) | SqBb(D4) | SqBb(E4) | SqBb(F4)
                                 | SqBb(C5) | SqBb(D5) | SqBb(E5) | SqBb(F5)
                                 | SqBb(C6) | SqBb(D6) | SqBb(E6) | SqBb(F6);
+    static constexpr U64 space[2] = { bb_central_file & (RANK_2_BB | RANK_3_BB | RANK_4_BB | RANK_5_BB),
+                                      bb_central_file & (RANK_7_BB | RANK_6_BB | RANK_5_BB | RANK_4_BB) };
 
     static constexpr U64 wb_special = SqBb(A7) | SqBb(A6) | SqBb(B8) | SqBb(H7) | SqBb(H6) | SqBb(G8) | SqBb(C1) | SqBb(F1) | SqBb(G2) | SqBb(B2);
     static constexpr U64 bb_special = SqBb(A2) | SqBb(A3) | SqBb(B1) | SqBb(H2) | SqBb(H3) | SqBb(G1) | SqBb(C8) | SqBb(F8) | SqBb(G7) | SqBb(B7);

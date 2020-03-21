@@ -32,6 +32,7 @@ constexpr U64 cMask::outpostMap[2];
 constexpr U64 cMask::kingSide;
 constexpr U64 cMask::q_side;
 constexpr U64 cMask::center;
+constexpr U64 cMask::space[2];
 
 // Squares requiring bishop pat
 constexpr U64 cMask::wb_special;
