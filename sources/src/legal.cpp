@@ -37,11 +37,11 @@ bool POS::Legal(int move) const {
                 if (fsq != E1)
                     return false;
                 if (tsq > fsq) {
-                    if ((mCFlags & W_KS) && !(Filled() & UINT64_C(0x0000000000000060)))
+                    if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
                         if (!Attacked(E1, BC) && !Attacked(F1, BC))
                             return true;
                 } else {
-                    if ((mCFlags & W_QS) && !(Filled() & UINT64_C(0x000000000000000E)))
+                    if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
                         if (!Attacked(E1, BC) && !Attacked(D1, BC))
                             return true;
                 }
@@ -49,11 +49,11 @@ bool POS::Legal(int move) const {
                 if (fsq != E8)
                     return false;
                 if (tsq > fsq) {
-                    if ((mCFlags & B_KS) && !(Filled() & UINT64_C(0x6000000000000000)))
+                    if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
                         if (!Attacked(E8, WC) && !Attacked(F8, WC))
                             return true;
                 } else {
-                    if ((mCFlags & B_QS) && !(Filled() & UINT64_C(0x0E00000000000000)))
+                    if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
                         if (!Attacked(E8, WC) && !Attacked(D8, WC))
                             return true;
                 }

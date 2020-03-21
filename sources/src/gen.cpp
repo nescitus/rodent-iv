@@ -185,10 +185,10 @@ int *POS::GenerateQuiet(int *list) const {
 
     sd = mSide;
     if (sd == WC) {
-        if ((mCFlags & W_KS) && !(Filled() & (U64)0x0000000000000060))
+        if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
             if (!Attacked(E1, BC) && !Attacked(F1, BC))
                 *list++ = (CASTLE << 12) | (G1 << 6) | E1;
-        if ((mCFlags & W_QS) && !(Filled() & (U64)0x000000000000000E))
+        if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
             if (!Attacked(E1, BC) && !Attacked(D1, BC))
                 *list++ = (CASTLE << 12) | (C1 << 6) | E1;
 
@@ -204,10 +204,10 @@ int *POS::GenerateQuiet(int *list) const {
             *list++ = (to << 6) | (to - 8);
         }
     } else {
-        if ((mCFlags & B_KS) && !(Filled() & (U64)0x6000000000000000))
+        if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
             if (!Attacked(E8, WC) && !Attacked(F8, WC))
                 *list++ = (CASTLE << 12) | (G8 << 6) | E8;
-        if ((mCFlags & B_QS) && !(Filled() & (U64)0x0E00000000000000))
+        if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
             if (!Attacked(E8, WC) && !Attacked(D8, WC))
                 *list++ = (CASTLE << 12) | (C8 << 6) | E8;
 
