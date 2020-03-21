@@ -368,6 +368,19 @@ class POS {
     static U64 msZobCastle[16];
     static U64 msZobEp[8];
 
+    static eSquare Castle_W_RQ;
+    static eSquare Castle_W_K;
+    static eSquare Castle_W_RK;
+    static eSquare Castle_B_RQ;
+    static eSquare Castle_B_K;
+    static eSquare Castle_B_RK;
+
+    static const unsigned char CastleMask [8][8];  // Var2
+    static U64 CastleMask_W_KS;
+    static U64 CastleMask_W_QS;
+    static U64 CastleMask_B_KS;
+    static U64 CastleMask_B_QS;
+
     void ClearPosition();
     void InitHashKey();
     void InitPawnKey();
@@ -1040,3 +1053,6 @@ extern std::wstring LogFileWStr;
 void FullPathEndSlash(std::wstring &pathWStr);
 void SetRodentHomeDir();
 void CreateRodentHome(const char *RodentDir);
+
+extern unsigned char CastleFile_RQ;
+extern unsigned char CastleFile_RK;
