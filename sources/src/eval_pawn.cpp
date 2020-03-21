@@ -102,7 +102,7 @@ void cEngine::EvaluatePawnStruct(POS *p, eData *e) {
             AddPawns(e, BC, pst_empty_ks[p->mKingSq[BC]], pst_empty_ks[p->mKingSq[BC]]);
         }
 
-        if (!(bb_all_pawns & Mask.q_side)) {
+        if (!(bb_all_pawns & Mask.queenSide)) {
             AddPawns(e, WC, pst_empty_qs[p->mKingSq[WC]], pst_empty_qs[p->mKingSq[WC]]);
             AddPawns(e, BC, pst_empty_qs[p->mKingSq[BC]], pst_empty_qs[p->mKingSq[BC]]);
         }

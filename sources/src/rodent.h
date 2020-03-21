@@ -708,7 +708,7 @@ class cMask {
                                             (bb_rel_rank[BC][RANK_4] | bb_rel_rank[BC][RANK_5] | bb_rel_rank[BC][RANK_6]) & bbNotA & bbNotH };
 
     static constexpr U64 kingSide = FILE_F_BB | FILE_G_BB | FILE_H_BB;
-    static constexpr U64 q_side = FILE_A_BB | FILE_B_BB | FILE_C_BB;
+    static constexpr U64 queenSide = FILE_A_BB | FILE_B_BB | FILE_C_BB;
     static constexpr U64 center = SqBb(C3) | SqBb(D3) | SqBb(E3) | SqBb(F3)
                                 | SqBb(C4) | SqBb(D4) | SqBb(E4) | SqBb(F4)
                                 | SqBb(C5) | SqBb(D5) | SqBb(E5) | SqBb(F5)

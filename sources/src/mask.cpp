@@ -30,11 +30,11 @@ constexpr U64 cMask::outpostMap[2];
 
 // King side / queen side / center
 constexpr U64 cMask::kingSide;
-constexpr U64 cMask::q_side;
+constexpr U64 cMask::queenSide;
 constexpr U64 cMask::center;
 constexpr U64 cMask::space[2];
 
-// Squares requiring bishop pat
+// Bishop positions that justify using pattern evaluation
 constexpr U64 cMask::wb_special;
 constexpr U64 cMask::bb_special;
 
