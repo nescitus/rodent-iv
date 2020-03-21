@@ -186,11 +186,11 @@ int *POS::GenerateQuiet(int *list) const {
     sd = mSide;
     if (sd == WC) {
         if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
-            if (!Attacked(E1, BC) && !Attacked(F1, BC))
-                *list++ = (CASTLE << 12) | (G1 << 6) | E1;
+            if (!Attacked(Castle_W_K, BC) && !Attacked(F1, BC))
+                *list++ = (CASTLE << 12) | (G1 << 6) | Castle_W_K;
         if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
-            if (!Attacked(E1, BC) && !Attacked(D1, BC))
-                *list++ = (CASTLE << 12) | (C1 << 6) | E1;
+            if (!Attacked(Castle_W_K, BC) && !Attacked(D1, BC))
+                *list++ = (CASTLE << 12) | (C1 << 6) | Castle_W_K;
 
         bb_moves = ((((Pawns(WC) & RANK_2_BB) << 8) & Empty()) << 8) & Empty();
         while (bb_moves) {
@@ -205,11 +205,11 @@ int *POS::GenerateQuiet(int *list) const {
         }
     } else {
         if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
-            if (!Attacked(E8, WC) && !Attacked(F8, WC))
-                *list++ = (CASTLE << 12) | (G8 << 6) | E8;
+            if (!Attacked(Castle_B_K, WC) && !Attacked(F8, WC))
+                *list++ = (CASTLE << 12) | (G8 << 6) | Castle_B_K;
         if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
-            if (!Attacked(E8, WC) && !Attacked(D8, WC))
-                *list++ = (CASTLE << 12) | (C8 << 6) | E8;
+            if (!Attacked(Castle_B_K, WC) && !Attacked(D8, WC))
+                *list++ = (CASTLE << 12) | (C8 << 6) | Castle_B_K;
 
         bb_moves = ((((Pawns(BC) & RANK_7_BB) >> 8) & Empty()) >> 8) & Empty();
         while (bb_moves) {

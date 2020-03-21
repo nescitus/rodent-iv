@@ -66,8 +66,9 @@ void POS::DoMove(int move, UNDO *u) {
     mPc[fsq] = NO_PC;
     mPc[tsq] = Pc(sd, ftp);
     mHashKey ^= msZobPiece[Pc(sd, ftp)][fsq] ^ msZobPiece[Pc(sd, ftp)][tsq];
-    mClBb[sd] ^= SqBb(fsq) | SqBb(tsq);
-    mTpBb[ftp] ^= SqBb(fsq) | SqBb(tsq);
+    mClBb[sd] ^= SqBb(fsq);
+    mClBb[sd] |= SqBb(tsq);
+    mTpBb[ftp] ^= SqBb(fsq) ^ SqBb(tsq);
 
     // Update king location
 
@@ -76,7 +77,7 @@ void POS::DoMove(int move, UNDO *u) {
 
     // Capture enemy piece
 
-    if (ttp != NO_TP) {
+    if (ttp != NO_TP && MoveType(move) != CASTLE) {
         mHashKey ^= msZobPiece[Pc(op, ttp)][tsq];
 
         if (ttp == P)
@@ -101,17 +102,20 @@ void POS::DoMove(int move, UNDO *u) {
             // define complementary rook move
 
             switch (tsq) {
-                case C1: { fsq = A1; tsq = D1; break; }
-                case G1: { fsq = H1; tsq = F1; break; }
-                case C8: { fsq = A8; tsq = D8; break; }
-                case G8: { fsq = H8; tsq = F8; break; }
+                case C1: { fsq = Castle_W_RQ; tsq = D1; break; }
+                case G1: { fsq = Castle_W_RK; tsq = F1; break; }
+                case C8: { fsq = Castle_B_RQ; tsq = D8; break; }
+                case G8: { fsq = Castle_B_RK; tsq = F8; break; }
             }
 
-            mPc[fsq] = NO_PC;
+            if (mPc[fsq] != Pc(sd, K)) {
+                mPc[fsq] = NO_PC;
+                mClBb[sd] ^= SqBb(fsq);
+            }
             mPc[tsq] = Pc(sd, R);
             mHashKey ^= msZobPiece[Pc(sd, R)][fsq] ^ msZobPiece[Pc(sd, R)][tsq];
-            mClBb[sd] ^= SqBb(fsq) | SqBb(tsq);
-            mTpBb[R] ^= SqBb(fsq) | SqBb(tsq);
+            mClBb[sd] |= SqBb(tsq);
+            mTpBb[R] ^= SqBb(fsq) ^ SqBb(tsq);
             break;
 
         // En passant capture

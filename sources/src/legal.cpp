@@ -34,27 +34,27 @@ bool POS::Legal(int move) const {
             break;
         case CASTLE:
             if (sd == WC) {
-                if (fsq != E1)
+                if (fsq != Castle_W_K)
                     return false;
                 if (tsq > fsq) {
                     if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
-                        if (!Attacked(E1, BC) && !Attacked(F1, BC))
+                        if (!Attacked(Castle_W_K, BC) && !Attacked(F1, BC))
                             return true;
                 } else {
                     if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
-                        if (!Attacked(E1, BC) && !Attacked(D1, BC))
+                        if (!Attacked(Castle_W_K, BC) && !Attacked(D1, BC))
                             return true;
                 }
             } else {
-                if (fsq != E8)
+                if (fsq != Castle_B_K)
                     return false;
                 if (tsq > fsq) {
                     if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
-                        if (!Attacked(E8, WC) && !Attacked(F8, WC))
+                        if (!Attacked(Castle_B_K, WC) && !Attacked(F8, WC))
                             return true;
                 } else {
                     if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
-                        if (!Attacked(E8, WC) && !Attacked(D8, WC))
+                        if (!Attacked(Castle_B_K, WC) && !Attacked(D8, WC))
                             return true;
                 }
             }

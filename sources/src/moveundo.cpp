@@ -34,10 +34,11 @@ void POS::UndoMove(int move, UNDO *u) {
 
     mHead--;
 
-    mPc[fsq] = Pc(sd, ftp);
     mPc[tsq] = NO_PC;
-    mClBb[sd] ^= SqBb(fsq) | SqBb(tsq);
-    mTpBb[ftp] ^= SqBb(fsq) | SqBb(tsq);
+    mPc[fsq] = Pc(sd, ftp);
+    mClBb[sd] ^= SqBb(tsq);
+    mClBb[sd] |= SqBb(fsq);
+    mTpBb[ftp] ^= SqBb(fsq) ^ SqBb(tsq);
 
     // Change king location
 
@@ -45,7 +46,7 @@ void POS::UndoMove(int move, UNDO *u) {
 
     // Uncapture enemy piece
 
-    if (ttp != NO_TP) {
+    if (ttp != NO_TP && MoveType(move) != CASTLE) {
         mPc[tsq] = Pc(op, ttp);
         mClBb[op] ^= SqBb(tsq);
         mTpBb[ttp] ^= SqBb(tsq);
@@ -65,16 +66,19 @@ void POS::UndoMove(int move, UNDO *u) {
             // define complementary rook move
 
             switch (tsq) {
-                case C1: { fsq = A1; tsq = D1; break; }
-                case G1: { fsq = H1; tsq = F1; break; }
-                case C8: { fsq = A8; tsq = D8; break; }
-                case G8: { fsq = H8; tsq = F8; break; }
+                case C1: { fsq = Castle_W_RQ; tsq = D1; break; }
+                case G1: { fsq = Castle_W_RK; tsq = F1; break; }
+                case C8: { fsq = Castle_B_RQ; tsq = D8; break; }
+                case G8: { fsq = Castle_B_RK; tsq = F8; break; }
             }
 
-            mPc[tsq] = NO_PC;
+            if (mPc[tsq] != Pc(sd, K)) {
+                mPc[tsq] = NO_PC;
+                mClBb[sd] ^= SqBb(tsq);
+            }
             mPc[fsq] = Pc(sd, R);
-            mClBb[sd] ^= SqBb(fsq) | SqBb(tsq);
-            mTpBb[R] ^= SqBb(fsq) | SqBb(tsq);
+            mClBb[sd] ^= SqBb(fsq);
+            mTpBb[R] ^= SqBb(fsq) ^ SqBb(tsq);
             break;
 
         case EP_CAP:
