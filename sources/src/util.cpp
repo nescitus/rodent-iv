@@ -163,7 +163,19 @@ int POS::StrToMove(const char *move_str) const {
 
     // change move type if necessary
 
-    if (TpOnSq(from) == K && Abs(to - from) == 2)
+    if ((TpOnSq(from) == K) && (TpOnSq(to) == R) && Cl(mPc[from]) == Cl(mPc[to])) {
+        // Chess960 Castle
+        type = CASTLE;
+        if (move_str[2] > move_str[0])
+            to   = Sq('g' - 'a', move_str[3] - '1');
+        else
+            to   = Sq('c' - 'a', move_str[3] - '1');
+    }
+    else if (TpOnSq(from) == K && (to == from)) {
+        // Chess960 in Standard-Mode - special situation, only when king on c- or g-row
+        type = CASTLE;
+    }
+    else if (TpOnSq(from) == K && Abs(to - from) >= 2 && move_str[1] == move_str[3])
         type = CASTLE;
     else if (TpOnSq(from) == P) {
         if (to == mEpSq)
