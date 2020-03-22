@@ -24,9 +24,10 @@ bool POS::Legal(int move) const {
     int tsq = Tsq(move);
     int ftp = TpOnSq(fsq);
     int ttp = TpOnSq(tsq);
+	int pos;
 
     if ((ftp == NO_TP || Cl(mPc[fsq]) != sd) ||
-        (ttp != NO_TP && Cl(mPc[tsq]) == sd))
+        (ttp != NO_TP && Cl(mPc[tsq]) == sd && MoveType(move) != CASTLE))
         return false;
 
     switch (MoveType(move)) {
@@ -36,26 +37,42 @@ bool POS::Legal(int move) const {
             if (sd == WC) {
                 if (fsq != Castle_W_K)
                     return false;
-                if (tsq > fsq) {
+                if (tsq == G1) {
                     if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
-                        if (!Attacked(Castle_W_K, BC) && !Attacked(F1, BC))
+                        if (!Attacked(Castle_W_K, BC)) {
+                            for (pos = Castle_W_K + 1 ; pos < G1 ; pos++)
+                                if (Attacked(pos, BC))
+                                    return false;
                             return true;
+                        }
                 } else {
                     if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
-                        if (!Attacked(Castle_W_K, BC) && !Attacked(D1, BC))
+                        if (!Attacked(Castle_W_K, BC)) {
+                            for (pos = Castle_W_K - 1 ; pos > C1 ; pos--)
+                                if (Attacked(pos, BC))
+                                    return false;
                             return true;
+                        }
                 }
             } else {
                 if (fsq != Castle_B_K)
                     return false;
-                if (tsq > fsq) {
+                if (tsq == G8) {
                     if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
-                        if (!Attacked(Castle_B_K, WC) && !Attacked(F8, WC))
+                        if (!Attacked(Castle_B_K, WC)) {
+                            for (pos = Castle_B_K + 1 ; pos < G8 ; pos++)
+                                if (Attacked(pos, WC))
+                                    return false;
                             return true;
+                        }
                 } else {
                     if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
-                        if (!Attacked(Castle_B_K, WC) && !Attacked(D8, WC))
+                        if (!Attacked(Castle_B_K, WC)) {
+                            for (pos = Castle_B_K - 1 ; pos > C8 ; pos--)
+                                if (Attacked(pos, WC))
+                                    return false;
                             return true;
+                        }
                 }
             }
             return false;

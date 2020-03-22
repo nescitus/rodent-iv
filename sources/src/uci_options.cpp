@@ -62,9 +62,8 @@ void PrintUciOptions() {
         printfUciOut("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
         printfUciOut("option name UCI_Elo type spin default %d min 800 max 2800\n", Par.elo);
     }
-	/* Not yet finished, will enable later:
     printfUciOut("option name UCI_Chess960 type check default false\n");
-    */
+
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)
             printfUciOut("option name PersonalityFile type string default default.txt\n");

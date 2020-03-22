@@ -467,7 +467,7 @@ void POS::PrintBoard() const {
     static const char piece_name[] = {'P', 'p', 'N', 'n', 'B', 'b', 'R', 'r', 'Q', 'q', 'K', 'k', '.' };
 
     if (mCFlags)
-        printf("        %s%c%s    %s%c%s    %s%c%s\n",
+        printfUciAdd("        %s%c%s    %s%c%s    %s%c%s\n",
             (mCFlags & B_QS)?" ":"(", File(Fsq(Castle_B_RQ)) + 'a', (mCFlags & B_QS)?" ":")",
             (mCFlags & (B_KS | B_QS))?" ":"(", File(Fsq(Castle_B_K)) + 'a', (mCFlags & (B_KS | B_QS))?" ":")",
             (mCFlags & B_KS)?" ":"(", File(Fsq(Castle_B_RK)) + 'a', (mCFlags & B_KS)?" ":")");
@@ -482,7 +482,7 @@ void POS::PrintBoard() const {
                                                                                             mSide == WC ? 'w' : 'b');
 
     if (mCFlags)
-        printf("        %s%c%s    %s%c%s    %s%c%s\n",
+        printfUciAdd("        %s%c%s    %s%c%s    %s%c%s\n",
             (mCFlags & W_QS)?" ":"(", File(Fsq(Castle_W_RQ)) + 'a', (mCFlags & W_QS)?" ":")",
             (mCFlags & (W_KS | W_QS))?" ":"(", File(Fsq(Castle_W_K)) + 'a', (mCFlags & (W_KS | W_QS))?" ":")",
             (mCFlags & W_KS)?" ":"(", File(Fsq(Castle_W_RK)) + 'a', (mCFlags & W_KS)?" ":")");

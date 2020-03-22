@@ -182,16 +182,25 @@ int *POS::GenerateQuiet(int *list) const {
     U64 bb_pieces, bb_moves;
 	eColor sd;
     int from, to;
+	int pos;
+    bool attackedB;
 
     sd = mSide;
     if (sd == WC) {
-        if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS))
-            if (!Attacked(Castle_W_K, BC) && !Attacked(F1, BC))
+        if ((mCFlags & W_KS) && !(Filled() & CastleMask_W_KS)) {
+            attackedB = Attacked(Castle_W_K, BC);
+            for (pos = Castle_W_K + 1 ; pos < G1 && !attackedB ; pos++)
+                attackedB |= Attacked(pos, BC);
+            if (!attackedB)
                 *list++ = (CASTLE << 12) | (G1 << 6) | Castle_W_K;
-        if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS))
-            if (!Attacked(Castle_W_K, BC) && !Attacked(D1, BC))
+		}
+        if ((mCFlags & W_QS) && !(Filled() & CastleMask_W_QS)) {
+            attackedB = Attacked(Castle_W_K, BC);
+            for (pos = Castle_W_K - 1 ; pos > C1 && !attackedB ; pos--)
+                attackedB |= Attacked(pos, BC);
+            if (!attackedB)
                 *list++ = (CASTLE << 12) | (C1 << 6) | Castle_W_K;
-
+        }
         bb_moves = ((((Pawns(WC) & RANK_2_BB) << 8) & Empty()) << 8) & Empty();
         while (bb_moves) {
             to = PopFirstBit(&bb_moves);
@@ -204,12 +213,20 @@ int *POS::GenerateQuiet(int *list) const {
             *list++ = (to << 6) | (to - 8);
         }
     } else {
-        if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS))
-            if (!Attacked(Castle_B_K, WC) && !Attacked(F8, WC))
+        if ((mCFlags & B_KS) && !(Filled() & CastleMask_B_KS)) {
+            attackedB = Attacked(Castle_B_K, WC);
+            for (pos = Castle_B_K + 1 ; pos < G8 && !attackedB ; pos++)
+                attackedB |= Attacked(pos, WC);
+            if (!attackedB)
                 *list++ = (CASTLE << 12) | (G8 << 6) | Castle_B_K;
-        if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS))
-            if (!Attacked(Castle_B_K, WC) && !Attacked(D8, WC))
+        }
+        if ((mCFlags & B_QS) && !(Filled() & CastleMask_B_QS)) {
+            attackedB = Attacked(Castle_B_K, WC);
+            for (pos = Castle_B_K - 1 ; pos > C8 && !attackedB ; pos--)
+                attackedB |= Attacked(pos, WC);
+            if (!attackedB)
                 *list++ = (CASTLE << 12) | (C8 << 6) | Castle_B_K;
+        }
 
         bb_moves = ((((Pawns(BC) & RANK_7_BB) >> 8) & Empty()) >> 8) & Empty();
         while (bb_moves) {
