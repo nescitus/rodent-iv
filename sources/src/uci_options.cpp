@@ -57,12 +57,14 @@ void PrintUciOptions() {
 	printfUciOut("option name TimeBuffer type spin default %d min 0 max 1000\n", Glob.timeBuffer);
 
     if (Glob.eloSlider) {
-        printfUciOut("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
         printfUciOut("option name PrintPv type check default %s\n", Glob.printPv ? "true" : "false");
         printfUciOut("option name Taunting type check default %s\n", Glob.useTaunting ? "true" : "false");
+        printfUciOut("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
         printfUciOut("option name UCI_Elo type spin default %d min 800 max 2800\n", Par.elo);
     }
-
+	/* Not yet finished, will enable later:
+    printfUciOut("option name UCI_Chess960 type check default false\n");
+    */
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)
             printfUciOut("option name PersonalityFile type string default default.txt\n");
@@ -380,6 +382,8 @@ void ParseSetoption(const char *ptr) {
         Par.SetSpeed(Par.elo);
     } else if (strcmp(name, "ponder") == 0)                                  {
         valuebool(Par.use_ponder, value);
+    } else if (strcmp(name, "uci_chess960") == 0)                            {
+        valuebool(Par.chess960, value);
     } else if (strcmp(name, "usebook") == 0)                                 {
         valuebool(Par.useBook, value);
     } else if (strcmp(name, "verbosebook") == 0)                             {

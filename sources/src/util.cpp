@@ -153,6 +153,13 @@ void MoveToStr(int move, char *move_str) {
         move_str[4] = prom_char[(move >> 12) & 3];
         move_str[5] = '\0';
     }
+
+    if ((Par.chess960) && (MoveType(move) == CASTLE)) {
+        if (move_str[2] == 'g')
+            move_str[2] = CastleFile_RK + 'a'; // or use File(Castle_W_RK), if ready
+        else
+            move_str[2] = CastleFile_RQ + 'a'; // or use File(Castle_W_RQ), if ready
+    }
 }
 
 int POS::StrToMove(const char *move_str) const {

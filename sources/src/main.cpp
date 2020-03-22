@@ -120,6 +120,7 @@ int main() {
     Mask.Init();
     Dist.Init();
 
+    Par.chess960 = false;
 	Par.useBook = true;
 	Par.verboseBook = false;
 

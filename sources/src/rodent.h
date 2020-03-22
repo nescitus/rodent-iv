@@ -618,6 +618,7 @@ class cParam {
     int min_val[N_OF_VAL];
     bool tunable[N_OF_VAL];
     bool use_ponder; // this option does nothing
+	bool chess960;
     bool useBook;
     bool verboseBook;
     int bookFilter;
