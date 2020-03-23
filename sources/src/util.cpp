@@ -170,7 +170,26 @@ int POS::StrToMove(const char *move_str) const {
 
     // change move type if necessary
 
-    if ((TpOnSq(from) == K) && (TpOnSq(to) == R) && Cl(mPc[from]) == Cl(mPc[to])) {
+    if (strstr(move_str,"O-O") || strstr(move_str,"o-o") || strstr(move_str,"0-0")) {
+        type = CASTLE;
+        if (mSide == WC)
+            from = Castle_W_K;
+        else
+            from = Castle_B_K;
+
+        if (strchr(move_str+2, '-')) {
+            if (mSide == WC)
+                to = C1;
+            else
+                to = C8;
+        } else {
+            if (mSide == WC)
+               to = G1;
+            else
+               to = G8;
+        }
+
+    } else if ((TpOnSq(from) == K) && (TpOnSq(to) == R) && Cl(mPc[from]) == Cl(mPc[to])) {
         // Chess960 Castle
         type = CASTLE;
         if (move_str[2] > move_str[0])
