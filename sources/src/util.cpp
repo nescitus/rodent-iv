@@ -154,11 +154,33 @@ void MoveToStr(int move, char *move_str) {
         move_str[5] = '\0';
     }
 
-    if ((Par.chess960) && (MoveType(move) == CASTLE)) {
-        if (move_str[2] == 'g')
-            move_str[2] = CastleFile_RK + 'a'; // or use File(Castle_W_RK), if ready
-        else
-            move_str[2] = CastleFile_RQ + 'a'; // or use File(Castle_W_RQ), if ready
+    if (MoveType(move) == CASTLE) {
+        /*
+        There are different types of notation used for 960-castling:
+        - "king takes rook" - (almost) all uci-engines doing this when UCI_Chess960 is set
+        - "king to target" - most engines doing so, if not in 960-mode
+          note: Q-castling from b- or d-file and K-castling from f-file is not unambiguously
+          (I'm thinking, if castling should be default - I guess no other engine is doing so.
+          still for the android GUI "Chess from Jeroen Carolus" it's unimportant, it always
+          send's position and no moves.)
+        - O-O (or also o-o or 0-0) - I know very less engines doing so, so I'm wondering
+          this is the (only) way Arena can handle
+        - e1g1 - very untypically, I know only 3 OLD (!!!) engines doing so
+            - 2-sidestep - also uncommon
+          also needs special treatment, if king is on b- or g-file
+        */
+
+        if (Par.chess960 || Par.CastleNotation == TakeRook) {
+            if (move_str[2] == 'g')
+                move_str[2] = CastleFile_RK + 'a'; // or use File(Castle_W_RK), if ready
+            else
+                move_str[2] = CastleFile_RQ + 'a'; // or use File(Castle_W_RQ), if ready
+        } else if (Par.CastleNotation == OOO) {
+            if ( move_str[2] == 'g')
+                sprintf(move_str, "O-O");
+            else
+                sprintf(move_str, "O-O-O");
+        }
     }
 }
 

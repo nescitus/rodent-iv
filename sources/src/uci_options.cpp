@@ -64,6 +64,10 @@ void PrintUciOptions() {
     }
     printfUciOut("option name UCI_Chess960 type check default false\n");
 
+    // additional "var take" not really needed - so not shown as option
+    // Arena needs "o-o", all other "move"
+    printfUciOut("option name CastleNotation type combo default move var move var O-O\n");
+
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)
             printfUciOut("option name PersonalityFile type string default default.txt\n");
@@ -381,6 +385,13 @@ void ParseSetoption(const char *ptr) {
         Par.SetSpeed(Par.elo);
     } else if (strcmp(name, "ponder") == 0)                                  {
         valuebool(Par.use_ponder, value);
+    } else if (strcmp(name, "castlenotation") == 0)                          {
+        if (strcmp(value, "O-O") == 0 || strcmp(value, "o-o") == 0)
+            Par.CastleNotation = OOO;
+        else if (strcmp(value, "take") == 0)
+            Par.CastleNotation = TakeRook;
+        else
+            Par.CastleNotation = KingMove;
     } else if (strcmp(name, "uci_chess960") == 0)                            {
         valuebool(Par.chess960, value);
     } else if (strcmp(name, "usebook") == 0)                                 {
