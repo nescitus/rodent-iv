@@ -1,0 +1,93 @@
+; Fischer personality for Rodent IV chess engine
+; author: Pawel Koziol
+; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; attacking, contemptous, mobility raised for both sides
+;
+;
+setoption name PawnValueMg value 100
+setoption name KnightValueMg value 325
+setoption name BishopValueMg value 335
+setoption name RookValueMg value 500
+setoption name QueenValueMg value 990
+setoption name PawnValueEg value 100
+setoption name KnightValueEg value 325
+setoption name BishopValueEg value 335
+setoption name RookValueEg value 500
+setoption name QueenValueEg value 990
+setoption name KeepPawn value 0
+setoption name KeepKnight value 0
+setoption name KeepBishop value 3
+setoption name KeepRook value 2
+setoption name KeepQueen value 0
+setoption name BishopPairMg value 50
+setoption name BishopPairEg value 50
+setoption name KnightPair value -10
+; setoption name RookPair value ???
+setoption name KnightLikesClosed value 6
+setoption name RookLikesOpen value 3
+setoption name ExchangeImbalance value 25
+; setoption name MinorVsQueen value ???
+setoption name Material value 102
+setoption name OwnAttack value 120
+setoption name OppAttack value 100
+setoption name OwnMobility value 110
+setoption name OppMobility value 110
+; setoption name FlatMobility value ???
+setoption name KingTropism value 20
+; setoption name PrimaryPstWeight value ???
+; setoption name SecondaryPstWeight value ???
+setoption name PiecePressure value 100
+setoption name PassedPawns value 100
+setoption name PawnStructure value 100
+setoption name Lines value 100
+setoption name Outposts value 100
+; setoption name Space value ???
+setoption name PawnShield value 115
+setoption name PawnStorm value 100
+setoption name DoubledPawnMg value -12
+setoption name DoubledPawnEg value -24
+setoption name IsolatedPawnMg value -10
+setoption name IsolatedPawnEg value -20
+setoption name IsolatedOnOpenMg value -10
+setoption name BackwardPawnMg value -8
+setoption name BackwardPawnEg value -10
+setoption name BackwardOnOpenMg value -8
+setoption name FianchBase value 20
+setoption name FianchKing value 20
+; setoption name ReturningB value ???
+setoption name PawnMass value 100
+setoption name PawnChains value 100
+setoption name PrimaryPstStyle value 2
+setoption name SecondaryPstStyle value 2
+setoption name Contempt value 25
+setoption name SlowMover value 100
+setoption name Selectivity value 175
+setoption name SearchSkill value 10
+setoption name BookFilter value 20
+setoption name GuideBookFile value players/ph-fischer2.bin
+setoption name MainBookFile value hist/_31to80.bin
+;
+; ToDo
+; adjust PawnValueMg, please
+; adjust KnightValueMg, please
+; adjust BishopValueMg, please
+; adjust RookValueMg, please
+; adjust QueenValueMg, please
+; adjust PawnValueEg, please
+; adjust KnightValueEg, please
+; adjust BishopValueEg, please
+; adjust RookValueEg, please
+; adjust QueenValueEg, please
+; adjust BishopPairMg, please
+; adjust BishopPairEg, please
+; add RookPair, please
+; add MinorVsQueen, please
+; add FlatMobility, please
+; add PrimaryPstWeight, please
+; add SecondaryPstWeight, please
+; add Space, please
+; adjust FianchBase, please
+; adjust FianchKing, please
+; add ReturningB, please
+; adjust PrimaryPstStyle, please
+; adjust SecondaryPstStyle, please
