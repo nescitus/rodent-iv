@@ -1,6 +1,6 @@
 ; Marshall personality for Rodent IV chess engine
 ; author: Pawel Koziol
-; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; hommage to Frank Marshall (1877-1944)
 ; very high attack, very high mobility, sacrificial, likes knights
 ;

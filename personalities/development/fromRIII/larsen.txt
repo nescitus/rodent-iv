@@ -1,6 +1,6 @@
 ; Larsen  personality for Rodent IV chess engine
 ; author: Pawel Koziol
-; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; tricky player following precepts of Nimzowitsch,
 ; plays varied and unusual openings, may want to sacrifice,
 ; even though king attacks aren't his chief interest

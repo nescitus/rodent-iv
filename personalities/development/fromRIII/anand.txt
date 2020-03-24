@@ -1,8 +1,8 @@
 ; Anand personality for Rodent III chess engine
-; hommage to Viswanathan Anand
 ; author: Pawel Koziol
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
+; hommage to Viswanathan Anand
 ; fast player, slight preference for attack, cares for pawn structure
-;
 ;
 setoption name PawnValueMg value 100
 setoption name KnightValueMg value 325

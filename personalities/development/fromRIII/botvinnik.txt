@@ -1,6 +1,6 @@
 ; Botvinnik personality for Rodent IV chess engine
 ; author: Pawel Koziol
-; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; balanced, cares for pawn structure, somewhat willing to accept doubled pawns
 ; changed piece/square table type
 ;

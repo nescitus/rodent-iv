@@ -1,6 +1,6 @@
 ; Karpov personality for Rodent IV chess engine
 ; based on Brendan J. Norman's personality for Rodent II
-; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ;
 ;
 ;

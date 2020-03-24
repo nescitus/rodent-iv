@@ -1,6 +1,6 @@
 ; Rubinstein personality for Rodent IV chess engine
 ; author: Pawel Koziol
-; converted from Rodent III by Bernard C. Maerz - needs a lot of editing!
+; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; classical player, marginally prefers defence, decreased mobility,
 ; likes rook play, steers towards endgame
 ;
