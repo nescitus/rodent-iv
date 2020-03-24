@@ -201,7 +201,12 @@ void ExtractMove(int *pv) {
     if (pv[1]) {
         MoveToStr(pv[1], ponder_str);
         printfUciOut("bestmove %s ponder %s\n", bestmove_str, ponder_str);
-    } else
+    } else if (!bestmove_str[3])
+        // Fix for Arena - not following standard and than have problem with
+        // stringlength of "O-O"
+        // Hope additional space don't make trouble for other GUIs
+        printfUciOut("bestmove %s \n", bestmove_str);
+    else
         printfUciOut("bestmove %s\n", bestmove_str);
 }
 
