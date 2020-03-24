@@ -1062,3 +1062,5 @@ void CreateRodentHome(const char *RodentDir);
 
 extern unsigned char CastleFile_RQ;
 extern unsigned char CastleFile_RK;
+
+void CheckGUI();

@@ -66,7 +66,14 @@ void PrintUciOptions() {
 
     // additional "var take" not really needed - so not shown as option
     // Arena needs "o-o", all other "move"
-    printfUciOut("option name CastleNotation type combo default move var move var O-O\n");
+#ifdef DEBUG
+    if (Par.CastleNotation == OOO)
+        printfUciOut("option name CastleNotation type combo default O-O var move var O-O\n");
+    else if (Par.CastleNotation == TakeRook)
+        printfUciOut("option name CastleNotation type combo default take var move var O-O\n");
+    else
+        printfUciOut("option name CastleNotation type combo default move var move var O-O\n");
+#endif
 
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)

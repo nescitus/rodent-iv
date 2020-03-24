@@ -33,3 +33,5 @@ std::wstring WStr(const std::string &Str);
 // #define WStr2CStr(x) ( WStr2Str(x).c_str())
 
 // void TestStrFunctions();
+
+std::string str_tolower(const std::string &inStr);

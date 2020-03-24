@@ -24,6 +24,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
     #include <wchar.h>
+    #include <tlhelp32.h>
 #else
     #include <unistd.h>
     #include <sys/time.h>
@@ -412,4 +413,43 @@ void printfLog(const char *preStr, const char *fmt, ...)
     }
 
     va_end(ap);
+}
+
+bool IsProcessRunning(const char *processToFind)
+{
+    bool exists = false;
+
+#if defined(_WIN32) || defined(_WIN64)
+    bool bResult;
+
+    std::string processToFindStr = str_tolower(processToFind);
+
+    PROCESSENTRY32W entry;
+    entry.dwSize = sizeof(PROCESSENTRY32W);
+
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+    bResult = Process32FirstW(snapshot, &entry);
+    while (bResult) {
+        if (str_tolower(WCStr2Str(entry.szExeFile).c_str()) == processToFindStr) {
+            // printf_debug("process found: '%s'\n", entry.szExeFile);
+            exists = true;
+            bResult = false;
+        } else
+            bResult = Process32NextW(snapshot, &entry);
+    }
+
+    CloseHandle(snapshot);
+#endif
+
+    return exists;
+}
+
+void CheckGUI() {
+
+    if (IsProcessRunning("arena.exe")) {
+        printfUciOut("info string GUI=Arena\n");
+        Par.CastleNotation = OOO;
+    } else
+        printf_debug("GUI=???\n");
 }

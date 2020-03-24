@@ -39,7 +39,6 @@ std::wstring Str2WStr(const std::string &Str) {
     return std::wstring(Str.begin(), Str.end());
 }
 
-
 #ifdef STR_OVERLOAD
 
 std::string Str(const std::string &Str) {
@@ -70,6 +69,16 @@ std::wstring WStr(const std::string &Str) {
 
 #endif
 
+std::string str_tolower(const std::string &inStr) {
+    std::string textStr;
+
+    textStr = inStr;
+
+    for (int i = textStr.length()-1 ; i >= 0 ; i--)
+        textStr[i] = std::tolower(textStr[i]);
+
+   return textStr;
+}
 
 /*
 void TestStrFunctions() {

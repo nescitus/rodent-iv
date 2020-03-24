@@ -147,6 +147,8 @@ if (Glob.isNoisy) {
     // We need set to default values AFTER reading basic.ini
     Par.DefaultWeights();
 
+    CheckGUI();
+
     UciLoop();
 }
 
