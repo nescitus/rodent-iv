@@ -489,23 +489,27 @@ void ReadPersonality(const char *fileName) {
 
         while ((pos = strpbrk(line, "\r\n"))) *pos = '\0'; // clean the sh!t
 
+        char *skipWS = line;
+        while (*skipWS == ' ' || *skipWS == '\t')
+            skipWS++;
+
         // Do we pick opening book within a personality?
 
-        if (strstr(line, "PERSONALITY_BOOKS")) Glob.useBooksFromPers = true; // DEFAULT
-        if (strstr(line, "GENERAL_BOOKS"))     Glob.useBooksFromPers = false;
+        if (strstr(line, "PERSONALITY_BOOKS") == skipWS) Glob.useBooksFromPers = true; // DEFAULT
+        if (strstr(line, "GENERAL_BOOKS") == skipWS)     Glob.useBooksFromPers = false;
 
         // How we go about weakening the engine?
 
-        if (strstr(line, "ELO_SLIDER")) Glob.eloSlider = true; // DEFAULT
-        if (strstr(line, "NPS_BLUR"))   Glob.eloSlider = false;
+        if (strstr(line, "ELO_SLIDER") == skipWS) Glob.eloSlider = true; // DEFAULT
+        if (strstr(line, "NPS_BLUR") == skipWS)   Glob.eloSlider = false;
 
         // Which UCI options are exposed to the user?
 
-        if (strstr(line, "HIDE_OPTIONS")) Glob.usePersonalityFiles = true;
-        if (strstr(line, "SHOW_OPTIONS")) Glob.usePersonalityFiles = false; // DEFAULT
-        if (strstr(line, "HIDE_PERSFILE")) Glob.showPersonalityFile = false; // DEFAULT == true
+        if (strstr(line, "HIDE_OPTIONS") == skipWS) Glob.usePersonalityFiles = true;
+        if (strstr(line, "SHOW_OPTIONS") == skipWS) Glob.usePersonalityFiles = false; // DEFAULT
+        if (strstr(line, "HIDE_PERSFILE") == skipWS) Glob.showPersonalityFile = false; // DEFAULT == true
 
-        if (strstr(line, "CLEAR_LOG")) {
+        if (strstr(line, "CLEAR_LOG") == skipWS) {
             FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
             if (logFile) fclose(logFile);
             printf_debug("Log cleared\n");
