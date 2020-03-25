@@ -620,7 +620,6 @@ class cParam {
     bool tunable[N_OF_VAL];
     bool use_ponder; // this option does nothing
 	bool chess960;
-    eCastleNotation CastleNotation;
     bool useBook;
     bool verboseBook;
     int bookFilter;
@@ -776,6 +775,7 @@ class cGlobals {
     int previousValue;
     int previousTaunt;
     int currentTaunt;
+    eCastleNotation CastleNotation;
 
     void ClearData();
     void Init();

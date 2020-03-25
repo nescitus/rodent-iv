@@ -121,7 +121,7 @@ int main() {
     Dist.Init();
 
     Par.chess960 = false;
-    Par.CastleNotation = KingMove;
+    Glob.CastleNotation = KingMove;
 	Par.useBook = true;
 	Par.verboseBook = false;
 

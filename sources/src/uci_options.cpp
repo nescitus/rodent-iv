@@ -67,9 +67,9 @@ void PrintUciOptions() {
     // additional "var take" not really needed - so not shown as option
     // Arena needs "o-o", all other "move"
 #ifdef DEBUG
-    if (Par.CastleNotation == OOO)
+    if (Glob.CastleNotation == OOO)
         printfUciOut("option name CastleNotation type combo default O-O var move var O-O\n");
-    else if (Par.CastleNotation == TakeRook)
+    else if (Glob.CastleNotation == TakeRook)
         printfUciOut("option name CastleNotation type combo default take var move var O-O\n");
     else
         printfUciOut("option name CastleNotation type combo default move var move var O-O\n");
@@ -394,11 +394,11 @@ void ParseSetoption(const char *ptr) {
         valuebool(Par.use_ponder, value);
     } else if (strcmp(name, "castlenotation") == 0)                          {
         if (strcmp(value, "O-O") == 0 || strcmp(value, "o-o") == 0)
-            Par.CastleNotation = OOO;
+            Glob.CastleNotation = OOO;
         else if (strcmp(value, "take") == 0)
-            Par.CastleNotation = TakeRook;
+            Glob.CastleNotation = TakeRook;
         else
-            Par.CastleNotation = KingMove;
+            Glob.CastleNotation = KingMove;
     } else if (strcmp(name, "uci_chess960") == 0)                            {
         valuebool(Par.chess960, value);
     } else if (strcmp(name, "usebook") == 0)                                 {

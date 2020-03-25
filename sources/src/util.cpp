@@ -171,12 +171,12 @@ void MoveToStr(int move, char *move_str) {
           also needs special treatment, if king is on b- or g-file
         */
 
-        if (Par.chess960 || Par.CastleNotation == TakeRook) {
+        if (Par.chess960 || Glob.CastleNotation == TakeRook) {
             if (move_str[2] == 'g')
                 move_str[2] = CastleFile_RK + 'a'; // or use File(Castle_W_RK), if ready
             else
                 move_str[2] = CastleFile_RQ + 'a'; // or use File(Castle_W_RQ), if ready
-        } else if (Par.CastleNotation == OOO) {
+        } else if (Glob.CastleNotation == OOO) {
             if ( move_str[2] == 'g')
                 sprintf(move_str, "O-O");
             else
@@ -449,7 +449,7 @@ void CheckGUI() {
 
     if (IsProcessRunning("arena.exe")) {
         printfUciOut("info string GUI=Arena\n");
-        Par.CastleNotation = OOO;
+        Glob.CastleNotation = OOO;
     } else
         printf_debug("GUI=???\n");
 }
