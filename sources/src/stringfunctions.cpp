@@ -16,6 +16,7 @@ If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "stringfunctions.h"
+#include <cctype>
 
 std::string CStr2Str(const char* CStr) {
     return (std::string)CStr;
