@@ -1,4 +1,4 @@
-; Anand personality for Rodent III chess engine
+; Anand personality for Rodent IV chess engine
 ; author: Pawel Koziol
 ; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; hommage to Viswanathan Anand
