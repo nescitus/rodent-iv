@@ -490,7 +490,7 @@ int cParam::EloToBlur(int elo_in) {
 
     // Weaker levels get their evaluation blurred
 
-    if (elo_in < 1500) return (1500 - elo_in) / 4;
+    if (elo_in < 1500) return (1500 - elo_in) / 3;
     return 0;
 }
 
