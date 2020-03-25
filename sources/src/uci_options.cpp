@@ -37,7 +37,17 @@ void PrintSingleOption(int ind) {
             paramNames[ind], Par.values[ind], Par.min_val[ind], Par.max_val[ind]);
 }
 
+// workaround for giving infos ("type label") to the GUI
+void PrintUciOptionInfo(const char* name, const char* info) {
+    printfUciOut("option name %s type combo default %s var %s\n", name, info, info);
+}
+
 void PrintUciOptions() {
+
+#ifdef DEBUG
+    // be sure testing the right version
+    PrintUciOptionInfo("Build Time", __TIME__ " " __DATE__);
+#endif
 
 	printfUciOut("option name Clear Hash type button\n");
     printfUciOut("option name Hash type spin default 16 min 1 max %d\n", max_tt_size_mb);
@@ -62,7 +72,11 @@ void PrintUciOptions() {
         printfUciOut("option name UCI_LimitStrength type check default %s\n", Par.useWeakening ? "true" : "false");
         printfUciOut("option name UCI_Elo type spin default %d min 800 max 2800\n", Par.elo);
     }
-    printfUciOut("option name UCI_Chess960 type check default false\n");
+
+    if (Glob.usedGUI == Arena)
+        PrintUciOptionInfo("Chess960 mode", "autodetection");
+    else
+        printfUciOut("option name UCI_Chess960 type check default false\n");
 
     // additional "var take" not really needed - so not shown as option
     // Arena needs "o-o", all other "move"

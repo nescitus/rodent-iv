@@ -449,7 +449,10 @@ void CheckGUI() {
 
     if (IsProcessRunning("arena.exe")) {
         printfUciOut("info string GUI=Arena\n");
+        Glob.usedGUI = Arena;
         Glob.CastleNotation = OOO;
-    } else
+    } else {
+        Glob.usedGUI = Other;
         printf_debug("GUI=???\n");
+    }
 }

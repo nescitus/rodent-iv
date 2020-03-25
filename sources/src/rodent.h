@@ -98,6 +98,7 @@ enum ePiece      { WP, BP, WN, BN, WB, BBi, WR, BR, WQ, BQ, WK, BK, NO_PC };
 enum eFile       { FILE_A, FILE_B, FILE_C, FILE_D, FILE_E, FILE_F, FILE_G, FILE_H };
 enum eRank       { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 };
 enum eCastleFlag { W_KS = 1, W_QS = 2, B_KS = 4, B_QS = 8 };
+enum eGUIs { Other, Arena };
 enum eCastleNotation { KingMove, TakeRook, OOO };
 enum eMoveType   { NORMAL, CASTLE, EP_CAP, EP_SET, N_PROM, B_PROM, R_PROM, Q_PROM };
 enum eMoveFlag   { MV_NORMAL, MV_HASH, MV_CAPTURE, MV_REFUTATION, MV_KILLER, MV_BADCAPT };
@@ -776,6 +777,7 @@ class cGlobals {
     int previousTaunt;
     int currentTaunt;
     eCastleNotation CastleNotation;
+    eGUIs usedGUI;
 
     void ClearData();
     void Init();
