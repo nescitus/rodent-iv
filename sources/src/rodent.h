@@ -467,6 +467,7 @@ class POS {
 
     int DrawScore() const;
     bool Legal(int move) const;
+    bool Unambiguous(int move) const;
 
     NOINLINE void PrintBoard() const;
     NOINLINE void ParseMoves(const char *ptr);
@@ -479,6 +480,7 @@ class POS {
     int Swap(int from, int to);
 
     int StrToMove(const char *move_str) const;
+    void ExtractMove(int *pv);
 };
 
 struct MOVES {
@@ -960,7 +962,6 @@ class cEngine {
 void PrintVersion();
 
 void DisplayCurrmove(int move, int tried);
-void ExtractMove(int *pv);
 int GetMS();
 U64 GetNps(int elapsed);
 bool InputAvailable();

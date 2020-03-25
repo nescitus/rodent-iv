@@ -118,3 +118,34 @@ bool POS::Legal(int move) const {
 
     return (AttacksFrom(fsq) & SqBb(tsq)) != 0;
 }
+
+bool POS::Unambiguous(int move) const {
+
+#ifndef DEBUG
+    // When OOO- or TakeRook-mode all is fine, but maybe we still like to know in debug-build
+    if (Glob.CastleNotation == OOO || Glob.CastleNotation == TakeRook)
+        return true;
+#endif
+
+    int fsq = Fsq(move);
+    int tsq = Tsq(move);
+    std::string moveTypeStr;
+
+    if (Legal((NORMAL << 12) | (tsq << 6) | fsq) &&
+        Legal((CASTLE << 12) | (tsq << 6) | fsq)) {
+
+        if (MoveType(move) == CASTLE)
+            moveTypeStr = "castling";
+        else
+            moveTypeStr = "noncastling";
+
+        if (Glob.CastleNotation == KingMove) {
+            // "Chess from Jeroen Carolus" uses this as default
+            printfUciOut("info string ambiguous move - like to do %s\n", moveTypeStr.c_str());
+            return false;
+        } else
+            printf_debug("ambiguous move in standard notation - do %s\n", moveTypeStr.c_str());
+    }
+
+    return true;
+}

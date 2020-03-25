@@ -193,7 +193,7 @@ int cEngine::BulletCorrection(int time) {
     else return time;
 }
 
-void ExtractMove(int *pv) {
+void POS::ExtractMove(int *pv) {
 
     char bestmove_str[6], ponder_str[6];
 
@@ -208,6 +208,8 @@ void ExtractMove(int *pv) {
         printfUciOut("bestmove %s \n", bestmove_str);
     else
         printfUciOut("bestmove %s\n", bestmove_str);
+
+    Unambiguous(pv[0]);
 }
 
 void cEngine::SetMoveTime(int base, int inc, int movestogo) {
@@ -363,7 +365,7 @@ void ParseGo(POS *p, const char *ptr) {
 #ifndef USE_THREADS
     EngineSingle.mDpCompleted = 0;
     EngineSingle.Think(p);
-    ExtractMove(EngineSingle.mPvEng);
+    p->ExtractMove(EngineSingle.mPvEng);
 #else
     Glob.goodbye = false;
 

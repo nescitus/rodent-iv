@@ -210,9 +210,9 @@ void cEngine::MultiPv(POS * p, int * pv) {
     }
 
     if (bestPv == 0) {
-        ExtractMove(line[1].pv);
+        p->ExtractMove(line[1].pv);
     } else {
-        ExtractMove(line[bestPv].pv);
+        p->ExtractMove(line[bestPv].pv);
     }
 }
 
