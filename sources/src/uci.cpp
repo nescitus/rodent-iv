@@ -404,7 +404,7 @@ void ParseGo(POS *p, const char *ptr) {
             best_pv = engine.mPvEng;
         }
 
-    ExtractMove(best_pv);
+    p->ExtractMove(best_pv);
 #endif
 
     }
