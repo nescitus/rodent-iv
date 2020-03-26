@@ -531,13 +531,23 @@ void ReadPersonality(const char *fileName) {
 
         // Aliases for personalities
 
-        pos = strchr(line, '=');
-        if (pos) {
-            *pos = '\0';
-            strncpy(pers_aliases.alias[cnt], line, PERSALIAS_ALEN-1); // -1 coz `strncpy` has a very unexpected glitch
-            strncpy(pers_aliases.path[cnt], pos+1, PERSALIAS_PLEN-1); // see the C11 language standard, note 308
-            cnt++;
-            continue;
+        if (*skipWS != ';' && *skipWS != '#' && *skipWS != '\'' && *skipWS != '/') {
+            pos = strchr(line, '=');
+            if (pos) {
+                if (!cnt) {
+                    // add a fake alias to allow to use PersonalityFile, ReadPersonality will
+                    // fail on it keeping PersonalityFile values
+                    strcpy(pers_aliases.alias[cnt], "---");
+                    strcpy(pers_aliases.path[cnt], "///");
+                    cnt++;
+                }
+
+                *pos = '\0';
+                strncpy(pers_aliases.alias[cnt], line, PERSALIAS_ALEN-1); // -1 coz `strncpy` has a very unexpected glitch
+                strncpy(pers_aliases.path[cnt], pos+1, PERSALIAS_PLEN-1); // see the C11 language standard, note 308
+                cnt++;
+                continue;
+            }
         }
 
         // Personality files use the same syntax as UCI options parser (yes I have been lazy)
@@ -547,11 +557,6 @@ void ReadPersonality(const char *fileName) {
             ParseSetoption(ptr);
     }
 
-    if (cnt) { // add a fake alias to allow to use PersonalityFile, ReadPersonality will fail on it keeping PersonalityFile values
-        strcpy(pers_aliases.alias[cnt], "---");
-        strcpy(pers_aliases.path[cnt], "///");
-        cnt++;
-    }
     if (cnt != 0) pers_aliases.count = cnt;
     fclose(personalityFile);
     Par.SpeedToBookDepth(Par.npsLimit);
