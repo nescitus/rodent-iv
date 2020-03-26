@@ -339,7 +339,15 @@ void ParseGo(POS *p, const char *ptr) {
         }
 
         if (pvb) {
-            printfUciOut("bestmove %s\n", MoveToStr(pvb).c_str());
+            if (MoveToStr(pvb).length()==3)
+                // Fix for Arena - not following standard and than have problem with
+                // stringlength of "O-O"
+                printfUciOut("bestmove %s \n", MoveToStr(pvb).c_str());
+            else
+                printfUciOut("bestmove %s\n", MoveToStr(pvb).c_str());
+
+            p->Unambiguous(pvb);
+
             return;
         }
     }

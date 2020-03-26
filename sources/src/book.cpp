@@ -393,21 +393,8 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
         const int move = entry->move;
         const int score = entry->weight;
 
-        // ugly hack to convert polyglot move to a real one
-
-        int fsq = Tsq(move);
-        int tsq = Fsq(move);
-
-        // correction for castling moves
-
-        if (fsq == E1 && tsq == H1 && p->mKingSq[WC] == E1) tsq = G1;
-        if (fsq == E8 && tsq == H8 && p->mKingSq[BC] == E8) tsq = G8;
-        if (fsq == E1 && tsq == A1 && p->mKingSq[WC] == E1) tsq = C1;
-        if (fsq == E8 && tsq == A8 && p->mKingSq[BC] == E8) tsq = C8;
-
-        // now we want to get a move with full data, not only from and to squares
-
-        int internal_move = (tsq << 6) | fsq;
+        int internal_move = (Fsq(move) << 6) | Tsq(move);
+        // convert uci-castle-notation (TakeKing) to internal-move (castle-flag)
         internal_move = p->StrToMove(MoveToStr(internal_move).c_str());
 
         if (max_weight < score) max_weight = score;
