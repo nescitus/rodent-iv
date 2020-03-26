@@ -1,0 +1,86 @@
+; Kortchnoi personality for Rodent IV chess engine
+; author: Rob Robinson (robinson-special-jeux.franceserv.com)
+; converted by Bernhard C. Maerz - needs some editing!
+;
+;
+;
+setoption name PawnValueMg value 95
+setoption name KnightValueMg value 340
+setoption name BishopValueMg value 322
+setoption name RookValueMg value 514
+setoption name QueenValueMg value 1000
+setoption name PawnValueEg value 110
+setoption name KnightValueEg value 305
+setoption name BishopValueEg value 320
+setoption name RookValueEg value 529
+setoption name QueenValueEg value 1013
+setoption name KeepPawn value 0
+setoption name KeepKnight value 5
+setoption name KeepBishop value -5
+setoption name KeepRook value 0
+setoption name KeepQueen value 0
+setoption name BishopPairMg value 40
+setoption name BishopPairEg value 40
+setoption name KnightPair value -10
+; setoption name RookPair value ???
+setoption name KnightLikesClosed value 8
+setoption name RookLikesOpen value 2
+setoption name ExchangeImbalance value 15
+; setoption name MinorVsQueen value ???
+setoption name Material value 105
+setoption name OwnAttack value 100
+setoption name OppAttack value 130
+setoption name OwnMobility value 100
+setoption name OppMobility value 110
+; setoption name FlatMobility value ???
+setoption name KingTropism value 30
+; setoption name PrimaryPstWeight value ???
+; setoption name SecondaryPstWeight value ???
+setoption name PiecePressure value 110
+setoption name PassedPawns value 100
+setoption name PawnStructure value 110
+setoption name Lines value 110
+setoption name Outposts value 100
+; setoption name Space value ???
+setoption name PawnShield value 120
+setoption name PawnStorm value 105
+setoption name DoubledPawnMg value -12
+setoption name DoubledPawnEg value -24
+setoption name IsolatedPawnMg value -10
+setoption name IsolatedPawnEg value -20
+setoption name IsolatedOnOpenMg value -10
+setoption name BackwardPawnMg value -8
+setoption name BackwardPawnEg value -10
+setoption name BackwardOnOpenMg value -8
+setoption name FianchBase value 4
+setoption name FianchKing value 6
+; setoption name ReturningB value ???
+; setoption name PawnMass value ???
+; setoption name PawnChains value ???
+setoption name PrimaryPstStyle value 0
+setoption name SecondaryPstStyle value 0
+setoption name Contempt value 0
+setoption name SlowMover value 100
+setoption name Selectivity value 175
+setoption name SearchSkill value 10
+setoption name BookFilter value 20
+setoption name GuideBookFile value players/rj-kortchnoi.bin
+setoption name MainBookFile value hist/_31to80.bin
+;
+; ToDo
+; adjust BishopPairMg, please
+; adjust BishopPairEg, please
+; add RookPair, please
+; add MinorVsQueen, please
+; add FlatMobility, please
+; add PrimaryPstWeight, please
+; add SecondaryPstWeight, please
+; add Space, please
+; adjust FianchKing, please
+; add ReturningB, please
+; add PawnMass, please
+; add PawnChains, please
+; adjust PrimaryPstStyle, please
+; adjust SecondaryPstStyle, please
+; adjust GuideBookFile, please
+; adjust MainBookFile, please
