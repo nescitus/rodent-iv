@@ -1155,6 +1155,9 @@ void cEngine::DisplayPv(int multipv, int score, int *pv) {
 
 void CheckTimeout() {
 
+    if (Glob.abortSearch)
+        return; // must handle "stop" first!
+
     char command[80];
 
     if (InputAvailable()) {
