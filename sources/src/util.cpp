@@ -450,7 +450,16 @@ void CheckGUI() {
     if (IsProcessRunning("arena.exe")) {
         printfUciOut("info string GUI=Arena\n");
         Glob.usedGUI = Arena;
+        // Uses (nonstandard) O-O notation in uci-protocoll when playing chess960
+        // Don't send "UCI_Chess960"
+        // But O-O notation works also in uci-standardchess, so always us it
         Glob.CastleNotation = OOO;
+    } else if (IsProcessRunning("winboard.exe")) {
+        printfUciOut("info string GUI=Winboard\n");
+        Glob.usedGUI = WinBoard;
+        // Detection not really needed
+        // Winboard uses maximum 16 values for combo-options
+        // But don't help to send "info string" - Winboard doesn't show
     } else {
         Glob.usedGUI = Other;
         printf_debug("GUI=???\n");
