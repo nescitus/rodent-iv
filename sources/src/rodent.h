@@ -19,11 +19,11 @@ If not, see <http://www.gnu.org/licenses/>.
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
 // 8856 lines
 
-// bench 14, 64-bit release: 11835547 nodes searched in 11281, speed 1049064 nps (Score: 2.435)
-// bench 14, 64-bit debug  : 11835547 nodes searched in 157344, speed 75220 nps (Score: 0.175)
+// bench 14, 64-bit release: 11981180 nodes searched in 11954, speed 1002189 nps (Score: 2.326)
+// bench 14, 64-bit debug  : ??
 
-// bench 14, 32-bit release: 11835547 nodes searched in 15672, speed 755155 nps (Score: 1.752)
-// bench 14, 32-bit debug  : 11835547 nodes searched in 157657, speed 75071 nps (Score: 0.174)
+// bench 14, 32-bit release: ??
+// bench 14, 32-bit debug  : ??
 
 // TODO: pawns participation in king attack
 // TODO: auxiliary pawn piece/square tables, depending on king's wing
@@ -906,6 +906,7 @@ class cEngine {
     static const int mscSnpDepth;      // max depth at which static null move pruning is applied
     static const int mscRazorDepth;    // max depth at which razoring is applied
     static const int mscFutDepth;      // max depth at which futility pruning is applied
+    static const int mscSEEmargin;     // margin for SEE pruning of bad captures
     static int msLmrSize[2][MAX_PLY][MAX_MOVES];
 
   public:

@@ -25,6 +25,7 @@ If not, see <http://www.gnu.org/licenses/>.
 const int cEngine::mscSnpDepth = 3;       // max depth at which static null move pruning is applied
 const int cEngine::mscRazorDepth = 4;     // max depth at which razoring is applied
 const int cEngine::mscFutDepth = 6;       // max depth at which futility pruning is applied
+const int cEngine::mscSEEmargin = 113;    // margin for SEE pruning of bad captures (113 means that at depth 2 losing NxP will be accepted)
 
 // this variable controls when evaluation function needs to be called for the sake of pruning
 const int cEngine::mscSelectiveDepth = Max(Max(mscSnpDepth, mscRazorDepth), mscFutDepth);
@@ -970,7 +971,9 @@ avoidNull:
         && !p->InCheck()
         && depth <= 3
         && !isPv) {
-            if (moveSEEscore > 150 * depth) { // yes, sign is correct
+            if (moveSEEscore < -mscSEEmargin * depth) {
+              //  p->PrintBoard();
+              //  printf("%s depth marg %d %d val %d\n", MoveToStr(move), -mscSEEmargin * depth, depth, moveSEEscore);
                 p->UndoMove(move, u);
                 continue;
             }
