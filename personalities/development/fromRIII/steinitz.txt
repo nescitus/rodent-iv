@@ -22,26 +22,26 @@ setoption name KeepQueen value 0
 setoption name BishopPairMg value 50
 setoption name BishopPairEg value 50
 setoption name KnightPair value -10
-; setoption name RookPair value ???
+setoption name RookPair value -5
 setoption name KnightLikesClosed value 6
 setoption name RookLikesOpen value 3
 setoption name ExchangeImbalance value 25
-; setoption name MinorVsQueen value ???
+setoption name MinorVsQueen value 0
 setoption name Material value 110
 setoption name OwnAttack value 80
 setoption name OppAttack value 100
 setoption name OwnMobility value 80
 setoption name OppMobility value 100
-; setoption name FlatMobility value ???
+setoption name FlatMobility value 0
 setoption name KingTropism value 20
-; setoption name PrimaryPstWeight value ???
-; setoption name SecondaryPstWeight value ???
+setoption name PrimaryPstWeight value 50
+setoption name SecondaryPstWeight value 50
 setoption name PiecePressure value 100
 setoption name PassedPawns value 100
 setoption name PawnStructure value 125
 setoption name Lines value 100
 setoption name Outposts value 100
-; setoption name Space value ???
+setoption name Space value 0
 setoption name PawnShield value 100
 setoption name PawnStorm value 100
 setoption name DoubledPawnMg value -12
@@ -54,7 +54,7 @@ setoption name BackwardPawnEg value -10
 setoption name BackwardOnOpenMg value -8
 setoption name FianchBase value 0
 setoption name FianchKing value 0
-; setoption name ReturningB value ???
+setoption name ReturningB value 15
 setoption name PawnMass value 125
 setoption name PawnChains value 100
 setoption name PrimaryPstStyle value 1
@@ -85,7 +85,6 @@ setoption name MainBookFile value hist/_pre30.bin
 ; add FlatMobility, please
 ; add PrimaryPstWeight, please
 ; add SecondaryPstWeight, please
-; add Space, please
 ; adjust FianchBase, please
 ; adjust FianchKing, please
 ; add ReturningB, please
