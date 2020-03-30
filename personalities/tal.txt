@@ -54,11 +54,13 @@ setoption name PawnMass value 100
 setoption name PawnChains value 100
 setoption name PrimaryPstStyle value 4
 setoption name SecondaryPstStyle value 1
+; little things, not accessible via UCI options
+setoption name blockedcpawn value -17
+; non-eval stuff
 setoption name Contempt value 0
 setoption name SlowMover value 100
 setoption name Selectivity value 175
 setoption name SearchSkill value 10
-setoption name RiskyDepth value 0
 setoption name BookFilter value 20
 setoption name GuideBookFile value players/ph-tal2.bin
 setoption name MainBookFile value rodent.bin

@@ -39,7 +39,7 @@ sBook MainBook;
 void PrintVersion() {
     std::string OutStr;
 
-    OutStr = "id name Rodent IV V0.25";
+    OutStr = "id name Rodent IV V0.26";
 
 	int bits = sizeof(void*) * 8; // CHAR_BIT
 	if (bits == 32)

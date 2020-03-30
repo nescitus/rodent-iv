@@ -111,7 +111,7 @@ void cEngine::EvaluateKnightPatterns(POS *p, eData *e) {
 
 void cEngine::EvaluateKingPatterns(POS *p, eData *e) {
 
-    U64 king_mask, rook_mask;
+    U64 kingMask, rookMask;
 
     if (p->Kings(WC) & RANK_1_BB) {
 
@@ -131,17 +131,17 @@ void cEngine::EvaluateKingPatterns(POS *p, eData *e) {
 
         // White rook blocked by uncastled king
 
-        king_mask = SqBb(F1) | SqBb(G1);
-        rook_mask = SqBb(G1) | SqBb(H1) | SqBb(H2);
+        kingMask = SqBb(F1) | SqBb(G1);
+        rookMask = SqBb(G1) | SqBb(H1) | SqBb(H2);
 
-        if ((p->Kings(WC) & king_mask)
-        && (p->Rooks(WC) & rook_mask)) Add(e, WC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
+        if ((p->Kings(WC) & kingMask)
+        && (p->Rooks(WC) & rookMask)) Add(e, WC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
 
-        king_mask = SqBb(B1) | SqBb(C1);
-        rook_mask = SqBb(A1) | SqBb(B1) | SqBb(A2);
+        kingMask = SqBb(B1) | SqBb(C1);
+        rookMask = SqBb(A1) | SqBb(B1) | SqBb(A2);
 
-        if ((p->Kings(WC) & king_mask)
-        && (p->Rooks(WC) & rook_mask)) Add(e, WC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
+        if ((p->Kings(WC) & kingMask)
+        && (p->Rooks(WC) & rookMask)) Add(e, WC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
 
         // White castling rights
 
@@ -167,17 +167,17 @@ void cEngine::EvaluateKingPatterns(POS *p, eData *e) {
 
         // Black rook blocked by uncastled king
 
-        king_mask = SqBb(F8) | SqBb(G8);
-        rook_mask = SqBb(G8) | SqBb(H8) | SqBb(H7);
+        kingMask = SqBb(F8) | SqBb(G8);
+        rookMask = SqBb(G8) | SqBb(H8) | SqBb(H7);
 
-        if ((p->Kings(BC) & king_mask)
-        && (p->Rooks(BC) & rook_mask)) Add(e, BC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
+        if ((p->Kings(BC) & kingMask)
+        && (p->Rooks(BC) & rookMask)) Add(e, BC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
 
-        king_mask = SqBb(B8) | SqBb(C8);
-        rook_mask = SqBb(B8) | SqBb(A8) | SqBb(A7);
+        kingMask = SqBb(B8) | SqBb(C8);
+        rookMask = SqBb(B8) | SqBb(A8) | SqBb(A7);
 
-        if ((p->Kings(BC) & king_mask)
-        && (p->Rooks(BC) & rook_mask)) Add(e, BC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
+        if ((p->Kings(BC) & kingMask)
+        && (p->Rooks(BC) & rookMask)) Add(e, BC, Par.values[R_BLOCK_MG], Par.values[R_BLOCK_EG]);
 
         // Black castling rights
 

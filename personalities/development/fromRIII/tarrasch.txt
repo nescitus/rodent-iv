@@ -58,7 +58,10 @@ setoption name FianchKing value 0
 setoption name PawnMass value 100
 setoption name PawnChains value 100
 setoption name PrimaryPstStyle value 1
-setoption name SecondaryPstStyle value 1
+setoption name SecondaryPstStyle value 
+; little things, not accessible via UCI options
+setoption name blockedcpawn value -25
+; non-eval stuff
 setoption name Contempt value 0
 setoption name SlowMover value 100
 setoption name Selectivity value 175

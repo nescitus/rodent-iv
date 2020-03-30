@@ -60,6 +60,9 @@ setoption name PawnChains value 100
 setoption name PrimaryPstStyle value 1
 setoption name SecondaryPstStyle value 1
 setoption name Contempt value 0
+; little things, not accessible via UCI options
+setoption name blockedcpawn value -17
+; non-eval stuff
 setoption name SlowMover value 100
 setoption name Selectivity value 175
 setoption name SearchSkill value 10

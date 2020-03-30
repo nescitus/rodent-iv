@@ -363,7 +363,8 @@ void ParseSetoption(const char *ptr) {
         Par.secondaryPstStyle = atoi(value);
         Par.InitPst();
         Glob.shouldClear = true;
-
+    } else if (strcmp(name, "blockedcpawn") == 0) {
+        Par.values[N_BLOCK] = atoi(value);
     // Here starts a block of non-eval options
 
     } else if (strcmp(name, "logfile") == 0)                           {
