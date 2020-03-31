@@ -67,7 +67,7 @@ setoption name SlowMover value 80
 setoption name Selectivity value 160
 setoption name SearchSkill value 10
 setoption name BookFilter value 20
-; setoption name GuideBookFile value players/bosboom.bin
+setoption name GuideBookFile value players/bn-bosboom.bin
 setoption name MainBookFile value hist/_post06.bin
 ;
 ; ToDo
