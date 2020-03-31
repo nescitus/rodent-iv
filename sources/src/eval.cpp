@@ -310,7 +310,7 @@ void cEngine::EvaluatePieces(POS *p, eData *e, eColor sd) {
 
         control = BB.KnightAttacks(sq) & ~p->mClBb[sd];    // get control bitboard
         if (!(control & ~e->pawnTakes[op] & Mask.away[sd]))// we do not attack enemy half of the board
-            Add(e, sd, V(N_OWH_MG), V(N_OWH_EG) );
+            Add(e, sd, V(N_OWH_MG), V(N_OWH_EG) );         // (surprisingly, seems beneficial for values like -1,0)
         e->allAttacks[sd] |= BB.KnightAttacks(sq);
         e->SetKnightAttacks(control, sd); // TODO: this or BB.KnightAttacks() ??
         if (control & nChecks) e->att[sd] += V(N_CHK);     // check threats

@@ -1,0 +1,70 @@
+; Dynamic personality for Rodent IV chess engine
+; author: Pawel Koziol
+; attacker that likes bishops, moderately likely to sacrifice
+;
+;
+setoption name PawnValueMg value 100
+setoption name KnightValueMg value 325
+setoption name BishopValueMg value 345
+setoption name RookValueMg value 500
+setoption name QueenValueMg value 1000
+setoption name PawnValueEg value 100
+setoption name KnightValueEg value 325
+setoption name BishopValueEg value 345
+setoption name RookValueEg value 500
+setoption name QueenValueEg value 1000
+setoption name KeepPawn value -1
+setoption name KeepKnight value 0
+setoption name KeepBishop value 2
+setoption name KeepRook value 0
+setoption name KeepQueen value 0
+setoption name BishopPairMg value 50
+setoption name BishopPairEg value 50
+setoption name KnightPair value -10
+setoption name RookPair value -11
+setoption name KnightLikesClosed value 5
+setoption name RookLikesOpen value 3
+setoption name ExchangeImbalance value 25
+setoption name MinorVsQueen value 5
+setoption name Material value 90
+setoption name OwnAttack value 120
+setoption name OppAttack value 90
+setoption name OwnMobility value 150
+setoption name OppMobility value 150
+setoption name FlatMobility value 0
+setoption name KingTropism value 20
+setoption name PrimaryPstWeight value 50
+setoption name SecondaryPstWeight value 50
+setoption name PiecePressure value 120
+setoption name PassedPawns value 100
+setoption name PawnStructure value 80
+setoption name Lines value 100
+setoption name Outposts value 80
+setoption name Space value 40
+setoption name PawnShield value 120
+setoption name PawnStorm value 80
+setoption name DoubledPawnMg value -12
+setoption name DoubledPawnEg value -24
+setoption name IsolatedPawnMg value -10
+setoption name IsolatedPawnEg value -20
+setoption name IsolatedOnOpenMg value -10
+setoption name BackwardPawnMg value -8
+setoption name BackwardPawnEg value -10
+setoption name BackwardOnOpenMg value -8
+setoption name FianchBase value 0
+setoption name FianchKing value 0
+setoption name ReturningB value 0
+setoption name PawnMass value 100
+setoption name PawnChains value 100
+setoption name PrimaryPstStyle value 1
+setoption name SecondaryPstStyle value 1
+; little things, not accessible via UCI options
+setoption name blockedcpawn value -25
+; non-eval stuff
+setoption name Contempt value 0
+setoption name SlowMover value 100
+setoption name Selectivity value 175
+setoption name SearchSkill value 10
+setoption name BookFilter value 20
+setoption name GuideBookFile value guide/active.bin
+setoption name MainBookFile value rodent.bin
