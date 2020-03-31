@@ -4,6 +4,8 @@ and downloaded from http://www.chesspraga.cz/spikebook.htm
 Books with names starting with rj- are downloaded from
 https://robinson-special-jeux.franceserv.com/famous-personnality.html
 
+Books with names starting with bn- are from Brendan J. Norman
+
 Books without such prefix were made by Pawel Koziol.
 
 kasparov.bin - Kasparov's games from PgnMentor as the first layer
