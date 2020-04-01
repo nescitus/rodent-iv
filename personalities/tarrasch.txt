@@ -1,7 +1,7 @@
 ; Tarrasch personality for Rodent IV chess engine
 ; author: Pawel Koziol
-; converted from Rodent III by Bernhard C. Maerz - needs a lot of editing!
 ; mobility, emphasis on bishops, likes open game
+;
 ;
 ;
 setoption name PawnValueMg value 100
