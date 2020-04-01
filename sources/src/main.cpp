@@ -121,7 +121,6 @@ int main() {
     Dist.Init();
 
     Par.chess960 = false;
-    Glob.CastleNotation = KingMove;
 	Par.useBook = true;
 	Par.verboseBook = false;
 
@@ -186,6 +185,8 @@ void cGlobals::Init() {
     isConsole = true;
     eloSlider = true;
 	multiPv = 1;
+    CastleNotation = KingMove;
+    useUciPersonalitySet = false;
 }
 
 bool cGlobals::CanReadBook() {

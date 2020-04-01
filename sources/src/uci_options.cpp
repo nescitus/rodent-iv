@@ -32,6 +32,13 @@ struct {
     int count;
 } pers_aliases;
 
+#define PERSSETALIAS_LEN     32     // max length for a personality-set alias
+struct {
+    char alias[10][PERSSETALIAS_LEN]; // use one-digit-number for sets, so max-value fixed
+    int count = 0;
+    int used = 0;
+} pers_sets;
+
 void PrintSingleOption(int ind) {
     printfUciOut("option name %s type spin default %d min %d max %d\n",
             paramNames[ind], Par.values[ind], Par.min_val[ind], Par.max_val[ind]);
@@ -92,6 +99,14 @@ void PrintUciOptions() {
     if (Glob.usePersonalityFiles) {
         if (pers_aliases.count == 0 || Glob.showPersonalityFile)
             printfUciOut("option name PersonalityFile type string default default.txt\n");
+        if (Glob.useUciPersonalitySet) {
+            if (pers_sets.count != 0 && pers_sets.used < pers_sets.count) {
+                printfUciOut("option name PersonalitySet type combo default %s", pers_sets.alias[pers_sets.used]);
+                for (int i = 0; i < pers_sets.count; i++)
+                    printfUciAdd(" var %s", pers_sets.alias[i]);
+                printfUciAdd("\n");
+            }
+        }
         if (pers_aliases.count != 0) {
             printfUciOut("option name Personality type combo default ---"); // `---` in case we want PersonalityFile
             for (int i = 0; i < pers_aliases.count; i++)
@@ -433,6 +448,12 @@ void ParseSetoption(const char *ptr) {
         Glob.shouldClear = true;
     } else if (strcmp(name, "personalityfile") == 0)                         {
         ReadPersonality(value);
+    } else if (strcmp(name, "personalityset") == 0)                          {
+        for (int i = 0; i < pers_sets.count; i++)
+            if (strcmp(pers_sets.alias[i], value) == 0) {
+                ChangePersonalitySet(i);
+                break;
+            }
     } else if (strcmp(name, "personality") == 0 )                            {
         for (int i = 0; i < pers_aliases.count; i++)
             if (strcmp(pers_aliases.alias[i], value) == 0) {
@@ -499,6 +520,7 @@ void ReadPersonality(const char *fileName) {
     Glob.isReadingPersonality = true;
 
     char line[256], token[180]; int cnt = 0; char *pos;
+    int readPersonalitySet = -1; // we use 0 as first (default) personality-set
 
     while (fgets(line, sizeof(line), personalityFile)) {    // read options line by line
 
@@ -524,6 +546,8 @@ void ReadPersonality(const char *fileName) {
         if (strstr(line, "SHOW_OPTIONS") == skipWS) Glob.usePersonalityFiles = false; // DEFAULT
         if (strstr(line, "HIDE_PERSFILE") == skipWS) Glob.showPersonalityFile = false; // DEFAULT == true
 
+        if (strstr(line, "GUI_PERSONALITYSET") == skipWS) Glob.useUciPersonalitySet = true;
+
         if (strstr(line, "CLEAR_LOG") == skipWS) {
             FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
             if (logFile) fclose(logFile);
@@ -532,9 +556,22 @@ void ReadPersonality(const char *fileName) {
 
         // Aliases for personalities
 
-        if (*skipWS != ';' && *skipWS != '#' && *skipWS != '\'' && *skipWS != '/') {
-            pos = strchr(line, '=');
-            if (pos) {
+        pos = strchr(line, '=');
+        if (pos && *skipWS != ';' && *skipWS != '#' && *skipWS != '\'' && *skipWS != '/') {
+
+            if (strstr(line, "USE_PERSONALITY_SET_NO") == skipWS) {
+                pers_sets.used = *(pos+1) - '0';
+                if (pers_sets.used < 0 || pers_sets.used > 9)
+                    pers_sets.used = 0;
+
+            } else if (strstr(line, "PERSONALITY_SET") == skipWS) {
+                readPersonalitySet++;
+                if (readPersonalitySet < 10) {
+                    strncpy(pers_sets.alias[readPersonalitySet], pos+1, PERSSETALIAS_LEN-1); // -1 coz `strncpy` has a very unexpected glitch
+                    pers_sets.count = readPersonalitySet+1;
+                }
+
+            } else if (pers_sets.used == readPersonalitySet) {
                 if (!cnt) {
                     // add a fake alias to allow to use PersonalityFile, ReadPersonality will
                     // fail on it keeping PersonalityFile values
@@ -562,4 +599,58 @@ void ReadPersonality(const char *fileName) {
     fclose(personalityFile);
     Par.SpeedToBookDepth(Par.npsLimit);
     Glob.isReadingPersonality = false;
+}
+
+void ChangePersonalitySet(int persSetNo) {
+    char line[256];
+    bool needReread = false;
+    FILE *basicFile = NULL;
+    char fileName[] = "basic.ini";
+
+    if (persSetNo < 0 || persSetNo > 9) {
+        // allow only one-digit, so we can make binary-change (and don't need to rewrite whole file)
+        printf_debug("USE_PERSONALITY_SET_NO allows only values from 0 to 9\n");
+        return;
+    }
+
+    if (isabsolute(fileName)                    // if known locations don't exist we want to load only from absolute paths
+        || ChDirEnv("RODENT4PERSONALITIES")     // try `RODENT4PERSONALITIES` env var first (26/08/17: linux only)
+            || ChDir(_PERSONALITIESPATH))       // next built-in path
+                basicFile = fopen(fileName, "r+b");
+    // printf_debug("reading personality '%s' (%s)\n", fileName, basicFile == NULL ? "failure" : "success");
+
+    if (!basicFile)
+        return;
+
+    while (fgets(line, sizeof(line), basicFile)) {    // read options line by line
+
+        char *skipWS = line;
+        while (*skipWS == ' ' || *skipWS == '\t')
+            skipWS++;
+
+        if (strstr(line, "USE_PERSONALITY_SET_NO=") == skipWS) {
+            char c;
+
+            // set position direct after '=' char:
+            fseek (basicFile, ftell (basicFile) - strlen(line) + strlen("USE_PERSONALITY_SET_NO="), SEEK_SET);
+
+            c = fgetc(basicFile); // to know if there are changes
+            fseek (basicFile, ftell (basicFile) - 1, SEEK_SET);
+
+            if (persSetNo != c-'0') {
+                fprintf(basicFile,"%d", persSetNo);
+                printf_debug("changed USE_PERSONALITY_SET_NO from '%c' to '%d'\n", c, persSetNo);
+                needReread = true;
+            } else
+                printf_debug("USE_PERSONALITY_SET_NO already '%d'\n", persSetNo);
+
+            break;
+        }
+    }
+
+    fclose(basicFile);
+
+    if (needReread)
+        // Reread PersonalitySets (in case any GUI will be able to reread them without restart)
+        ReadPersonality("basic.ini");
 }

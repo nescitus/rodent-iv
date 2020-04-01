@@ -767,6 +767,7 @@ class cGlobals {
     bool usePersonalityFiles;
 	bool scoreJump;
     bool showPersonalityFile;
+    bool useUciPersonalitySet;
     glob_int depthReached;
     int moves_from_start; // to restrict book depth for weaker levels
     int numberOfThreads;
@@ -1063,6 +1064,7 @@ extern std::wstring LogFileWStr;
 void FullPathEndSlash(std::wstring &pathWStr);
 void SetRodentHomeDir();
 void CreateRodentHome(const char *RodentDir);
+void ChangePersonalitySet(int persSetNo);
 
 extern unsigned char CastleFile_RQ;
 extern unsigned char CastleFile_RK;
