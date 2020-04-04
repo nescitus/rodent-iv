@@ -29,6 +29,25 @@ U64 POS::Random64() {
     return dist(e2);
 }
 
+bool POS::Is960() {
+
+    if (Castle_W_RQ != A1 && mCFlags & W_QS)
+        return true;
+    if (Castle_W_K  != E1 && (mCFlags & W_KS || mCFlags & W_QS))
+        return true;
+    if (Castle_W_RK != H1 && mCFlags & W_KS)
+        return true;
+
+    if (Castle_B_RQ != A8 && mCFlags & B_QS)
+        return true;
+    if (Castle_B_K  != E8 && (mCFlags & B_KS || mCFlags & B_QS))
+        return true;
+    if (Castle_B_RK != H8 && mCFlags & B_KS)
+        return true;
+
+    return false;
+}
+
 void POS::Init960() { // static init function for chess960
 
     for (int sq = 0; sq < 64; sq++)

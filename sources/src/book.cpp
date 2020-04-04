@@ -376,6 +376,42 @@ void sBook::OpenPolyglot() {
 
 int sBook::GetPolyglotMove(POS *p, bool print_output) {
 
+    std::string newBookNameStr = bookName;
+    if (newBookNameStr.length() > 4) {
+
+        // keep it simple: book must end with ".bin" or "_960.bin"
+        if (p->Is960()) {
+            if (strstr(bookName, "_960") == NULL) {
+                newBookNameStr = newBookNameStr.substr(0, newBookNameStr.length()-4) + "_960.bin";
+            }
+        } else {
+            if (strstr(bookName, "_960")) {
+                newBookNameStr = newBookNameStr.substr(0, newBookNameStr.length()-8) + ".bin";
+            }
+        }
+
+        if (newBookNameStr != bookName) {
+            std::string oldBookNameStr = bookName; // in case we have to go back
+
+            strcpy(bookName, newBookNameStr.c_str());
+            OpenPolyglot();
+
+            if (Success()) {
+                if (Glob.isNoisy)
+                    printfUciOut("info string changed book file from '%s' to '%s'\n",
+                                 oldBookNameStr.c_str(), newBookNameStr.c_str());
+                else
+                    printf_debug("changed book file from '%s' to '%s'\n",
+                                 oldBookNameStr.c_str(), newBookNameStr.c_str());
+            } else {
+                printf_debug("used book not belongs to right standard/960-rule!\n");
+                // use previous book
+                strcpy(bookName, oldBookNameStr.c_str());
+                OpenPolyglot();
+            }
+        }
+    }
+
     if (!Success()) return 0;
 
     int best_move = 0, max_weight = 0, weight_sum = 0, n_of_choices = 0;

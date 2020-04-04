@@ -177,11 +177,8 @@ void POS::ParsePosition(const char *ptr) {
 
 #ifdef DEBUG
     // Currently mainly for checking 960
-    if (Glob.isNoisy && mCFlags &&
-        (Castle_W_RQ != A1 || Castle_W_K != E1 || Castle_W_RK != H1 ||
-        Castle_B_RQ != A8 || Castle_B_K != E8 || Castle_B_RK != H8)) {
+    if (Glob.isNoisy && Is960())
         PrintBoard();
-    }
 #endif
 }
 
