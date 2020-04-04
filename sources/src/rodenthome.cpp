@@ -192,7 +192,7 @@ void SetRodentHomeDir() {
 #endif
     printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
 
-#if defined(DEBUG) || defined(ANDROID)
+#if defined(DEBUG) && defined(ANDROID)
     // only for information (for GUIs supporting oex):
     char binfile[1024];
     ssize_t len = readlink("/proc/self/exe", binfile, sizeof(binfile)-1);
