@@ -279,7 +279,7 @@ void cEngine::Iterate(POS *p, int *pv) {
 
         if (cur_val > MAX_EVAL || cur_val < -MAX_EVAL) {
             int max_mate_depth = (MATE - Abs(cur_val) + 1) + 1;
-            max_mate_depth *= 4;
+            max_mate_depth *= 5;
             max_mate_depth /= 3;
             if (max_mate_depth <= mRootDepth) {
                 mDpCompleted = mRootDepth;
