@@ -517,6 +517,7 @@ void ReadPersonality(const char *fileName) {
 
     // Set flag in case we want to disable some options while reading personality from a file
 
+    bool oldIsReadingPersonality = Glob.isReadingPersonality;
     Glob.isReadingPersonality = true;
 
     char line[256], token[180]; int cnt = 0; char *pos;
@@ -598,7 +599,7 @@ void ReadPersonality(const char *fileName) {
     if (cnt != 0) pers_aliases.count = cnt;
     fclose(personalityFile);
     Par.SpeedToBookDepth(Par.npsLimit);
-    Glob.isReadingPersonality = false;
+    Glob.isReadingPersonality = oldIsReadingPersonality;
 }
 
 void ChangePersonalitySet(int persSetNo) {
