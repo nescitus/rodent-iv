@@ -64,4 +64,4 @@ setoption name Selectivity value 175
 setoption name SearchSkill value 10
 setoption name BookFilter value 20
 setoption name GuideBookFile value players/nimzowitsch.bin
-setoption name MainBookFile value players/nimzowitsch.bin
+setoption name MainBookFile value hist/_pre30.bin
