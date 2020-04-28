@@ -23,3 +23,9 @@
 ; setoption name Personality value Strangler
 ; setoption name Personality value Swapper
 ; setoption name Personality value Tal
+
+
+; If you like to do selfplay with two personalities, use the
+; following line for the black player:
+
+; setoption name PersonalityB value ...

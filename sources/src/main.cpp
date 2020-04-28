@@ -187,6 +187,8 @@ void cGlobals::Init() {
 	multiPv = 1;
     CastleNotation = KingMove;
     useUciPersonalitySet = false;
+    personalityW = "";
+    personalityB = "";
 }
 
 bool cGlobals::CanReadBook() {

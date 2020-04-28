@@ -245,6 +245,15 @@ void cEngine::SetMoveTime(int base, int inc, int movestogo) {
 
 void ParseGo(POS *p, const char *ptr) {
 
+    if (Glob.personalityB != "") {
+        Trans.Clear();
+        if (p->mSide == WC) {
+            ReadPersonality(Glob.personalityW.c_str());
+        } else {
+            ReadPersonality(Glob.personalityB.c_str());
+        }
+    }
+
     char token[80];
 
     int wtime = -1, btime = -1;

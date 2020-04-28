@@ -769,6 +769,8 @@ class cGlobals {
 	bool scoreJump;
     bool showPersonalityFile;
     bool useUciPersonalitySet;
+    std::string personalityW;
+    std::string personalityB;
     glob_int depthReached;
     int moves_from_start; // to restrict book depth for weaker levels
     int numberOfThreads;

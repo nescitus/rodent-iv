@@ -108,10 +108,15 @@ void PrintUciOptions() {
             }
         }
         if (pers_aliases.count != 0) {
-            printfUciOut("option name Personality type combo default ---"); // `---` in case we want PersonalityFile
+            std::string varStr = "";
             for (int i = 0; i < pers_aliases.count; i++)
-                printfUciAdd(" var %s", pers_aliases.alias[i]);
-            printfUciAdd("\n");
+                varStr += " var " + (std::string)pers_aliases.alias[i];
+            // `---` in case we want PersonalityFile
+            printfUciOut("option name Personality type combo default ---%s\n", varStr.c_str());
+            #ifdef ANDROID
+                // Feature not needed in windows version
+                printfUciOut("option name PersonalityB type combo default ---%s\n", varStr.c_str());
+            #endif
         }
     } else {
 
@@ -455,11 +460,23 @@ void ParseSetoption(const char *ptr) {
                 break;
             }
     } else if (strcmp(name, "personality") == 0 )                            {
+        Glob.personalityW = "";
         for (int i = 0; i < pers_aliases.count; i++)
             if (strcmp(pers_aliases.alias[i], value) == 0) {
-                ReadPersonality(pers_aliases.path[i]);
+                Glob.personalityW = pers_aliases.path[i];
+                if (Glob.personalityB == "")
+                    ReadPersonality(Glob.personalityW.c_str());
                 break;
             }
+    } else if (strcmp(name, "personalityb") == 0 )                           {
+        Glob.personalityB = "";
+        for (int i = 0; i < pers_aliases.count; i++)
+            if (strcmp(pers_aliases.alias[i], value) == 0) {
+                Glob.personalityB = pers_aliases.path[i];
+                break;
+            }
+        if (Glob.personalityB == "")
+            ReadPersonality(Glob.personalityW.c_str());
     }
 }
 
