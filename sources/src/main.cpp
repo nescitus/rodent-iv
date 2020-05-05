@@ -39,7 +39,9 @@ sBook MainBook;
 void PrintVersion() {
     std::string OutStr;
 
-    OutStr = "id name Rodent IV V0.26";
+    OutStr = "id name Rodent IV 0.26";
+
+#if defined(DEBUG)
 
 	int bits = sizeof(void*) * 8; // CHAR_BIT
 	if (bits == 32)
@@ -87,7 +89,6 @@ void PrintVersion() {
     OutStr += "/SMP";
 #endif
 
-#if defined(DEBUG)
     OutStr += "/DEBUG";
 #endif
 
