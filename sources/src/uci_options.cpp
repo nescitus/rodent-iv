@@ -373,7 +373,7 @@ void ParseSetoption(const char *ptr) {
         Glob.shouldClear = true;
     } else if (strcmp(name, "backwardpawneg") == 0)                          {
         setvalue(BK_END, atoi(value), false);
-    } else if (strcmp(name, "backwardopenmg") == 0)                          {
+    } else if (strcmp(name, "backwardonopenmg") == 0)                          {
         setvalue(BK_OPE, atoi(value), false);
     } else if (strcmp(name, "primarypststyle") == 0)                         {
         Par.primaryPstStyle = atoi(value);
