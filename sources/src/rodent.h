@@ -700,30 +700,48 @@ class cMask {
     bool IsOnRank7(U64 b, int side);
     bool IsOnRank8(U64 b, int side);
 
+    // masks of own and opponent's sides of the board
+
     static constexpr U64 home[2] = { RANK_1_BB | RANK_2_BB | RANK_3_BB | RANK_4_BB,
                                      RANK_8_BB | RANK_7_BB | RANK_6_BB | RANK_5_BB };
     static constexpr U64 away[2] = { RANK_8_BB | RANK_7_BB | RANK_6_BB | RANK_5_BB,
                                      RANK_1_BB | RANK_2_BB | RANK_3_BB | RANK_4_BB };
 
+    // mask of castled king squares
+
     static constexpr U64 ksCastle[2] = { SqBb(F1) | SqBb(G1) | SqBb(H1) | SqBb(F2) | SqBb(G2) | SqBb(H2),
-                                          SqBb(F8) | SqBb(G8) | SqBb(H8) | SqBb(F7) | SqBb(G7) | SqBb(H7) };
+                                         SqBb(F8) | SqBb(G8) | SqBb(H8) | SqBb(F7) | SqBb(G7) | SqBb(H7) };
     static constexpr U64 qsCastle[2] = { SqBb(A1) | SqBb(B1) | SqBb(C1) | SqBb(A2) | SqBb(B2) | SqBb(C2),
-                                          SqBb(A8) | SqBb(B8) | SqBb(C8) | SqBb(A7) | SqBb(B7) | SqBb(C7) };
+                                         SqBb(A8) | SqBb(B8) | SqBb(C8) | SqBb(A7) | SqBb(B7) | SqBb(C7) };
+
+    // mask of squares taken into account in outpost evaluation
 
     static constexpr U64 outpostMap[2] = { (bb_rel_rank[WC][RANK_4] | bb_rel_rank[WC][RANK_5] | bb_rel_rank[WC][RANK_6]) & bbNotA & bbNotH,
-                                            (bb_rel_rank[BC][RANK_4] | bb_rel_rank[BC][RANK_5] | bb_rel_rank[BC][RANK_6]) & bbNotA & bbNotH };
+                                           (bb_rel_rank[BC][RANK_4] | bb_rel_rank[BC][RANK_5] | bb_rel_rank[BC][RANK_6]) & bbNotA & bbNotH };
+
+    // masks of wing squares
 
     static constexpr U64 kingSide = FILE_F_BB | FILE_G_BB | FILE_H_BB;
     static constexpr U64 queenSide = FILE_A_BB | FILE_B_BB | FILE_C_BB;
+
+    // mask of central squares
+
     static constexpr U64 center = SqBb(C3) | SqBb(D3) | SqBb(E3) | SqBb(F3)
                                 | SqBb(C4) | SqBb(D4) | SqBb(E4) | SqBb(F4)
                                 | SqBb(C5) | SqBb(D5) | SqBb(E5) | SqBb(F5)
                                 | SqBb(C6) | SqBb(D6) | SqBb(E6) | SqBb(F6);
+
+    // mask of squares taken into account in space evaluation
+
     static constexpr U64 space[2] = { bb_central_file & (RANK_2_BB | RANK_3_BB | RANK_4_BB | RANK_5_BB),
                                       bb_central_file & (RANK_7_BB | RANK_6_BB | RANK_5_BB | RANK_4_BB) };
 
-    static constexpr U64 wb_special = SqBb(A7) | SqBb(A6) | SqBb(B8) | SqBb(H7) | SqBb(H6) | SqBb(G8) | SqBb(C1) | SqBb(F1) | SqBb(G2) | SqBb(B2);
-    static constexpr U64 bb_special = SqBb(A2) | SqBb(A3) | SqBb(B1) | SqBb(H2) | SqBb(H3) | SqBb(G1) | SqBb(C8) | SqBb(F8) | SqBb(G7) | SqBb(B7);
+    // mask showing bishop positions where pattern evaluation can be applied
+
+    static constexpr U64 wb_special = SqBb(A7) | SqBb(A6) | SqBb(B8) | SqBb(H7) | SqBb(H6) | SqBb(G8) 
+                                    | SqBb(C1) | SqBb(F1) | SqBb(G2) | SqBb(B2) | SqBb(A1) | SqBb(H1);
+    static constexpr U64 bb_special = SqBb(A2) | SqBb(A3) | SqBb(B1) | SqBb(H2) | SqBb(H3) | SqBb(G1) 
+                                    | SqBb(C8) | SqBb(F8) | SqBb(G7) | SqBb(B7) | SqBb(A8) | SqBb(H8);
 
     U64 adjacent[8];
     U64 passed[2][64];

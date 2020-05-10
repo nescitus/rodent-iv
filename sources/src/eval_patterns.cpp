@@ -51,6 +51,16 @@ void cEngine::EvaluateBishopPatterns(POS *p, eData *e) {
             if (p->IsOnSq(BC, P, E4) && (p->IsAnyPawn(BC, D5, F5))) Add(e, WC, Par.values[B_BADF]);
             if (p->Kings(WC) & Mask.ksCastle[WC]) Add(e, WC, Par.values[B_KING], 0);
         }
+
+        // FRC opening pattern: blocked bishop in the corner
+
+        if (p->IsOnSq(WC, B, H1) && p->IsOnSq(WC, P, G2)) {
+            Add(e, WC, -20, -40);
+        }
+
+        if (p->IsOnSq(WC, B, A1) && p->IsOnSq(WC, P, B2)) {
+            Add(e, WC, -20, -40);
+        }
     }
 
     if (p->Bishops(BC) & Mask.bb_special) {
@@ -84,6 +94,16 @@ void cEngine::EvaluateBishopPatterns(POS *p, eData *e) {
             if (p->IsOnSq(BC, P, G6) && (p->IsAnyPawn(BC, H7, F7))) Add(e, BC, Par.values[B_FIANCH]);
             if (p->IsOnSq(WC, P, E5) && (p->IsAnyPawn(WC, D4, F4))) Add(e, BC, Par.values[B_BADF]);
             if (p->Kings(BC) & Mask.ksCastle[BC]) Add(e, BC, Par.values[B_KING], 0);
+        }
+
+        // FRC opening pattern: blocked bishop in the corner
+
+        if (p->IsOnSq(BC, B, H8) && p->IsOnSq(BC, P, G7)) {
+            Add(e, BC, -20, -40);
+        }
+
+        if (p->IsOnSq(BC, B, A8) && p->IsOnSq(BC, P, B7)) {
+            Add(e, BC, -20, -40);
         }
     }
 
