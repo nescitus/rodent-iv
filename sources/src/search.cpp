@@ -348,9 +348,9 @@ int cEngine::Widen(POS *p, int depth, int *pv, int lastScore) {
 int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv) {
 
     int best, score = -INF, move, newDepth, new_pv[MAX_PLY];
-    int mv_type, reduction, victim, last_capt, hashFlag;
+    int moveType, reduction, victim, last_capt, hashFlag;
     int singMove = -1, singScore = -INF;
-    int mv_tried = 0;
+    int movesTried = 0;
     int mv_played[MAX_MOVES];
     int quiet_tried = 0;
     int mv_hist_score = 0;
@@ -428,7 +428,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
     // MAIN LOOP
 
-    while ((move = NextMove(m, &mv_type, ply))) {
+    while ((move = NextMove(m, &moveType, ply))) {
 
         // this thread appears to be lagging behind
         // - let's restart it
@@ -466,12 +466,12 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
         // GATHER INFO ABOUT THE MOVE
 
         flagExtended = false;
-        mv_played[mv_tried] = move;
-        mv_tried++;
-        if (!ply && mv_tried > 1) mFlRootChoice = true;
-        if (mv_type == MV_NORMAL) quiet_tried++;
+        mv_played[movesTried] = move;
+        movesTried++;
+        if (!ply && movesTried > 1) mFlRootChoice = true;
+        if (moveType == MV_NORMAL) quiet_tried++;
         if (ply == 0 && !Par.shut_up && depth > 16 && Glob.numberOfThreads == 1)
-            DisplayCurrmove(move, mv_tried);
+            DisplayCurrmove(move, movesTried);
 
         // SET NEW SEARCH DEPTH
 
@@ -514,17 +514,17 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
         if (depth > 2
         && Par.searchSkill > 2
-        && mv_tried > 3
+        && movesTried > 3
         && !flagInCheck
         && !p->InCheck()
-        && msLmrSize[isPv][depth][mv_tried] > 0
-        && mv_type == MV_NORMAL
+        && msLmrSize[isPv][depth][movesTried] > 0
+        && moveType == MV_NORMAL
         && mv_hist_score < Par.histLimit
         && MoveType(move) != CASTLE) {
 
             // read reduction amount from the table
 
-            reduction = (int)msLmrSize[isPv][depth][mv_tried];
+            reduction = (int)msLmrSize[isPv][depth][movesTried];
 
             // increase reduction on bad history score
 
@@ -534,6 +534,9 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
             newDepth = newDepth - reduction;
         }
+
+        // LMR 2: MARGINAL REDUCTION OF BAD CAPTURES
+        // skipped, because at root we are in a pv-node by definition
 
     research:
 
@@ -567,7 +570,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
         if (score >= beta) {
             if (!flagInCheck) {
                 UpdateHistory(p, -1, move, depth, ply);
-                for (int mv = 0; mv < mv_tried; mv++) {
+                for (int mv = 0; mv < movesTried; mv++) {
                     DecreaseHistory(p, mv_played[mv], depth);
                 }
             }
@@ -606,7 +609,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
     if (*pv) {
         if (!flagInCheck) {
             UpdateHistory(p, -1, *pv, depth, ply);
-            for (int mv = 0; mv < mv_tried; mv++) {
+            for (int mv = 0; mv < movesTried; mv++) {
                 DecreaseHistory(p, mv_played[mv], depth);
             }
         }
