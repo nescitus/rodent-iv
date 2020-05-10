@@ -40,15 +40,13 @@ int cEngine::QuiesceChecks(POS *p, int ply, int alpha, int beta, int *pv) {
     Glob.nodes++;
     Slowdown();
     
-    if (Glob.abortSearch && mRootDepth > 1) {
+    if (ShouldAbortSearch())
         return 0;
-    }
 
     *pv = 0;
 
-    if (p->IsDraw()) {
+    if (p->IsDraw())
         return p->DrawScore();
-    }
 
     move = 0;
 
@@ -104,9 +102,9 @@ int cEngine::QuiesceChecks(POS *p, int ply, int alpha, int beta, int *pv) {
         // UNDO MOVE
 
         p->UndoMove(move, u);
-        if (Glob.abortSearch && mRootDepth > 1) {
+
+        if (ShouldAbortSearch())
             return 0;
-        }
 
         // BETA CUTOFF
 
@@ -155,9 +153,8 @@ int cEngine::QuiesceFlee(POS *p, int ply, int alpha, int beta, int *pv) {
     Glob.nodes++;
     Slowdown();
     
-    if (Glob.abortSearch && mRootDepth > 1) {
+    if (ShouldAbortSearch())
         return 0;
-    }
 
     *pv = 0;
     
@@ -208,9 +205,9 @@ int cEngine::QuiesceFlee(POS *p, int ply, int alpha, int beta, int *pv) {
         // UNDO MOVE
 
         p->UndoMove(move, u);
-        if (Glob.abortSearch && mRootDepth > 1) {
+
+        if (ShouldAbortSearch())
             return 0;
-        }
 
         // BETA CUTOFF
 
@@ -263,15 +260,13 @@ int cEngine::Quiesce(POS *p, int ply, int alpha, int beta, int *pv) {
 
     // EARLY EXIT
 
-    if (Glob.abortSearch && mRootDepth > 1) {
+    if (ShouldAbortSearch())
         return 0;
-    }
 
     *pv = 0;
 
-    if (p->IsDraw()) {
+    if (p->IsDraw())
         return p->DrawScore();
-    }
 
     // SAFEGUARD AGAINST HITTIMG MAX PLY LIMIT
 
@@ -330,9 +325,9 @@ int cEngine::Quiesce(POS *p, int ply, int alpha, int beta, int *pv) {
 
         score = -Quiesce(p, ply + 1, -beta, -alpha, new_pv);
         p->UndoMove(move, u);
-        if (Glob.abortSearch && mRootDepth > 1) {
+
+        if (ShouldAbortSearch())
             return 0;
-        }
 
         // BETA CUTOFF
 

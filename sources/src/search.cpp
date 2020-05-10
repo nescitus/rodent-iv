@@ -368,9 +368,15 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
     Glob.nodes++;
     Slowdown();
-    if (Glob.abortSearch && mRootDepth > 1) return 0;
+    
+    if (ShouldAbortSearch()) 
+        return 0;
+    
     if (ply) *pv = 0;
-    if (p->IsDraw() && ply) return p->DrawScore();
+    
+    if (p->IsDraw() && ply) 
+        return p->DrawScore();
+    
     move = 0;
 
     // RETRIEVE MOVE FROM TRANSPOSITION TABLE
@@ -552,7 +558,9 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
         // UNDO MOVE
 
         p->UndoMove(move, u);
-        if (Glob.abortSearch && mRootDepth > 1) return 0;
+
+        if (ShouldAbortSearch()) 
+            return 0;
 
         // BETA CUTOFF
 
@@ -641,9 +649,15 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
 
     Glob.nodes++;
     Slowdown();
-    if (Glob.abortSearch && mRootDepth > 1) return 0;
+
+    if (ShouldAbortSearch()) 
+        return 0;
+    
     *pv = 0;
-    if (p->IsDraw()) return p->DrawScore();
+    
+    if (p->IsDraw()) 
+        return p->DrawScore();
+    
     move = 0;
 
     // MATE DISTANCE PRUNING
@@ -774,9 +788,8 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
 
         p->UndoNull(u);
 
-        if (Glob.abortSearch && mRootDepth > 1) {
+        if (ShouldAbortSearch())
             return 0;
-        }
 
         // do not return unproved mate scores, Stockfish-style
 
@@ -791,8 +804,11 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
             if (newDepth > 6 && Par.searchSkill > 9)
                 score = Search(p, ply, alpha, beta, newDepth - 5, true, lastMove, lastCaptSquare, pv);
 
-            if (Glob.abortSearch && mRootDepth > 1) return 0;
-            if (score >= beta) return score;
+            if (ShouldAbortSearch()) 
+                return 0;
+            
+            if (score >= beta) 
+                return score;
         }
     } // end of null move code
 
@@ -1043,7 +1059,9 @@ avoidNull:
         // UNDO MOVE
 
         p->UndoMove(move, u);
-        if (Glob.abortSearch && mRootDepth > 1) return 0;
+
+        if (ShouldAbortSearch()) 
+            return 0;
 
         // BETA CUTOFF
 
@@ -1099,6 +1117,10 @@ int cEngine::SetLateMoveReduction(bool isPv, int depth, int movesTried, int move
          + (moveHistScore < 0)                      // increase if history score is bad
          + (!isPv && moveHistScore < -MAX_HIST / 2) // in two steps
          + (!isPv && !improving);                   // increase if score is going down
+}
+
+bool cEngine::ShouldAbortSearch() {
+    return (Glob.abortSearch && mRootDepth > 1);
 }
 
 int cEngine::SetNullReductionDepth(int depth, int eval, int beta) {

@@ -904,6 +904,8 @@ class cEngine {
     static void WasteTime(int milliseconds);
     static int BulletCorrection(int time);
 
+    bool ShouldAbortSearch();
+
     static const int mscRazorMargin[];
     static const int mscFutMargin[];
     static const int mscSelectiveDepth;
