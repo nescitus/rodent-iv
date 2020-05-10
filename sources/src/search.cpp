@@ -424,10 +424,11 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
     while ((move = NextMove(m, &mv_type, ply))) {
 
-        if (Glob.finishedDepth >= depth && Glob.numberOfThreads > 1) {
-            printfUciOut("info string restarting lagging thread\n");
+        // this thread appears to be lagging behind
+        // - let's restart it
+
+        if (Glob.finishedDepth >= depth && Glob.numberOfThreads > 1)
             return 0;
-        }
 
         // MAKE MOVE
 
