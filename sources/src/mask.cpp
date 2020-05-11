@@ -70,9 +70,9 @@ void cMask::Init() {
 }
 
 bool cMask::IsOnRank7(U64 b, int side) {
-    return (b & bb_rel_rank[side][RANK_7]);
+    return (b & bbRelRank[side][RANK_7]);
 }
 
 bool cMask::IsOnRank8(U64 b, int side) {
-    return (b & bb_rel_rank[side][RANK_8]);
+    return (b & bbRelRank[side][RANK_8]);
 }

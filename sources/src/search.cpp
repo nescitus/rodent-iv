@@ -823,7 +823,7 @@ avoidNull:
     && Par.searchSkill > 3
     && !move
     && !wasNull
-    && !(p->Pawns(p->mSide) & bb_rel_rank[p->mSide][RANK_7]) // no pawns to promote in one move
+    && !(p->Pawns(p->mSide) & bbRelRank[p->mSide][RANK_7]) // no pawns to promote in one move
     && depth <= mscRazorDepth) {
         int threshold = beta - mscRazorMargin[depth];
 

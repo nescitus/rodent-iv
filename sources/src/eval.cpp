@@ -466,8 +466,8 @@ void cEngine::EvaluatePieces(POS *p, eData *e, eColor sd) {
         // Rook on the 7th rank attacking pawns or cutting off enemy king
 
         if (Mask.IsOnRank7(b,sd)) {                        // rook on 7th rank
-            if (p->Pawns(op) & bb_rel_rank[sd][RANK_7]     // attacking enemy pawns
-            ||  p->Kings(op) & bb_rel_rank[sd][RANK_8]) {  // or cutting off enemy king
+            if (p->Pawns(op) & bbRelRank[sd][RANK_7]     // attacking enemy pawns
+            ||  p->Kings(op) & bbRelRank[sd][RANK_8]) {  // or cutting off enemy king
                 linesMg += V(RSR_MG);
                 linesEg += V(RSR_EG);
                 rooksOn7th++;
@@ -519,8 +519,8 @@ void cEngine::EvaluatePieces(POS *p, eData *e, eColor sd) {
         flatMobEg += q_flat_eg[cnt];
 
         if (Mask.IsOnRank7(b,sd)) {                        // queen on 7th rank
-            if (p->Pawns(op) & bb_rel_rank[sd][RANK_7]     // attacking enemy pawns
-            ||  p->Kings(op) & bb_rel_rank[sd][RANK_8]) {  // or cutting off enemy king
+            if (p->Pawns(op) & bbRelRank[sd][RANK_7]     // attacking enemy pawns
+            ||  p->Kings(op) & bbRelRank[sd][RANK_8]) {  // or cutting off enemy king
                 linesMg += V(QSR_MG);
                 linesEg += V(QSR_EG);
             }

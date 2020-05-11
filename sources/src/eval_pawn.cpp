@@ -163,7 +163,7 @@ void cEngine::EvaluateKingFile(POS *p, eColor sd, U64 bb_file, int *shield, int 
 
     int shelter = EvaluateFileShelter(bb_file &  p->Pawns(sd), sd);
     if (p->Kings(sd) & bb_file) shelter = ((shelter * 120) / 100);
-    if (bb_file & bb_central_file) shelter /= 2;
+    if (bb_file & bbCentralFile) shelter /= 2;
     *shield += shelter;
     *storm += EvaluateFileStorm(p, bb_file & p->Pawns(~sd), sd);
 }
@@ -171,21 +171,21 @@ void cEngine::EvaluateKingFile(POS *p, eColor sd, U64 bb_file, int *shield, int 
 int cEngine::EvaluateFileShelter(U64 bb_own_pawns, eColor sd) {
 
     if (!bb_own_pawns) return V(P_SH_NONE);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_2]) return V(P_SH_2);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_3]) return V(P_SH_3);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_4]) return V(P_SH_4);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_5]) return V(P_SH_5);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_6]) return V(P_SH_6);
-    if (bb_own_pawns & bb_rel_rank[sd][RANK_7]) return V(P_SH_7);
+    if (bb_own_pawns & bbRelRank[sd][RANK_2]) return V(P_SH_2);
+    if (bb_own_pawns & bbRelRank[sd][RANK_3]) return V(P_SH_3);
+    if (bb_own_pawns & bbRelRank[sd][RANK_4]) return V(P_SH_4);
+    if (bb_own_pawns & bbRelRank[sd][RANK_5]) return V(P_SH_5);
+    if (bb_own_pawns & bbRelRank[sd][RANK_6]) return V(P_SH_6);
+    if (bb_own_pawns & bbRelRank[sd][RANK_7]) return V(P_SH_7);
     return 0;
 }
 
 int cEngine::EvaluateFileStorm(POS * p, U64 bb_opp_pawns, eColor sd) {
 
     if (!bb_opp_pawns) return V(P_ST_OPEN);
-    if (bb_opp_pawns & bb_rel_rank[sd][RANK_3]) return V(P_ST_3);
-    if (bb_opp_pawns & bb_rel_rank[sd][RANK_4]) return V(P_ST_4);
-    if (bb_opp_pawns & bb_rel_rank[sd][RANK_5]) return V(P_ST_5);
+    if (bb_opp_pawns & bbRelRank[sd][RANK_3]) return V(P_ST_3);
+    if (bb_opp_pawns & bbRelRank[sd][RANK_4]) return V(P_ST_4);
+    if (bb_opp_pawns & bbRelRank[sd][RANK_5]) return V(P_ST_5);
     return 0;
 }
 

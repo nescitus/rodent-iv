@@ -72,6 +72,9 @@ static const int BN_bb[64] = {
     0,   0,  15,  30,  45,  60,  85, 100
 };
 
+// TODO: it would be better to use piece counts instead of game phase,
+// because now game phase cannot be changed without rewriting this entire function
+
 int cEngine::GetDrawFactor(POS *p, eColor sd) {  // refactoring may be needed
 
     eColor op = ~sd; // weaker side
@@ -206,13 +209,13 @@ int cEngine::ScaleKRPKR(POS *p, eColor sd, eColor op) {
        ) return 0; // dead draw
 
     U64 bb_span = BB.GetFrontSpan(p->Pawns(sd), sd);
-    int prom_sq = FirstOne(bb_rel_rank[sd][RANK_8] & bb_span);
+    int prom_sq = FirstOne(bbRelRank[sd][RANK_8] & bb_span);
     int strong_king = p->mKingSq[sd];
     int weak_king = p->mKingSq[op];
     int strong_pawn = FirstOne(p->Pawns(sd));
     int weak_rook = FirstOne(p->Rooks(op));
     int tempo = (p->mSide == sd);
-    U64 bb_safe_zone = Mask.home[sd] ^ bb_rel_rank[sd][RANK_5];
+    U64 bb_safe_zone = Mask.home[sd] ^ bbRelRank[sd][RANK_5];
 
     if (p->Pawns(sd) & bb_safe_zone) {
 
@@ -227,7 +230,7 @@ int cEngine::ScaleKRPKR(POS *p, eColor sd, eColor op) {
 
         if (Dist.metric[weak_king][prom_sq] <= 1
         && strong_king <= H5
-        && (p->Rooks(op) & bb_rel_rank[sd][RANK_6]))
+        && (p->Rooks(op) & bbRelRank[sd][RANK_6]))
             return 0;
 
     } else { // advanced enemy pawn
@@ -236,10 +239,10 @@ int cEngine::ScaleKRPKR(POS *p, eColor sd, eColor op) {
         // pawn on the 6th rank, but weaker side defends promotion square
         // and can check from behind
 
-        if (p->Pawns(sd) & bb_rel_rank[sd][RANK_6]
+        if (p->Pawns(sd) & bbRelRank[sd][RANK_6]
         && Dist.metric[weak_king][prom_sq] <= 1
-        && ((p->Kings(sd) & bb_safe_zone) || (!tempo && p->Kings(sd) & bb_rel_rank[sd][RANK_6]))
-        && (p->Rooks(op) & bb_rel_rank[sd][RANK_1]))
+        && ((p->Kings(sd) & bb_safe_zone) || (!tempo && p->Kings(sd) & bbRelRank[sd][RANK_6]))
+        && (p->Rooks(op) & bbRelRank[sd][RANK_1]))
             return 0;
 
     }
@@ -254,7 +257,7 @@ int cEngine::ScaleKRPKR(POS *p, eColor sd, eColor op) {
 
 int cEngine::ScaleKQKRP(POS *p, eColor sd, eColor op) {
 
-    U64 bb_defended = p->Pawns(op) & bb_rel_rank[sd][RANK_7];
+    U64 bb_defended = p->Pawns(op) & bbRelRank[sd][RANK_7];
     bb_defended &= BB.KingAttacks(p->mKingSq[op]);
 
     // fortress: rook defended by a pawn on the third rank, pawn defended by the king

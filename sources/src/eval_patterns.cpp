@@ -39,19 +39,8 @@ void cEngine::EvaluateBishopPatterns(POS *p, eData *e) {
 
         // white bishop fianchettoed
 
-        if (p->IsOnSq(WC, B, B2)) {
-            if (p->IsOnSq(WC, P, C3)) Add(e, WC, Par.values[B_BF_MG], Par.values[B_BF_EG]);
-            if (p->IsOnSq(WC, P, B3) && (p->IsAnyPawn(WC, A2, C2))) Add(e, WC, Par.values[B_FIANCH]);
-            if (p->IsOnSq(BC, P, D4) && (p->IsAnyPawn(BC, E5, C5))) Add(e, WC, Par.values[B_BADF]);
-            if (p->Kings(WC) & Mask.qsCastle[WC]) Add(e, WC, Par.values[B_KING], 0);
-        }
-
-        if (p->IsOnSq(WC, B, G2)) {
-            if (p->IsOnSq(WC, P, F3)) Add(e, WC, Par.values[B_BF_MG], Par.values[B_BF_EG]);
-            if (p->IsOnSq(WC, P, G3) && (p->IsAnyPawn(WC, H2, F2))) Add(e, WC, Par.values[B_FIANCH]);
-            if (p->IsOnSq(BC, P, E4) && (p->IsAnyPawn(BC, D5, F5))) Add(e, WC, Par.values[B_BADF]);
-            if (p->Kings(WC) & Mask.ksCastle[WC]) Add(e, WC, Par.values[B_KING], 0);
-        }
+        EvalFianchetto(p, e, WC, B2, B3, A2, C2, C3, D4, E5, C5, Mask.qsCastle[WC]);
+        EvalFianchetto(p, e, WC, G2, G3, H2, F2, F3, E4, D5, F5, Mask.ksCastle[WC]);
 
         // FRC opening pattern: blocked bishop in the corner
 
@@ -83,19 +72,8 @@ void cEngine::EvaluateBishopPatterns(POS *p, eData *e) {
 
         // black bishop fianchettoed
 
-        if (p->IsOnSq(BC, B, B7)) {
-            if (p->IsOnSq(BC, P, C6)) Add(e, BC, Par.values[B_BF_MG], Par.values[B_BF_EG]);
-            if (p->IsOnSq(BC, P, B6) && (p->IsAnyPawn(BC, A7, C7))) Add(e, BC, Par.values[B_FIANCH]);
-            if (p->IsOnSq(WC, P, D5) && (p->IsAnyPawn(WC, E4, C4))) Add(e, BC, Par.values[B_BADF]);
-            if (p->Kings(BC) & Mask.qsCastle[BC]) Add(e, BC, Par.values[B_KING], 0);
-        }
-
-        if (p->IsOnSq(BC, B, G7)) {
-            if (p->IsOnSq(BC, P, F6)) Add(e, BC, Par.values[B_BF_MG], Par.values[B_BF_EG]);
-            if (p->IsOnSq(BC, P, G6) && (p->IsAnyPawn(BC, H7, F7))) Add(e, BC, Par.values[B_FIANCH]);
-            if (p->IsOnSq(WC, P, E5) && (p->IsAnyPawn(WC, D4, F4))) Add(e, BC, Par.values[B_BADF]);
-            if (p->Kings(BC) & Mask.ksCastle[BC]) Add(e, BC, Par.values[B_KING], 0);
-        }
+        EvalFianchetto(p, e, BC, B7, B6, A7, C7, C6, D5, E4, C4, Mask.qsCastle[BC]);
+        EvalFianchetto(p, e, BC, G7, G6, H7, F7, F6, E5, D4, F4, Mask.ksCastle[BC]);
 
         // FRC opening pattern: blocked bishop in the corner
 
@@ -110,11 +88,44 @@ void cEngine::EvaluateBishopPatterns(POS *p, eData *e) {
 
 }
 
+void cEngine::EvalFianchetto(POS *p, eData *e, eColor side, eSquare bsq, eSquare psq, eSquare s1, eSquare s2, 
+     eSquare obl, eSquare b1, eSquare b2, eSquare b3, U64 kingMask) {
+
+    if (p->IsOnSq(side, B, bsq)) {
+       
+        // fianchetto: bishop behind defended pawn
+
+        if (p->IsOnSq(side, P, psq) && (p->IsAnyPawn(side, s1, s2))) 
+            Add(e, side, Par.values[B_FIANCH]);
+
+        // bishop protecting king
+
+        if (p->Kings(side) & kingMask)
+            Add(e, side, Par.values[B_KING], 0);
+
+        // bishop blocked by own pawn
+
+        if (p->IsOnSq(side, P, obl))
+            Add(e, side, Par.values[B_BF_MG], Par.values[B_BF_EG]);
+
+        // bishop blocked by defended enemy pawn
+
+        if (p->IsOnSq(~side, P, b1) && (p->IsAnyPawn(~side, b2, b3))) 
+            Add(e, side, Par.values[B_BADF]);
+    }
+}
+
 void cEngine::EvalBishopOnInitial(POS *p, eData *e, eColor side, eSquare bSq, eSquare pSq, eSquare blockSq, U64 king) {
 
     if (p->IsOnSq(side, B, bSq)) {
+
+        // bishop hampered by blocked central pawn
+
         if (p->IsOnSq(side, P, pSq) && (SqBb(blockSq) & p->Filled()))
             Add(e, side, Par.values[B_BLOCK], 0);
+
+        // bishop returned to protect castled king's position
+
         if (p->Kings(side) & king)
             Add(e, side, Par.values[B_RETURN], 0);
     }

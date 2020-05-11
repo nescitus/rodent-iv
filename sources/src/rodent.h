@@ -17,9 +17,9 @@ If not, see <http://www.gnu.org/licenses/>.
 */ 
 
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
-// 8856 lines
+// 9289 lines
 
-// bench 14, 64-bit release: 11981180 nodes searched in 11954, speed 1002189 nps (Score: 2.326)
+// bench 14, 64-bit release: 11981180 nodes searched in 11422, speed 1048864 nps (Score: 2.434)
 // bench 14, 64-bit debug  : ??
 
 // bench 14, 32-bit release: ??
@@ -55,7 +55,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include "stringfunctions.h"
 
-//#define USE_TUNING
+#define USE_TUNING
 
 using U64 = uint64_t;
 
@@ -163,12 +163,12 @@ constexpr U64 DIAG_B8H2_BB = 0x0204081020408000;
 constexpr U64 bbWhiteSq = 0x55AA55AA55AA55AA;
 constexpr U64 bbBlackSq = 0xAA55AA55AA55AA55;
 
-constexpr U64 bb_rel_rank[2][8] = {
+constexpr U64 bbRelRank[2][8] = {
     { RANK_1_BB, RANK_2_BB, RANK_3_BB, RANK_4_BB, RANK_5_BB, RANK_6_BB, RANK_7_BB, RANK_8_BB },
     { RANK_8_BB, RANK_7_BB, RANK_6_BB, RANK_5_BB, RANK_4_BB, RANK_3_BB, RANK_2_BB, RANK_1_BB }
 };
 
-constexpr U64 bb_central_file = FILE_C_BB | FILE_D_BB | FILE_E_BB | FILE_F_BB;
+constexpr U64 bbCentralFile = FILE_C_BB | FILE_D_BB | FILE_E_BB | FILE_F_BB;
 
 constexpr U64 SIDE_RANDOM = ~UINT64_C(0);
 
@@ -716,8 +716,8 @@ class cMask {
 
     // mask of squares taken into account in outpost evaluation
 
-    static constexpr U64 outpostMap[2] = { (bb_rel_rank[WC][RANK_4] | bb_rel_rank[WC][RANK_5] | bb_rel_rank[WC][RANK_6]) & bbNotA & bbNotH,
-                                           (bb_rel_rank[BC][RANK_4] | bb_rel_rank[BC][RANK_5] | bb_rel_rank[BC][RANK_6]) & bbNotA & bbNotH };
+    static constexpr U64 outpostMap[2] = { (bbRelRank[WC][RANK_4] | bbRelRank[WC][RANK_5] | bbRelRank[WC][RANK_6]) & bbNotA & bbNotH,
+                                           (bbRelRank[BC][RANK_4] | bbRelRank[BC][RANK_5] | bbRelRank[BC][RANK_6]) & bbNotA & bbNotH };
 
     // masks of wing squares
 
@@ -733,8 +733,8 @@ class cMask {
 
     // mask of squares taken into account in space evaluation
 
-    static constexpr U64 space[2] = { bb_central_file & (RANK_2_BB | RANK_3_BB | RANK_4_BB | RANK_5_BB),
-                                      bb_central_file & (RANK_7_BB | RANK_6_BB | RANK_5_BB | RANK_4_BB) };
+    static constexpr U64 space[2] = { bbCentralFile & (RANK_2_BB | RANK_3_BB | RANK_4_BB | RANK_5_BB),
+                                      bbCentralFile & (RANK_7_BB | RANK_6_BB | RANK_5_BB | RANK_4_BB) };
 
     // mask showing bishop positions where pattern evaluation can be applied
 
@@ -903,6 +903,8 @@ class cEngine {
     static void EvaluateKnightPatterns(POS *p, eData *e);
     static void EvaluateCentralPatterns(POS *p, eData *e);
     static void EvaluateKingPatterns(POS *p, eData *e);
+    static void EvalFianchetto(POS *p, eData *e, eColor side, eSquare bSq, eSquare pSq, eSquare sq, eSquare s2, 
+                               eSquare obl, eSquare b1, eSquare b2, eSquare b3, U64 kingMask);
     static void EvalBishopOnInitial(POS *p, eData *e, eColor side, eSquare bSq, eSquare pSq, eSquare blockSq, U64 king);
     static void EvaluateKingAttack(POS *p, eData *e, eColor sd);
     void EvalPin(POS * p, eData * e, eColor c, eSquare pinned0, eSquare pinned1, eSquare knight, eSquare bish0, eSquare bish1);
