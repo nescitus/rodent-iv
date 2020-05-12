@@ -292,7 +292,7 @@ void cParam::DefaultWeights() {  // tuned automatically
     SetVal(ROQ_MG,  9, 0, 50, tuneRook); // rook and queen on the same file, open or closed
     SetVal(ROQ_EG, 18, 0, 50, tuneRook);
     SetVal(R_BLOCK_MG, -50, -100, 0, tuneRook);
-    SetVal(R_BLOCK_EG, 0, -100, 0, tuneRook);
+    SetVal(R_BLOCK_EG, -20, -100, 0, tuneRook);
 
     // Queen parameters
 

@@ -19,7 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 // REGEX to count all the lines under MSVC 13: ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
 // 9289 lines
 
-// bench 14, 64-bit release: 11981180 nodes searched in 11422, speed 1048864 nps (Score: 2.434)
+// bench 14, 64-bit release: 11133006 nodes searched in 11203, speed 993663 nps (Score: 2.306)
 // bench 14, 64-bit debug  : ??
 
 // bench 14, 32-bit release: ??
@@ -55,7 +55,7 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include "stringfunctions.h"
 
-#define USE_TUNING
+//#define USE_TUNING
 
 using U64 = uint64_t;
 
