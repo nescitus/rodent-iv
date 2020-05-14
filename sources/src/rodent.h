@@ -35,6 +35,19 @@ If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#if (!defined(DEBUG) && !defined(NDEBUG)) || (defined(DEBUG) && defined(NDEBUG))
+    #if defined(DEBUG)
+        #undef DEBUG
+    #endif
+    #if defined(NDEBUG)
+        #undef NDEBUG
+    #endif
+
+    // Unclear settings, so use this as default (each cpp-file should include rodent.h)
+    #define NDEBUG
+
+#endif
+
 #if !(__cplusplus >= 201402L || _MSVC_LANG >= 201402L)
     #error Rodent requires C++14 compatible compiler.
 #endif
