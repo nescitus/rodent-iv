@@ -601,7 +601,18 @@ void ReadPersonality(const char *fileName) {
                 *pos = '\0';
                 strncpy(pers_aliases.alias[cnt], line, PERSALIAS_ALEN-1); // -1 coz `strncpy` has a very unexpected glitch
                 strncpy(pers_aliases.path[cnt], pos+1, PERSALIAS_PLEN-1); // see the C11 language standard, note 308
-                cnt++;
+
+                // test if filename exists:
+                FILE *tempFile = NULL;
+                tempFile = fopen(pers_aliases.path[cnt], "r");
+                printf_debug("personality '%s' exists? (%s)\n", pers_aliases.path[cnt], tempFile == NULL ? "failure" : "success");
+
+                if (tempFile) {
+                    // only allow existing personalities
+                    fclose(tempFile);
+                    cnt++;
+                }
+
                 continue;
             }
         }
