@@ -168,20 +168,7 @@ void cEngine::MultiPv(POS * p, int * pv) {
         bestScore = -INF;
         bestPv = 0;
 
-        val[1] = Widen(p, mRootDepth, line[1].pv, val[1]);
-
-        if (Glob.abortSearch) {
-            break;
-        }
-
-        if (val[1] > bestScore) {
-            bestPv = 1;
-            bestScore = val[1];
-        };
-
-        Glob.SetAvoidMove(1, line[1].pv[0]);
-
-        for (int i = 2; i <= Glob.multiPv; i++) {
+        for (int i = 1; i <= Glob.multiPv; i++) {
 
             val[i] = Widen(p, mRootDepth, line[i].pv, val[i]);
 

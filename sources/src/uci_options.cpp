@@ -252,6 +252,10 @@ void ParseSetoption(const char *ptr) {
         Trans.Clear();
     } else if (strcmp(name, "multipv") == 0)                                 {
         Glob.multiPv = atoi(value);
+        if (Glob.multiPv < 1)
+            Glob.multiPv = 1;
+        else if (Glob.multiPv > MAX_PV)
+            Glob.multiPv = MAX_PV;
     } else if (strcmp(name, "timebuffer") == 0)                              {
         Glob.timeBuffer = atoi(value);
     } else if (strcmp(name, "pawnvaluemg") == 0)                             {
