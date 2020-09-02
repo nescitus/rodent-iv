@@ -457,6 +457,21 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
             }
         }
 
+        if (i < Glob.multiPv) {
+            int score = 0;
+            if (!IsInfrequent(values[i], max_weight))
+                score = (values[i] * 100) / weight_sum;
+            // Thinking:
+            // - show also "nodes 0 nps 0 " or not?
+            // - I would prefere "depth 0", but DroidFish don't show such lines
+            // - maybe show value-pecentage as depth?
+            // - show positive numbers, also for black?  => if (p->mSide) score = -score;
+            if (Glob.multiPv <= 1)
+                printfUciOut("info depth 1 score cp %d pv %s\n", score, MoveToStr(moves[i]).c_str());
+            else
+                printfUciOut("info depth 1 multipv %d score cp %d pv %s\n", i+1, score, MoveToStr(moves[i]).c_str());
+        }
+
         // shall we pick this move?
 
         if (!IsInfrequent(values[i], max_weight)) {
