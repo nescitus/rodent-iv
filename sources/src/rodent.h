@@ -792,6 +792,7 @@ class cGlobals {
     bool useTaunting;
     bool printPv;
     glob_bool pondering;
+    glob_bool infinite;
     bool isReadingPersonality;
     bool useBooksFromPers;
     bool shouldClear;
@@ -966,6 +967,7 @@ class cEngine {
     static int msStartTime;
 
     static void InitSearch();
+    static void ReadyForBestmove();
 
     int mPvEng[MAX_PLY];
     int mDpCompleted;

@@ -261,6 +261,7 @@ void ParseGo(POS *p, const char *ptr) {
     int movestogo = 40;
     bool strict_time = false;
     Glob.pondering = false;
+    Glob.infinite = false;
 
     // We may assume that when the engine can think on opponent's time,
     // it can afford to use more time to think. Unfortunately, this fails
@@ -280,6 +281,8 @@ void ParseGo(POS *p, const char *ptr) {
             break;
         if (strcmp(token, "ponder") == 0)           {
             Glob.pondering = true;
+        } else if (strcmp(token, "infinite") == 0)    {
+            Glob.infinite = true;
         } else if (strcmp(token, "depth") == 0)     {
             ptr = ParseToken(ptr, token);
             cEngine::msSearchDepth = atoi(token);
@@ -345,6 +348,11 @@ void ParseGo(POS *p, const char *ptr) {
         }
 
         if (pvb) {
+#ifndef USE_THREADS
+            EngineSingle.ReadyForBestmove();
+#else
+            Engines.ReadyForBestmove();
+#endif
             if (MoveToStr(pvb).length()==3)
                 // Fix for Arena - not following standard and than have problem with
                 // stringlength of "O-O"
@@ -379,6 +387,7 @@ void ParseGo(POS *p, const char *ptr) {
 #ifndef USE_THREADS
     EngineSingle.mDpCompleted = 0;
     EngineSingle.Think(p);
+    EngineSingle.ReadyForBestmove();
     p->ExtractMove(EngineSingle.mPvEng);
 #else
     Glob.goodbye = false;
@@ -418,6 +427,7 @@ void ParseGo(POS *p, const char *ptr) {
             best_pv = engine.mPvEng;
         }
 
+    engine.ReadyForBestmove();
     p->ExtractMove(best_pv);
 #endif
 

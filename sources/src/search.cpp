@@ -274,6 +274,7 @@ void cEngine::MultiPv(POS * p, int * pv) {
         // pv = line[bestPv].pv; // "pv" isn't used and also not working in this way. Do we need it?
     }
 
+    ReadyForBestmove();
     if (bestPv == 0) {
         // no result from current depth, so use previous one
         if (bestPvLastDepth)
@@ -364,7 +365,10 @@ void cEngine::Iterate(POS *p, int *pv) {
         }
     }
 
-    if (!Par.shut_up) Glob.abortSearch = true; // for correct exit from fixed depth search
+    if (!Par.shut_up) {
+        ReadyForBestmove();
+        Glob.abortSearch = true; // for correct exit from fixed depth search
+    }
 }
 
 // Aspiration search, progressively widening the window (based on Senpai 1.0)
@@ -1278,7 +1282,7 @@ void CheckTimeout() {
             Glob.pondering = false;
     }
 
-    if (!Glob.pondering && cEngine::msMoveTime >= 0 && GetMS() - cEngine::msStartTime >= cEngine::msMoveTime)
+    if (!Glob.pondering && !Glob.infinite && cEngine::msMoveTime >= 0 && GetMS() - cEngine::msStartTime >= cEngine::msMoveTime)
         Glob.abortSearch = true;
 }
 
@@ -1300,7 +1304,7 @@ void cEngine::Slowdown() {
             WasteTime(10);
             time = GetMS() - msStartTime + 1;
             nps = (int)GetNps(time);
-            if ((!Glob.pondering && msMoveTime >= 0 && GetMS() - msStartTime >= msMoveTime)) {
+            if ((!Glob.pondering && !Glob.infinite && msMoveTime >= 0 && GetMS() - msStartTime >= msMoveTime)) {
                 Glob.abortSearch = true;
                 return;
             }

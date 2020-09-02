@@ -276,6 +276,24 @@ void cEngine::BuildPv(int *dst, int *src, int move) {
         ;
 }
 
+void cEngine::ReadyForBestmove() {
+    if (!Glob.abortSearch) {
+
+		if (Glob.isNoisy) {
+			if (Glob.infinite)
+					printfUciOut("info string found bestmove in infinite-mode - wait for stop.\n");
+				else if (Glob.pondering)
+					printfUciOut("info string found bestmove in ponder-mode - wait for stop or ponderhit.\n");
+		}
+
+		// Continue only with stop, quit or (if ponder-mode) ponderhit
+		while ((Glob.pondering || Glob.infinite) && !Glob.abortSearch) {
+			WasteTime(10);
+			CheckTimeout();
+		}
+    }
+}
+
 void cEngine::WasteTime(int milliseconds) {
 
 #if defined(_WIN32) || defined(_WIN64)
