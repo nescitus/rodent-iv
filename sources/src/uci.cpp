@@ -351,7 +351,7 @@ void ParseGo(POS *p, const char *ptr) {
 #ifndef USE_THREADS
             EngineSingle.ReadyForBestmove();
 #else
-            Engines.ReadyForBestmove();
+            Engines.front().ReadyForBestmove();
 #endif
             if (MoveToStr(pvb).length()==3)
                 // Fix for Arena - not following standard and than have problem with
@@ -427,7 +427,7 @@ void ParseGo(POS *p, const char *ptr) {
             best_pv = engine.mPvEng;
         }
 
-    engine.ReadyForBestmove();
+    Engines.front().ReadyForBestmove();
     p->ExtractMove(best_pv);
 #endif
 
