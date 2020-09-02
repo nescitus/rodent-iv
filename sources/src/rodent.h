@@ -833,6 +833,12 @@ void CheckTimeout();
 constexpr int EVAL_HASH_SIZE = 512 * 512 / 4;
 constexpr int PAWN_HASH_SIZE = 512 * 512 / 4;
 
+struct LineFullInfo {
+    int depth;
+    int val;
+    Line line;
+};
+
 class cEngine {
     sEvalHashEntry mEvalTT[EVAL_HASH_SIZE];
     sPawnHashEntry mPawnTT[PAWN_HASH_SIZE];
@@ -885,6 +891,10 @@ class cEngine {
     int QuiesceFlee(POS *p, int ply, int alpha, int beta, int *pv);
     int Quiesce(POS *p, int ply, int alpha, int beta, int *pv);
     void DisplayPv(int multipv, int score, int *pv);
+    void DisplayPvDepth(int depth, int multipv, int score, int *pv);
+    void ShowMultiPVInfo(POS * p, int curMove, int curDepth,
+                         int valThisDepth[MAX_PV + 1], Line lineThisDepth[MAX_PV + 1],
+                         int valLastDepth[MAX_PV + 1], Line lineLastDepth[MAX_PV + 1]);
     void Slowdown();
     int SetLateMoveReduction(bool isPv, int depth, int movesTried, int moveHistScore, bool improving);
     int SetNullReductionDepth(int depth, int eval, int beta);

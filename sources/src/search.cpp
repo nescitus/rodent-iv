@@ -151,13 +151,81 @@ void cEngine::Think(POS *p) {
     }
 }
 
+void cEngine::ShowMultiPVInfo(POS * p, int curMove, int curDepth,
+                              int valThisDepth[MAX_PV + 1], Line lineThisDepth[MAX_PV + 1],
+                              int valLastDepth[MAX_PV + 1], Line lineLastDepth[MAX_PV + 1]) {
+
+    LineFullInfo Info2Show[MAX_PV + 1];
+    int fillDepth;
+    LineFullInfo tmpLineFull;
+
+    for ( fillDepth = 1 ; fillDepth <= curMove; fillDepth++) {
+        Info2Show[fillDepth].depth=curDepth;
+        Info2Show[fillDepth].val=valThisDepth[fillDepth];
+        Info2Show[fillDepth].line=lineThisDepth[fillDepth];
+        // printfUciOut("Move %d use: depth=%d multipv=%d\n", fillDepth, Info2Show[fillDepth].depth, fillDepth);
+    }
+    // Fill with moves from previous depth
+    for ( ; fillDepth <= Glob.multiPv; fillDepth++) {
+        int j = 1;
+        for (int k = 1; k < fillDepth; k++) {
+            if (Info2Show[k].line.pv[0] == lineLastDepth[j].pv[0]) {
+                j++;
+                k = 0;
+            }
+        }
+
+        Info2Show[fillDepth].depth=curDepth-1;
+        Info2Show[fillDepth].val=valLastDepth[j];
+        Info2Show[fillDepth].line=lineLastDepth[j];
+        // printfUciOut("Move %d use: depth=%d multipv=%d\n", fillDepth, Info2Show[fillDepth].depth, j);
+    }
+
+    for ( fillDepth = 1 ; fillDepth < curMove; fillDepth++) {
+        for (int i = fillDepth+1 ; i <= curMove; i++) {
+            if (Info2Show[i].val > Info2Show[fillDepth].val) {
+                tmpLineFull = Info2Show[fillDepth];
+                Info2Show[fillDepth] = Info2Show[i];
+                Info2Show[i] = tmpLineFull;
+                // printfUciOut("depth %d change %d with %d\n", Info2Show[fillDepth].depth, i, fillDepth);
+            }
+        }
+    }
+    for ( fillDepth = curMove+1 ; fillDepth < Glob.multiPv; fillDepth++) {
+        for (int i = fillDepth+1 ; i <= Glob.multiPv; i++) {
+            if (Info2Show[i].val > Info2Show[fillDepth].val) {
+                tmpLineFull = Info2Show[fillDepth];
+                Info2Show[fillDepth] = Info2Show[i];
+                Info2Show[i] = tmpLineFull;
+                // printfUciOut("depth %d change %d with %d\n", Info2Show[fillDepth].depth, i, fillDepth);
+            }
+        }
+    }
+
+    for (int i = Glob.multiPv; i > 0; i--) {
+        if (p->Legal(Info2Show[i].line.pv[0])) {
+            DisplayPvDepth(Info2Show[i].depth, i, Info2Show[i].val, Info2Show[i].line.pv);
+        }
+#if defined(DEBUG)
+        else {
+            printf_debug("DisplayPv not legal?\n");
+            DisplayPvDepth(Info2Show[i].depth, i, Info2Show[i].val, Info2Show[i].line.pv);
+        }
+#endif
+    }
+}
+
 void cEngine::MultiPv(POS * p, int * pv) {
 
-    int val[MAX_PV + 1];
-    int bestPv = 1;
     int bestScore;
 
+    int bestPv = 1;
+    int val[MAX_PV + 1];
     Line line[MAX_PV + 1];
+
+    int bestPvLastDepth = 0;
+    int valLastDepth[MAX_PV + 1];
+    Line lineLastDepth[MAX_PV + 1];
 
     for (int i = 0; i <= MAX_PV; i++) {
         val[i] = 0;
@@ -176,6 +244,8 @@ void cEngine::MultiPv(POS * p, int * pv) {
                 break;
             }
 
+            ShowMultiPVInfo(p, i, mRootDepth, val, line, valLastDepth, lineLastDepth);
+
             if (val[i] > bestScore) {
                 bestPv = i;
                 bestScore = val[i];
@@ -188,17 +258,29 @@ void cEngine::MultiPv(POS * p, int * pv) {
             break;
         }
 
+        /* Already displayed each multipv-step
         for (int i = Glob.multiPv; i > 0; i--) {
             if (p->Legal(line[i].pv[0])) {
                 DisplayPv(i, val[i], line[i].pv);
             }
+        } */
+
+        bestPvLastDepth = bestPv;
+        for (int i = 1; i <= Glob.multiPv; i++) {
+            valLastDepth[i] = val[i];
+            lineLastDepth[i] = line[i];
         }
 
-        pv = line[1].pv;
+        // pv = line[bestPv].pv; // "pv" isn't used and also not working in this way. Do we need it?
     }
 
     if (bestPv == 0) {
-        p->ExtractMove(line[1].pv);
+        // no result from current depth, so use previous one
+        if (bestPvLastDepth)
+            p->ExtractMove(lineLastDepth[bestPvLastDepth].pv);
+        else
+            // maybe we are in trouble now? Hope "Widen" can't be aborted without any line
+            p->ExtractMove(line[1].pv);
     } else {
         p->ExtractMove(line[bestPv].pv);
     }
@@ -1140,10 +1222,14 @@ void DisplayCurrmove(int move, int tried) {
 }
 
 void cEngine::DisplayPv(int multipv, int score, int *pv) {
+    DisplayPvDepth(mRootDepth, multipv, score, pv);
+}
+
+void cEngine::DisplayPvDepth(int depth, int multipv, int score, int *pv) {
 
     // don't display information from threads that are late
 
-    if (mRootDepth < Glob.depthReached) return;
+    if (depth < Glob.depthReached) return;
     if (!Glob.printPv) return;
 
     const char *type; 
@@ -1163,10 +1249,10 @@ void cEngine::DisplayPv(int multipv, int score, int *pv) {
 
     if (multipv == 0)
         printfUciOut("info depth %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
-                mRootDepth, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
+                depth, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
     else
         printfUciOut("info depth %d multipv %d time %d nodes %" PRIu64 " nps %" PRIu64 " score %s %d pv %s\n",
-                mRootDepth, multipv, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
+                depth, multipv, elapsed, (U64)Glob.nodes, nps, type, score, pvString);
 }
 
 void CheckTimeout() {
