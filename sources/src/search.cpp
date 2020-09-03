@@ -209,7 +209,7 @@ void cEngine::ShowMultiPVInfo(POS * p, int curMove, int curDepth,
         }
 #if defined(DEBUG)
         else if (Info2Show[i].line.pv[0]) {
-            / only show, if really crazy things happened
+            // only show, if really crazy things happened
             printf_debug("DisplayPv not legal: ");
             DisplayPvDepth(Info2Show[i].depth, i, Info2Show[i].val, Info2Show[i].line.pv);
         }
