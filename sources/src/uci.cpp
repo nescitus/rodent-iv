@@ -218,10 +218,8 @@ void cEngine::SetMoveTime(int base, int inc, int movestogo) {
 
         // make a percentage correction to playing speed (unless too risky)
 
-        if (2 * msMoveTime > base) {
-            msMoveTime *= Par.timePercentage;
-            msMoveTime /= 100;
-        }
+        if (2 * msMoveTime > base)
+            msMoveTime = (U64)msMoveTime * Par.timePercentage / 100;
 
         // ensure that our limit does not exceed total time available
 
