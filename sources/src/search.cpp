@@ -169,7 +169,7 @@ void cEngine::ShowMultiPVInfo(POS * p, int curMove, int curDepth,
     for ( ; fillDepth <= Glob.multiPv; fillDepth++) {
         int j = 1;
         for (int k = 1; k < fillDepth; k++) {
-            if (Info2Show[k].line.pv[0] == lineLastDepth[j].pv[0]) {
+            if (Info2Show[k].line.pv[0] == lineLastDepth[j].pv[0] && j < Glob.multiPv) {
                 j++;
                 k = 0;
             }
@@ -203,12 +203,14 @@ void cEngine::ShowMultiPVInfo(POS * p, int curMove, int curDepth,
     }
 
     for (int i = Glob.multiPv; i > 0; i--) {
+
         if (p->Legal(Info2Show[i].line.pv[0])) {
             DisplayPvDepth(Info2Show[i].depth, i, Info2Show[i].val, Info2Show[i].line.pv);
         }
 #if defined(DEBUG)
-        else {
-            printf_debug("DisplayPv not legal?\n");
+        else if (Info2Show[i].line.pv[0]) {
+            / only show, if really crazy things happened
+            printf_debug("DisplayPv not legal: ");
             DisplayPvDepth(Info2Show[i].depth, i, Info2Show[i].val, Info2Show[i].line.pv);
         }
 #endif
@@ -229,6 +231,8 @@ void cEngine::MultiPv(POS * p, int * pv) {
 
     for (int i = 0; i <= MAX_PV; i++) {
         val[i] = 0;
+        valLastDepth[i] = 0;
+        lineLastDepth[i].pv[0] = 0;
     }
 
     for (mRootDepth = 1; mRootDepth <= msSearchDepth; mRootDepth++) {
@@ -244,14 +248,19 @@ void cEngine::MultiPv(POS * p, int * pv) {
                 break;
             }
 
-            ShowMultiPVInfo(p, i, mRootDepth, val, line, valLastDepth, lineLastDepth);
-
             if (val[i] > bestScore) {
                 bestPv = i;
                 bestScore = val[i];
             };
 
             Glob.SetAvoidMove(i, line[i].pv[0]);
+
+            if (p->Legal(line[i].pv[0]))
+                ShowMultiPVInfo(p, i, mRootDepth, val, line, valLastDepth, lineLastDepth);
+            else
+                // I guess there are not enough possible moves
+                // probably rest of "for" could be skipped, but I'm not sure and almost no time wasted
+                line[i].pv[0] = 0;
         }
 
         if (Glob.abortSearch) {
