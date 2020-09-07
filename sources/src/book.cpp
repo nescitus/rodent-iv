@@ -458,9 +458,9 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
         }
 
         if (i < Glob.multiPv) {
-            int score = 0;
-            if (!IsInfrequent(values[i], max_weight))
-                score = (values[i] * 100) / weight_sum;
+            int score = (values[i] * 100) / weight_sum;
+            if (IsInfrequent(values[i], max_weight))
+                score *= -1;
             // Thinking:
             // - show also "nodes 0 nps 0 " or not?
             // - I would prefere "depth 0", but DroidFish don't show such lines
