@@ -22,6 +22,9 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <cstring>
 #include <cctype>
+#include <iomanip>
+#include <sstream>
+#include "stringfunctions.h"
 
 #define PERSALIAS_ALEN       32     // max length for a personality alias
 #define PERSALIAS_PLEN       256    // max length for an alias path
@@ -52,8 +55,19 @@ void PrintUciOptionInfo(const char* name, const char* info) {
 void PrintUciOptions() {
 
 #ifdef DEBUG
+    using namespace std;
+
+    const string months("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec");
+    const string time(__TIME__); // From compiler, format is " 1:02:03"
+    string month, day, year;
+    stringstream ss, date(__DATE__); // From compiler, format is "Sep 21 2008"
+
+    date >> month >> day >> year;
+    ss << setfill('0') << year << setw(2) << (1 + months.find(month) / 4) << setw(2) << day;
+    ss << setw(2) << atoi(time.substr(0,2).c_str()) << setw(2) << time.substr(3,2) << setw(2) << time.substr(6,2);
+
     // be sure testing the right version
-    PrintUciOptionInfo("Build Time", __TIME__ " " __DATE__);
+    PrintUciOptionInfo("Build Time", ss.str().c_str());
 #endif
 
 	printfUciOut("option name Clear Hash type button\n");
@@ -574,6 +588,28 @@ void ReadPersonality(const char *fileName) {
             FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
             if (logFile) fclose(logFile);
             printf_debug("Log cleared\n");
+        }
+
+        if (strstr(line, "SPLIT_LOG") == skipWS) {
+            std::wstring::size_type pos;
+
+            pos=LogFileWStr.find(L'.');
+            if (pos != std::wstring::npos) {
+                LogFileWStr = LogFileWStr.substr(0, pos);
+
+                pos=LogFileWStr.find(L'_');
+                if (pos != std::wstring::npos) {
+                    LogFileWStr = LogFileWStr.substr(0, pos);
+                }
+
+                using namespace std;
+                stringstream ss;
+                ss << setfill('0') << setw(7) << GetMS() / 1000;
+
+                LogFileWStr = LogFileWStr + L"_" + Str2WStr(ss.str()) + L".log";
+
+                printf_debug("Log splitted='%s'\n", WStr2Str(LogFileWStr).c_str());
+            }
         }
 
         // Aliases for personalities
