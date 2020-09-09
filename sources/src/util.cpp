@@ -415,7 +415,7 @@ void printfLog(const char *preStr, const char *fmt, ...)
     if (strcmp(preStr, ">> ")) // uci-in needn't echo
         vfprintf(stdout, fmt, ap);
 
-    if (LogFileWStr != L"") {
+    if (LogFileWStr != L"" && !SkipBeginningOfLog) {
 
 		if (Glob.isNoisy ||
 		   (strstr(fmt, "info depth ")!=fmt && strstr(fmt, "info currmove ")!=fmt)) {

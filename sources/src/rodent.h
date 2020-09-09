@@ -1111,6 +1111,10 @@ extern ChessHeapClass Trans;
 extern std::wstring RodentHomeDirWStr;
 extern std::wstring LogFileWStr;
 
+// as the GUI can set the filename for the log, we skip writing anything to the log,
+// till we got "setoption name LogFile value ..." or "ucinewgame" (in release build only).
+extern bool SkipBeginningOfLog;
+
 void FullPathEndSlash(std::wstring &pathWStr);
 void SetRodentHomeDir();
 void CreateRodentHome(const char *RodentDir);

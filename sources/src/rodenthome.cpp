@@ -132,6 +132,17 @@ void PathEndSlash(std::wstring &pathWStr) {
         pathWStr += slashWStr; 
 }
 
+#if defined (ANDROID)
+void CheckRodentHome(std::wstring checkDirWStr) {
+
+    if (RodentHomeDirWStr != L"")
+        return;
+
+    if (DirOrFileExists(WStr2Str(checkDirWStr + L"personalities/basic.ini").c_str()))
+        RodentHomeDirWStr = checkDirWStr;
+}
+#endif
+
 // --------------------------------------------------------------------------------
 // SetRodentHomeDir
 // --------------------------------------------------------------------------------
@@ -139,6 +150,11 @@ void PathEndSlash(std::wstring &pathWStr) {
 void SetRodentHomeDir() {
 
     RodentHomeDirWStr = L"";
+#ifndef DEBUG
+    SkipBeginningOfLog = true;
+#else
+    SkipBeginningOfLog = false;
+#endif
 
     // Taken from "ChDir", added GetEnv
 
@@ -162,9 +178,16 @@ void SetRodentHomeDir() {
     // RodentHomeDirWStr = ...
     
 #elif defined (ANDROID)
-    RodentHomeDirWStr = CStr2WStr("/sdcard/Rodent4/");
+    RodentHomeDirWStr = L"";
 
-    // only if it doesn't exists, create and fill it with default files
+    CheckRodentHome(L"/sdcard/Rodent4/");
+    CheckRodentHome(L"/sdcard/Android/data/ccc.chess.engines/files/");
+
+    if (RodentHomeDirWStr == L"")
+        RodentHomeDirWStr = L"/sdcard/Rodent4/";
+
+    // only if it doesn't exists, create it
+    // (filling with default files is no longer needed)
     CreateRodentHome(WStr2Str(RodentHomeDirWStr).c_str());
 
 #else

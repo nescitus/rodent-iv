@@ -62,3 +62,4 @@ int cEngine::msStartTime;
 
 std::wstring RodentHomeDirWStr;
 std::wstring LogFileWStr;
+bool SkipBeginningOfLog;

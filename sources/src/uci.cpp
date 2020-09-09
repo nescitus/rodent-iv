@@ -78,6 +78,7 @@ void UciLoop() {
             PrintUciOptions();
             printfUciOut("uciok\n");
         } else if (strcmp(token, "ucinewgame") == 0) {
+            SkipBeginningOfLog = false;
             Trans.Clear();
             Glob.ClearData();
             p->SetPosition(START_POS);

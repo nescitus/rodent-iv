@@ -75,9 +75,9 @@ void PrintUciOptions() {
 
     if (LogFileWStr != L"")
         printfUciOut("option name LogFile type string default %s\n", WStr2Str(LogFileWStr).c_str());
-#ifdef DEBUG
+#if defined(DEBUG) || defined(ANDROID)
     else
-        printfUciOut("option name LogFile type string default ---\n");
+        printfUciOut("option name LogFile type string default <empty>\n");
 #endif
 
 #ifdef USE_THREADS
@@ -407,12 +407,17 @@ void ParseSetoption(const char *ptr) {
 
     } else if (strcmp(name, "logfile") == 0)                           {
         LogFileWStr = CStr2WStr(value);
-        if (!isabsolute(WStr2Str(LogFileWStr).c_str()))
-            LogFileWStr = RodentHomeDirWStr + LogFileWStr;
-        printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
-        ReadPersonality("basic.ini"); // only for checking "CLEAR_LOG" - needed!
+        if (LogFileWStr == L"<empty>")
+            LogFileWStr = L"";
+        else {
+            if (!isabsolute(WStr2Str(LogFileWStr).c_str()))
+                LogFileWStr = RodentHomeDirWStr + LogFileWStr;
+            SkipBeginningOfLog = false;
+            printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
+            ReadPersonality("basic.ini"); // only for checking "CLEAR_LOG" - needed!
+        }
     } else if (strcmp(name, "bookfilter") == 0)                              {
-	    Par.bookFilter = atoi(value);
+        Par.bookFilter = atoi(value);
     } else if (strcmp(name, "guidebookfile") == 0)                           {
         if (Glob.CanReadBook() ) GuideBook.SetBookName(value);
     } else if (strcmp(name, "mainbookfile") == 0)                            {
@@ -585,9 +590,17 @@ void ReadPersonality(const char *fileName) {
         if (strstr(line, "GUI_PERSONALITYSET") == skipWS) Glob.useUciPersonalitySet = true;
 
         if (strstr(line, "CLEAR_LOG") == skipWS) {
-            FILE *logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
-            if (logFile) fclose(logFile);
-            printf_debug("Log cleared\n");
+            FILE *logFile;
+
+            logFile = fopen(WStr2Str(LogFileWStr).c_str(), "r");
+            if (logFile) {
+                fclose(logFile);
+
+                logFile = fopen(WStr2Str(LogFileWStr).c_str(), "w");
+                if (logFile)
+                    fclose(logFile);
+                printf_debug("Log cleared\n");
+            }
         }
 
         if (strstr(line, "SPLIT_LOG") == skipWS) {
