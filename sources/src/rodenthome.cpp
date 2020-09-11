@@ -206,14 +206,21 @@ void SetRodentHomeDir() {
 
 #endif
 
-    printf_debug("RodentHome: '%s'\n", WStr2Str(RodentHomeDirWStr).c_str());
-
 #ifndef DEBUG
     LogFileWStr = L"";
 #else
     LogFileWStr = RodentHomeDirWStr + L"rodent.log";
 #endif
     printf_debug("LogFile='%s'\n", WStr2Str(LogFileWStr).c_str());
+
+    if (!DirOrFileExists(WStr2Str(RodentHomeDirWStr + L"personalities/basic.ini").c_str()))
+        printfUciOut("info string no 'basic.ini' - check installation, please\n");
+#ifdef DEBUG
+    else
+        printfUciOut("info string use '%s'\n", WStr2Str(RodentHomeDirWStr).c_str());
+#endif
+
+    printf_debug("RodentHome: '%s'\n", WStr2Str(RodentHomeDirWStr).c_str());
 
 #if defined(DEBUG) && defined(ANDROID)
     // only for information (for GUIs supporting oex):
