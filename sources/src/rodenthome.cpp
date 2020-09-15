@@ -188,7 +188,8 @@ void SetRodentHomeDir() {
 
     // only if it doesn't exists, create it
     // (filling with default files is no longer needed)
-    CreateRodentHome(WStr2Str(RodentHomeDirWStr).c_str());
+    // Also no longer create directories
+    // CreateRodentHome(WStr2Str(RodentHomeDirWStr).c_str());
 
 #else
     RodentHomeDirWStr = Str2WStr(GetEnv("RODENT4HOME"));

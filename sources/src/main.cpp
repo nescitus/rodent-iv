@@ -39,7 +39,7 @@ sBook MainBook;
 void PrintVersion() {
     std::string OutStr;
 
-    OutStr = "id name Rodent IV 0.31";
+    OutStr = "id name Rodent IV 0.32";
 
 #if defined(DEBUG)
 
