@@ -67,7 +67,7 @@ setoption name SlowMover value 90
 setoption name Selectivity value 175
 setoption name SearchSkill value 
 setoption name BookFilter value 0
-setoption name GuideBookFile value players/ph-book2010-topalov.bin
+setoption name GuideBookFile value players/ph-topalov2.bin
 setoption name MainBookFile value hist/_post06.bin
 ;
 ; ToDo
