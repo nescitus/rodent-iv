@@ -1117,6 +1117,7 @@ extern bool SkipBeginningOfLog;
 
 void FullPathEndSlash(std::wstring &pathWStr);
 void SetRodentHomeDir();
+bool DirOrFileExists(const char* path);
 void CreateRodentHome(const char *RodentDir);
 void ChangePersonalitySet(int persSetNo);
 
