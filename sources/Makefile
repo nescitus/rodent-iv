@@ -5,7 +5,7 @@ BINDIR = /usr/bin
 DATADIR = /usr/share/rodentIV
 
 # define the C compiler to use
-CC = clang++
+CC = g++
 
 # define the compile-time flags
 CFLAGS = -g -w -Wfatal-errors -pipe -DNDEBUG -O3 -fno-rtti -finline-functions -fprefetch-loop-arrays -DBOOKPATH=$(DATADIR)
@@ -16,7 +16,7 @@ LDFLAGS = -s -lm
 LD1FLAGS = -lm
 
 # define output name and settings file
-EXENAME= rodentIV
+EXENAME= ../mac/rodentIV
 
 default: build
 
