@@ -174,7 +174,7 @@ void SetRodentHomeDir() {
     }
 
 #elif defined (__APPLE__)
-    #error something should be done here, look for _NSGetExecutablePath(path, &size)
+    // #error something should be done here, look for _NSGetExecutablePath(path, &size)
     // RodentHomeDirWStr = ...
     
 #elif defined (ANDROID)
