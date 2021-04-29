@@ -956,6 +956,7 @@ class cEngine {
     static const int mscSnpDepth;      // max depth at which static null move pruning is applied
     static const int mscRazorDepth;    // max depth at which razoring is applied
     static const int mscFutDepth;      // max depth at which futility pruning is applied
+    static const int mscSingDepth;     // min depth at which singular extension is applied
     static const int mscSEEmargin;     // margin for SEE pruning of bad captures
     static int msLmrSize[2][MAX_PLY][MAX_MOVES];
 

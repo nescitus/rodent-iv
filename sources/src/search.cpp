@@ -22,9 +22,12 @@ If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <cmath>
 
-const int cEngine::mscSnpDepth = 3;       // max depth at which static null move pruning is applied
+// bench 16 31281168 nodes searched in 28031, speed 1115909 nps (Score: 2.590)
+
+const int cEngine::mscSnpDepth = 7;       // max depth at which static null move pruning is applied
 const int cEngine::mscRazorDepth = 4;     // max depth at which razoring is applied
 const int cEngine::mscFutDepth = 6;       // max depth at which futility pruning is applied
+const int cEngine::mscSingDepth = 5;      // min depth at which singular extension is applied
 const int cEngine::mscSEEmargin = 113;    // margin for SEE pruning of bad captures (113 means that at depth 2 losing NxP will be accepted)
 
 // this variable controls when evaluation function needs to be called for the sake of pruning
@@ -442,7 +445,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
     int hashScore = -INF;
 
     bool flagInCheck;
-    bool flagExtended;
+    bool isExtended;
     bool isPv = (alpha != beta - 1);
     bool canSing = false;
 
@@ -477,7 +480,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
     // PREPARE FOR SINGULAR EXTENSION, SENPAI-STYLE
 
-    if (isPv && depth > 5) {
+    if (isPv && depth > mscSingDepth) {
         if (Trans.Retrieve(p->mHashKey, &singMove, &singScore, &hashFlag, alpha, beta, depth - 4, ply)) {
             if (hashFlag & LOWER) {
                 canSing = true;
@@ -547,7 +550,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
         // GATHER INFO ABOUT THE MOVE
 
-        flagExtended = false;
+        isExtended = false;
         mv_played[movesTried] = move;
         movesTried++;
         if (!ply && movesTried > 1) mFlRootChoice = true;
@@ -565,7 +568,7 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
 
         if (isPv || depth < 8) {
             newDepth += p->InCheck();
-            flagExtended = true;
+            isExtended = true;
         };
 
         // 2. pawn to 7th rank extension at the tips of pv-line
@@ -575,18 +578,18 @@ int cEngine::SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv
         && p->TpOnSq(Tsq(move)) == P
         && (SqBb(Tsq(move)) & (RANK_2_BB | RANK_7_BB))) {
             newDepth += 1;
-            flagExtended = true;
+            isExtended = true;
         };
 
         // 3. singular extension, Senpai-style
 
-        if (isPv && depth > 5 && move == singMove && canSing && flagExtended == false) {
+        if (isPv && depth > mscSingDepth && move == singMove && canSing && isExtended == false) {
             int new_alpha = -singScore - 50;
             int mockPv;
             int sc = Search(p, ply + 1, new_alpha, new_alpha + 1, depth - 4, false, -1, -1, &mockPv);
             if (sc <= new_alpha) {
                 newDepth += 1;
-                flagExtended = true;
+                isExtended = true;
             }
         }
 
@@ -782,7 +785,7 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
 
     // PREPARE FOR SINGULAR EXTENSION, SENPAI-STYLE
 
-    if (isPv && depth > 5) {
+    if (isPv && depth > mscSingDepth) {
         if (Trans.Retrieve(p->mHashKey, &singMove, &singScore, &hashFlag, alpha, beta, depth - 4, ply)) {
             if (hashFlag & LOWER) {
                 canSing = true;
@@ -833,7 +836,7 @@ int cEngine::Search(POS *p, int ply, int alpha, int beta, int depth, bool wasNul
 
     if (flagPrunableNode
     && Par.searchSkill > 7
-    && depth <= 7
+    && depth <= mscSnpDepth
     && eval < MAX_EVAL
     && p->MayNull()
     && !wasNull) {
@@ -1026,7 +1029,7 @@ avoidNull:
         // 4. singular extension, Senpai-style
 
         if (isPv
-        && depth > 5
+        && depth > mscSingDepth
         && move == singMove
         && canSing) {
             int newAlpha = -singScore - 50;
