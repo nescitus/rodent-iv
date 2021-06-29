@@ -70,6 +70,9 @@ void PrintUciOptions() {
     PrintUciOptionInfo("Build Time", ss.str().c_str());
 #endif
 
+    if (!DirOrFileExists(WStr2Str(RodentHomeDirWStr + L"personalities/basic.ini").c_str()))
+        printfUciOut(std::string("option name EngineHome type string default " + WStr2Str(RodentHomeDirWStr) + "\n").c_str());
+
 	printfUciOut("option name Clear Hash type button\n");
     printfUciOut("option name Hash type spin default 16 min 1 max %d\n", max_tt_size_mb);
 
@@ -500,6 +503,9 @@ void ParseSetoption(const char *ptr) {
             }
         if (Glob.personalityB == "")
             ReadPersonality(Glob.personalityW.c_str());
+    } else if (strcmp(name, "enginehome") == 0) {
+        RodentHomeDirWStr = CStr2WStr(value);
+        ReadPersonality("basic.ini");
     }
 }
 
