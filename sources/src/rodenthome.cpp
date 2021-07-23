@@ -23,6 +23,11 @@ If not, see <http://www.gnu.org/licenses/>.
     #include <unistd.h>
 #endif
 
+#if defined(__APPLE__)
+    #include <libproc.h>
+    #include <libgen.h>
+#endif
+
 #include "rodent.h"
 
 // --------------------------------------------------------------------------------
@@ -174,9 +179,25 @@ void SetRodentHomeDir() {
     }
 
 #elif defined (__APPLE__)
-    // #error something should be done here, look for _NSGetExecutablePath(path, &size)
-    // RodentHomeDirWStr = ...
-    
+    pid_t pid = getpid();
+    char procpath[PROC_PIDPATHINFO_MAXSIZE];
+    int rc = proc_pidpath(pid, procpath, sizeof(procpath));
+    if ( rc <= 0 ) {
+        printf_debug("Error, PID: %d, err: %s\n", strerror(errno));
+    } else {
+        printf_debug("proc: %d, procpath: %s\n", pid, procpath);
+        char dirpath[PROC_PIDPATHINFO_MAXSIZE];
+        char *retptr = dirname_r(procpath, dirpath);
+        if (retptr == nullptr) {
+            printf_debug("Error getting dirname for path: %s\n", procpath);
+        } else {
+            RodentHomeDirWStr = Str2WStr(dirpath);
+            RodentHomeDirWStr.push_back('/');
+            printf_debug("proc: %d, dirpath: %s, RodentHomeDirWStr: %s\n",
+                pid, dirpath, WStr2Str(RodentHomeDirWStr).c_str());
+        }
+    }
+
 #elif defined (ANDROID)
     RodentHomeDirWStr = L"";
 
